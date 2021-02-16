@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>PCH System</title>
+    </h:head>
+    <h:body>
+        
+        <ui:insert name="header">
+            <ui:include src="header.xhtml" />
+        </ui:insert>
+        
+        <p>Content</p>
+        <ui>
+            <li>
+                <h:link outcome="index.xhtml">Home</h:link>
+            </li>
+            <li>
+                <h:link outcome="viewAllMedications.xhtml">View All Medications</h:link>
+            </li>
+            <li>
+                <h:link outcome="createMedication.xhtml">Create New Medications</h:link>
+            </li>
+        </ui>
+        
+        <h:form>
+        
+            <h:messages globalOnly="true" />
+
+            <h:panelGrid columns="3">
+
+                <h:outputLabel for="name" value="Medication Name" />
+                <h:inputText id="name" value="#{createNewMedicationManagedBean.newMedication.name}" required="true" requiredMessage="Name is required" />
+                <h:message for="name" />
+
+                <h:outputText value="" />
+                <h:commandButton value="Create new Medication" actionListener="#{createNewMedicationManagedBean.createNewMedication}" />
+                <h:outputText value="" />
+
+            </h:panelGrid>
+        
+        </h:form>
+        
+        <ui:insert name="footer">
+            <ui:include src="footer.xhtml" />
+        </ui:insert>
+        
+    </h:body>
+</html>
+
