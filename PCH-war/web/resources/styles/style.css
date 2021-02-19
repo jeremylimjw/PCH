@@ -1,0 +1,56 @@
+/* GLOBAL CSS */
+/* Any defined css here will be applied to the entire application, ADD WISELY */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.orange-button {
+    font-family: 'Fira Sans', sans-serif;
+    background-color: rgb(242, 175, 103);
+    color: rgb(61, 58, 55);
+    border-radius: 5px;
+    outline: none;
+    border: none;
+}
+
+.orange-button:hover {
+    background-color: rgb(255, 210, 124);
+}
+
+.blue-button {
+    font-family: 'Fira Sans', sans-serif;
+    background-color: #4169E1;
+    color: rgb(61, 58, 55);
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    color: white;
+}
+
+.blue-button:hover:enabled {
+    background-color: #6A5ACD;
+}
+
+.blue-button:disabled {
+    background-color: #1E90FF;
+}
+
+/*--- Inputs --- */
+input {
+    outline: none;
+    border: 1px solid #c2c2c2;
+    font-family: 'Roboto', sans-serif;
+}
+
+input:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

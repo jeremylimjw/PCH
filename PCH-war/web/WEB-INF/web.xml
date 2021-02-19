@@ -25,4 +25,18 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
+    
+<!--    HTTPS protocol crashes the application
+    <security-constraint>
+        <display-name>Secured Resources</display-name>
+        <web-resource-collection>
+            <web-resource-name>Secured Web Pages</web-resource-name>
+            <description>Secured Web Pages</description>
+            <url-pattern>/login.xhtml</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>-->
 </web-app>

@@ -12,7 +12,6 @@
             <ui:include src="header.xhtml" />
         </ui:insert>
         
-        <p>Content</p>
         <ui>
             <li>
                 <h:link outcome="viewAllMedications.xhtml">View All Medications</h:link>
@@ -21,6 +20,27 @@
                 <h:link outcome="createNewMedication.xhtml">Create New Medications</h:link>
             </li>
         </ui>
+            
+        <div style="border:1px solid black; padding: 15px;display:inline-table;margin: 5px 0;">
+            <h:outputText value="isLogin: #{sessionScope.isLogin}" /><br/>
+            <h:outputText value="Session ID: #{session.id}" /><br/>
+        </div>
+
+        <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+            <h:form id="logoutForm">
+                <div style="border:1px solid black; padding: 15px;display:inline-table;margin: 5px 0;">
+                    <b>Logged in as:</b> <br />
+                    <h:outputText value="Emp ID: #{sessionScope.user.id}" /><br/>
+                    <h:outputText value="Name: #{sessionScope.user.name}" /><br/>
+                    <h:outputText value="Username: #{sessionScope.user.username}" /><br/>
+                    <h:outputText value="Password: #{sessionScope.user.password}" /><br/>
+                    <h:outputText value="Role: #{sessionScope.user.role}" /><br/>
+
+                    <h:commandButton class="blue-button" type="submit" value="LOGOUT" actionListener="#{loginManagedBean.logout}" />
+                </div>
+            </h:form>
+        </h:panelGroup>
+        
         
         <ui:insert name="footer">
             <ui:include src="footer.xhtml" />

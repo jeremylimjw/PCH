@@ -5,6 +5,7 @@
  */
 package web.filter;
 
+import entity.Employee;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -16,6 +17,10 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import util.enumeration.RoleEnum;
 
 /**
  *
@@ -24,32 +29,63 @@ import javax.servlet.annotation.WebFilter;
 @WebFilter(filterName = "DefaultFilter", urlPatterns = {"/*"})
 public class DefaultFilter implements Filter {
     
-    private static final boolean debug = true;
+    FilterConfig filterConfig;
+    
+    private static final String CONTEXT_ROOT = "/PCH-war";
 
-    // The filter configuration object we are associated with.  If
-    // this value is null, this filter instance is not currently
-    // configured. 
-    private FilterConfig filterConfig = null;
+    public void init(FilterConfig filterConfig) throws ServletException {
+        this.filterConfig = filterConfig;
+    }
     
-    public DefaultFilter() {
-    }    
-    
-    /**
-     *
-     * @param request The servlet request we are processing
-     * @param response The servlet response we are creating
-     * @param chain The filter chain we are processing
-     *
-     * @exception IOException if an input/output error occurs
-     * @exception ServletException if a servlet error occurs
-     */
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
         
         System.out.println("---- DefaultFilter.doFilter()");
         
-        chain.doFilter(request, response);
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+        
+        String path = request.getServletPath();
+        
+        HttpSession session = request.getSession(true);
+        
+        if(session.getAttribute("isLogin") == null) {
+            session.setAttribute("isLogin", false);
+        }
+
+        Boolean isLogin = (Boolean) session.getAttribute("isLogin");
+        
+        // Login page and other resources like images and CSS should be excluded from filters
+        if (!path.equals("/login.xhtml") && !path.startsWith("/resources") && !path.startsWith("/javax.faces.resource")) {
+            
+            if (!isLogin) {
+                response.sendRedirect(CONTEXT_ROOT + "/login.xhtml");
+            } else {
+                Employee employee = (Employee) session.getAttribute("user");
+                
+                /*
+                ---- Filter individual pages example ----
+                if(path.equals("/doctorpage.xhtml") || path.equals("/doctorpage2.xhtml")) {
+                    if (employee.getRole().equals(RoleEnum.DOCTOR)) {
+                        chain.doFilter(servletRequest, servletResponse);
+                    } else {
+                        response.sendRedirect(CONTEXT_ROOT + "/somewhere.xhtml");
+                    }
+                } else if(path.equals("/nursepage.xhtml")) {
+                    if (employee.getRole().equals(RoleEnum.NURSE)) {
+                        chain.doFilter(servletRequest, servletResponse);
+                    } else {
+                        response.sendRedirect(CONTEXT_ROOT + "/somewhere.xhtml");
+                    }
+                }
+                */
+                
+                chain.doFilter(servletRequest, servletResponse);
+            }
+            
+        } else {
+            chain.doFilter(servletRequest, servletResponse);
+        }
+        
     }
     
 }

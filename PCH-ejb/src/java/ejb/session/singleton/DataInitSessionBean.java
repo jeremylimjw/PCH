@@ -6,6 +6,7 @@
 package ejb.session.singleton;
 
 import ejb.session.stateless.MedicationEntitySessionBeanLocal;
+import entity.Employee;
 import entity.Medication;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -14,6 +15,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.enumeration.RoleEnum;
 
 /**
  *
@@ -37,6 +39,9 @@ public class DataInitSessionBean {
             medicationEntitySessionBeanLocal.create(new Medication("Medication B"));
             medicationEntitySessionBeanLocal.create(new Medication("Medication C"));
             medicationEntitySessionBeanLocal.create(new Medication("Medication D"));
+            
+            em.persist(new Employee("Alice", "alice", "password", RoleEnum.DOCTOR));
+            em.persist(new Employee("Bob", "bob", "password", RoleEnum.NURSE));
         }
     }
     
