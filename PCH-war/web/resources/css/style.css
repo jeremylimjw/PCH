@@ -37,6 +37,20 @@ html, body {
     background-color: #1E90FF;
 }
 
+.gray-button {
+    font-family: 'Fira Sans', sans-serif;
+    background-color: #696969;
+    color: rgb(61, 58, 55);
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    color: white;
+}
+
+.gray-button:hover:enabled {
+    background-color: #727171;
+}
+
 /*--- Inputs --- */
 input {
     outline: none;

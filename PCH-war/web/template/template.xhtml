@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <h:head>
+        <title>PCH System</title>
+        <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/favicon.ico"/>
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" />
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/template.css" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500" rel="stylesheet" />
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" crossorigin="anonymous"/>
+    </h:head>
+
+    <h:body>
+
+        <header class="header">
+            <nav>
+                <ul>
+                    <li class="#{templateManagedBean.isUrl(',', '/index.xhtml')}">
+                        <h:link outcome="index.xhtml">
+                            <i class="fas fa-home"></i>
+                            <span>HOME</span>
+                        </h:link>
+                    </li>
+                    <li class="#{templateManagedBean.isUrl('/viewAllMedications.xhtml', '/createNewMedication.xhtml')}">
+                        <h:link outcome="viewAllMedications.xhtml">
+                            <i class="fas fa-capsules"></i>
+                            <span>MEDICATIONS</span>
+                        </h:link>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-user-injured"></i>
+                            <span>PATIENTS</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-circle"></i>
+                            <span>NEED</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-circle"></i>
+                            <span>MORE</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-circle"></i>
+                            <span>CONTENTS</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="far fa-user"></i>
+                            <span>ACCOUNT</span>
+                        </a>
+                    </li>
+                    
+                    <li class="header-right">
+                        <h:form>
+                            <h:commandButton class="gray-button" type="submit" value="LOGOUT" actionListener="#{loginManagedBean.logout}" />
+                        </h:form>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="sub-header">
+            <nav>
+                <ul>
+                    <li>
+                        <div class="label">APPTS TODAY</div>
+                        <div class="value">0</div>
+                    </li>
+                    <li>
+                        <div class="label">CURRENT BLOCK</div>
+                        <div class="value">0</div>
+                    </li>
+                    <li>
+                        <div class="label">GAS PRICE</div>
+                        <div class="value">2000000000</div>
+                    </li>
+                    <li>
+                        <div class="label">GAS LIMIT</div>
+                        <div class="value">6721975</div>
+                    </li>
+                    <li>
+                        <div class="label">HARDFORK</div>
+                        <div class="value">MUIRGLACIER</div>
+                    </li>
+                    <li>
+                        <div class="label">RPC SERVER</div>
+                        <div class="value">HTTP://127.0.0.1:8545</div>
+                    </li>
+                    <li>
+                        <div class="label">MINING STATUS</div>
+                        <div class="value">AUTOMINING</div>
+                    </li>
+                    <li class="sub-header-right">
+                        <button class="orange-button">BUTTON</button>
+                        <button class="orange-button">BUTTON 2</button>
+                        <button class="orange-button"><i class="fas fa-cog fa-lg"></i></button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div id="main"  class="container">
+            <ui:insert name="main">Main</ui:insert>            
+        </div>
+
+    </h:body>
+
+</html>

@@ -1,53 +1,27 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <h:head>
-        <title>PCH System</title>
-        <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/favicon.ico"/>
-        <link rel="stylesheet" href="resources/styles/style.css" />
-    </h:head>
-    <h:body>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                template="./template/template.xhtml">
+
+    <ui:define name="main">
         
-        <ui:insert name="header">
-            <ui:include src="header.xhtml" />
-        </ui:insert>
-        
-        <ui>
-            <li>
-                <h:link outcome="viewAllMedications.xhtml">View All Medications</h:link>
-            </li>
-            <li>
-                <h:link outcome="createNewMedication.xhtml">Create New Medications</h:link>
-            </li>
-        </ui>
-            
         <div style="border:1px solid black; padding: 15px;display:inline-table;margin: 5px 0;">
             <h:outputText value="isLogin: #{sessionScope.isLogin}" /><br/>
             <h:outputText value="Session ID: #{session.id}" /><br/>
         </div>
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
-            <h:form id="logoutForm">
-                <div style="border:1px solid black; padding: 15px;display:inline-table;margin: 5px 0;">
-                    <b>Logged in as:</b> <br />
-                    <h:outputText value="Emp ID: #{sessionScope.user.id}" /><br/>
-                    <h:outputText value="Name: #{sessionScope.user.name}" /><br/>
-                    <h:outputText value="Username: #{sessionScope.user.username}" /><br/>
-                    <h:outputText value="Password: #{sessionScope.user.password}" /><br/>
-                    <h:outputText value="Role: #{sessionScope.user.role}" /><br/>
-
-                    <h:commandButton class="blue-button" type="submit" value="LOGOUT" actionListener="#{loginManagedBean.logout}" />
-                </div>
-            </h:form>
+            <div style="border:1px solid black; padding: 15px;display:inline-table;margin: 5px 0;">
+                <b>Logged in as:</b> <br />
+                <h:outputText value="Emp ID: #{sessionScope.user.id}" /><br/>
+                <h:outputText value="Name: #{sessionScope.user.name}" /><br/>
+                <h:outputText value="Username: #{sessionScope.user.username}" /><br/>
+                <h:outputText value="Password: #{sessionScope.user.password}" /><br/>
+                <h:outputText value="Role: #{sessionScope.user.role}" /><br/>
+            </div>
         </h:panelGroup>
         
-        
-        <ui:insert name="footer">
-            <ui:include src="footer.xhtml" />
-        </ui:insert>
-        
-    </h:body>
-</html>
+    </ui:define>
 
+</ui:composition>
