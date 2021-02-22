@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.Medication;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.MedicationEntityException;
 
 /**
  *
@@ -17,5 +18,9 @@ import javax.ejb.Local;
 public interface MedicationEntitySessionBeanLocal {
     public List<Medication> retrieveAll();
     public Long create(Medication m);
+
+    public List<Medication> searchProductsByName(String searchString);
+
+    public Medication retrieveByMedicineId(Long mId) throws MedicationEntityException;
     
 }

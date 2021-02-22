@@ -15,7 +15,15 @@
                 <h:outputLabel for="name" value="Medication Name" />
                 <h:inputText id="name" value="#{createNewMedicationManagedBean.newMedication.name}" required="true" requiredMessage="Name is required" />
                 <h:message for="name" />
-
+                   
+                <h:outputLabel for="description" value="Medication Description" />
+                <h:inputText id="description" value="#{createNewMedicationManagedBean.newMedication.description}"  />
+                <h:message for="description" />
+                
+                   <h:outputLabel for="quantity" value="Quantity" />
+                   <h:inputText id="quantity" value="#{createNewMedicationManagedBean.newMedication.quantityOnHand}" required="true" requiredMessage="Quantity is required" />
+                <h:message for="quantity" />
+                
                 <h:outputText value="" />
                 <h:commandButton value="Create new Medication" actionListener="#{createNewMedicationManagedBean.createNewMedication}" />
                 <h:outputText value="" />

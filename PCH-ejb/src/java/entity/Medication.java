@@ -6,10 +6,14 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -22,14 +26,33 @@ public class Medication implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, length = 64)
+    @NotNull
+    @Size(max = 64)
     private String name;
+    @Column(length = 128)
+    @Size(max = 128)
+    private String description;
+    @Column(nullable = false)
+    @NotNull
+    @Min(0)
+    private Integer quantityOnHand;
+    
+    
+    
+    
+    
+    
 
     public Medication() {
     }
 
-    public Medication(String name) {
+    public Medication(String name, String description, Integer quantityOnHand) {
         this.name = name;
+        this.description = description;
+        this.quantityOnHand = quantityOnHand;
     }
+    
 
     public Long getId() {
         return id;
@@ -46,6 +69,34 @@ public class Medication implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+      /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the quantityOnHand
+     */
+    public Integer getQuantityOnHand() {
+        return quantityOnHand;
+    }
+
+    /**
+     * @param quantityOnHand the quantityOnHand to set
+     */
+    public void setQuantityOnHand(Integer quantityOnHand) {
+        this.quantityOnHand = quantityOnHand;
+    }
+    
 
     @Override
     public int hashCode() {
@@ -71,5 +122,6 @@ public class Medication implements Serializable {
     public String toString() {
         return "entity.MedicationEntity[ id=" + id + " ]";
     }
-    
+
+  
 }

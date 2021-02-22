@@ -3,12 +3,30 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="./template/template.xhtml">
+                template="./template/template.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
     <ui:define name="main">
         
         <h2>Medications</h2>
-        <h:dataTable class="table" value="#{viewAllMedicationsManagedBean.medications}" var="medication" style="width:100%">
+        
+        
+        <h:form id="formMain">
+
+            <br />
+             <div style="text-align: center;">
+                 <h:inputText id="txtSearchString" value="#{viewAllMedicationsManagedBean.searchString}" style="font-size: x-large;">
+                     <f:ajax event="keyup" execute="@this" render="formMain:dataTableMain" listener="#{viewAllMedicationsManagedBean.searchMedication()}" />
+                    </h:inputText>
+                    &nbsp;
+                    <h:commandButton value="Search" style="font-size: x-large;">
+                        <f:ajax event="click" execute="@this formMain:txtSearchString" render="formMain:dataTableMain" listener="#{searchProductsByNameManagedBean.searchProduct}" />
+                    </h:commandButton>
+
+                 
+             </div>
+            
+            <h:dataTable id="dataTableMain" value="#{viewAllMedicationsManagedBean.medications}" var="medication" style="width:100%">
             
             <h:column>
                 <f:facet name="header">Medication ID</f:facet>
@@ -20,7 +38,19 @@
                 <h:outputText value="#{medication.name}"/>
             </h:column>
             
+             <h:column>
+                <f:facet name="header">Medication Description</f:facet>
+                <h:outputText value="#{medication.description}"/>
+            </h:column>
+            
+             <h:column>
+                <f:facet name="header">Medication Quantity</f:facet>
+                <h:outputText value="#{medication.quantityOnHand}"/>
+            </h:column>
+            
+            
         </h:dataTable>
+        </h:form>
         
         <h:link outcome="createNewMedication.xhtml">
             <h:commandButton class="blue-button" value="Create" />

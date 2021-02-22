@@ -7,23 +7,27 @@ package jsf.managedbean;
 
 import ejb.session.stateless.MedicationEntitySessionBeanLocal;
 import entity.Medication;
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 
 /**
  *
  * @author USER
  */
 @Named(value = "viewAllMedicationsManagedBean")
-@RequestScoped
-public class ViewAllMedicationsManagedBean {
+@ViewScoped
+public class ViewAllMedicationsManagedBean implements Serializable{
 
     @EJB
     private MedicationEntitySessionBeanLocal medicationEntitySessionBeanLocal;
     
+    private String searchString;
     private List<Medication> medications;
 
     /**
@@ -34,8 +38,33 @@ public class ViewAllMedicationsManagedBean {
     
     @PostConstruct
     public void postConstruct() {
+        setSearchString((String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("medicationSearchString"));
+       
+        if(getSearchString() == null || getSearchString().trim().length() == 0)
+        {
+        
         medications = medicationEntitySessionBeanLocal.retrieveAll();
+        }
+        else
+        {
+            medications = medicationEntitySessionBeanLocal.searchProductsByName(getSearchString());
+        }
     }
+    
+    
+    public void searchMedication(){
+         if(getSearchString() == null || getSearchString().trim().length() == 0)
+        {
+        
+        medications = medicationEntitySessionBeanLocal.retrieveAll();
+        }
+        else
+        {
+            medications = medicationEntitySessionBeanLocal.searchProductsByName(getSearchString());
+        }
+        
+    }
+    
 
     public List<Medication> getMedications() {
         return medications;
@@ -43,6 +72,20 @@ public class ViewAllMedicationsManagedBean {
 
     public void setMedications(List<Medication> medications) {
         this.medications = medications;
+    }
+
+    /**
+     * @return the searchString
+     */
+    public String getSearchString() {
+        return searchString;
+    }
+
+    /**
+     * @param searchString the searchString to set
+     */
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
     
 }

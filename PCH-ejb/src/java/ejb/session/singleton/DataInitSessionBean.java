@@ -35,10 +35,10 @@ public class DataInitSessionBean {
     @PostConstruct
     public void postConstruct() {
         if (em.find(Medication.class, 1l) == null) {
-            medicationEntitySessionBeanLocal.create(new Medication("Medication A"));
-            medicationEntitySessionBeanLocal.create(new Medication("Medication B"));
-            medicationEntitySessionBeanLocal.create(new Medication("Medication C"));
-            medicationEntitySessionBeanLocal.create(new Medication("Medication D"));
+            medicationEntitySessionBeanLocal.create(new Medication("Medication A","testA", 10));
+            medicationEntitySessionBeanLocal.create(new Medication("Medication B","testB", 20));
+            medicationEntitySessionBeanLocal.create(new Medication("Medication C","testC", 30));
+            medicationEntitySessionBeanLocal.create(new Medication("Medication D","testD", 40));
             
             em.persist(new Employee("Alice", "alice", "password", RoleEnum.DOCTOR));
             em.persist(new Employee("Bob", "bob", "password", RoleEnum.NURSE));
