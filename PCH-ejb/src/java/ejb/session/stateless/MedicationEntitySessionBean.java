@@ -56,7 +56,7 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
     @Override
     public List<Medication> searchMedicinesByName(String searchString)
     {
-        Query query = em.createQuery("SELECT m FROM Medication m WHERE m.name LIKE :inSearchString ORDER BY m.quantityOnHand ASC");
+        Query query = em.createQuery("SELECT m FROM Medication m WHERE m.name LIKE :inSearchString ORDER BY m.quantity_on_hand ASC");
         query.setParameter("inSearchString", "%" + searchString + "%");
         List<Medication> medications = query.getResultList();
         
