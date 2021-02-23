@@ -26,6 +26,12 @@
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
     
+<!--    Remove Prime Faces Stylings
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>none</param-value>
+    </context-param>-->
+    
 <!--    HTTPS protocol crashes the application
     <security-constraint>
         <display-name>Secured Resources</display-name>
