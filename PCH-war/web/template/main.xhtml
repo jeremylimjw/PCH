@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f = "http://java.sun.com/jsf/core">
 
     <h:head>
         <title>PCH System</title>
@@ -13,6 +14,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500" rel="stylesheet" />
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" crossorigin="anonymous"/>
+        
+        <ui:insert name="head"></ui:insert>   
     </h:head>
 
     <h:body>
@@ -71,45 +74,49 @@
                 </ul>
             </nav>
         </header>
-
+        
         <div class="sub-header">
-            <nav>
-                <ul>
-                    <li>
-                        <div class="label">APPTS TODAY</div>
-                        <div class="value">0</div>
-                    </li>
-                    <li>
-                        <div class="label">CURRENT BLOCK</div>
-                        <div class="value">0</div>
-                    </li>
-                    <li>
-                        <div class="label">GAS PRICE</div>
-                        <div class="value">2000000000</div>
-                    </li>
-                    <li>
-                        <div class="label">GAS LIMIT</div>
-                        <div class="value">6721975</div>
-                    </li>
-                    <li>
-                        <div class="label">HARDFORK</div>
-                        <div class="value">MUIRGLACIER</div>
-                    </li>
-                    <li>
-                        <div class="label">RPC SERVER</div>
-                        <div class="value">HTTP://127.0.0.1:8545</div>
-                    </li>
-                    <li>
-                        <div class="label">MINING STATUS</div>
-                        <div class="value">AUTOMINING</div>
-                    </li>
-                    <li class="sub-header-right">
-                        <button class="orange-button">BUTTON</button>
-                        <button class="orange-button">BUTTON 2</button>
-                        <button class="orange-button"><i class="fas fa-cog fa-lg"></i></button>
-                    </li>
-                </ul>
-            </nav>
+            <div class="sub-header-item">
+                <div class="label">APPTS TODAY</div>
+                <div class="value"><h:outputText id="appointmentCount" value="#{appointmentManagedBean.getMyAppointmentCount(sessionScope.user)}" /></div>
+            </div>
+            <div class="sub-header-item">
+                <div class="label">IN QUEUE</div>
+                <div class="value"><h:outputText id="queueCount" value="#{appointmentManagedBean.queue.size()}" /></div>
+            </div>
+            <div class="sub-header-item">
+                <div class="label">GAS PRICE</div>
+                <div class="value">2000000000</div>
+            </div>
+            <div class="sub-header-item">
+                <div class="label">GAS LIMIT</div>
+                <div class="value">6721975</div>
+            </div>
+            <div class="sub-header-item">
+                <div class="label">HARDFORK</div>
+                <div class="value">MUIRGLACIER</div>
+            </div>
+            <div class="sub-header-item">
+                <div class="label">RPC SERVER</div>
+                <div class="value">HTTP://127.0.0.1:8545</div>
+            </div>
+            <div class="sub-header-item">
+                <div class="label">MINING STATUS</div>
+                <div class="value">AUTOMINING</div>
+            </div>
+            <div class="sub-header-right">
+                        
+                <h:commandButton class="orange-button" value="ADD RANDOM APPOINTMENT" actionListener="#{appointmentManagedBean.addRandomAppointment(sessionScope.user)}">
+                    <f:ajax execute="@this" render="appointments appointmentCount test_appointments" />
+                </h:commandButton>
+
+                <h:commandButton class="orange-button" value="ADD RANDOM WALK-IN" actionListener="#{appointmentManagedBean.addRandomWalkIn()}">
+                    <f:ajax execute="@this" render="queue queueCount test_queue" />
+                </h:commandButton>
+                <button class="orange-button">BUTTON</button>
+                <button class="orange-button">BUTTON 2</button>
+                <button class="orange-button"><i class="fas fa-cog fa-lg" style="padding-top: 1px;"></i></button>
+            </div>
         </div>
 
         <div id="main"  class="container">

@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Employee;
+import java.util.List;
 import javax.ejb.Local;
 import util.exception.EmployeeEntityException;
 
@@ -16,4 +17,6 @@ import util.exception.EmployeeEntityException;
 @Local
 public interface EmployeeEntitySessionBeanLocal {
     public Employee login(String username, String password) throws EmployeeEntityException;
+    public Employee retrieveById(Long id) throws EmployeeEntityException;
+    public List<Employee> retrieveAllDoctors();
 }

@@ -49,7 +49,7 @@ public class Appointment implements Serializable {
     private Date date_time;
     
     @Column(length = 128)
-    @Size(min = 1, max = 128)
+    @Size(max = 128)
     private String description;
     
     @Enumerated(EnumType.STRING)
@@ -90,9 +90,9 @@ public class Appointment implements Serializable {
     public Appointment() {
     }
 
-    public Appointment(Employee employee, MedicalRecord medical_record, Date date_time, String description, AppointmentTypeEnum type) {
+    public Appointment(Employee employee, MedicalRecord medical_record, Date date_time, AppointmentTypeEnum type) {
         this.date_time = date_time;
-        this.description = description;
+        this.description = "";
         this.status = StatusEnum.BOOKED;
         this.type = type;
         this.total_price = new BigDecimal(0);

@@ -1,0 +1,66 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 24 Feb, 2021, 6:19:19 AM
+    Author     : USER
+*/
+.container {
+    display: flex;
+}
+
+.left-container, .right-container {
+    width: 50%;
+    height: calc(100vh - 62px - 62px);
+    overflow: auto;
+    border-right: 1px solid rgb(51, 48, 46);
+}
+
+.left-container {
+    border-right: 1px solid rgb(51, 48, 46);
+}
+
+.right-container {
+    border-left: 1px solid rgb(51, 48, 46);
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.label-text {
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.row {
+    padding: 15px 10px;
+    border-bottom: 1px solid rgb(191, 190, 189);
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    transition: background-color 0.3s;
+}
+
+.row:hover {
+    background-color: rgb(191, 190, 189);
+}
+
+.name {
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.error-message {
+    font-family: 'Fira Sans', sans-serif;
+    color: rgb(185, 185, 185);
+    font-size: 22px;
+    margin: auto;
+    width: 200px;
+    text-align: center;
+    margin-top: calc(50vh - 62px - 62px);
+}
