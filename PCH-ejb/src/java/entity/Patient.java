@@ -6,31 +6,28 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import util.enumeration.RoleEnum;
 
 /**
  *
  * @author USER
  */
 @Entity
-public class Employee implements Serializable {
+public class Patient implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,30 +55,26 @@ public class Employee implements Serializable {
     @NotNull
     private String email;
     
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    @NotNull
-    private RoleEnum role;
-    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     @NotNull
     private Date date_created;
     
-    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
-    private List<Appointment> appointments;
+    @OneToOne(mappedBy = "patient")
+    @JoinColumn(nullable = false)
+    @NotNull
+    private MedicalRecord medical_record;
 
-    public Employee() {
+    public Patient() {
     }
 
-    public Employee(String name, String username,String password, String email,  RoleEnum role) {
+    public Patient(String name, String username, String password, String email, MedicalRecord medical_record) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.email = email;
-        this.role = role;
         this.date_created = new Date();
-        this.appointments = new ArrayList<>();
+        this.medical_record = medical_record;
     }
 
     public Long getId() {
@@ -112,24 +105,16 @@ public class Employee implements Serializable {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public RoleEnum getRole() {
-        return role;
-    }
-
-    public void setRole(RoleEnum role) {
-        this.role = role;
     }
 
     public Date getDate_created() {
@@ -140,14 +125,15 @@ public class Employee implements Serializable {
         this.date_created = date_created;
     }
 
-    public List<Appointment> getAppointments() {
-        return appointments;
+    public MedicalRecord getMedical_record() {
+        return medical_record;
     }
 
-    public void setAppointments(List<Appointment> appointments) {
-        this.appointments = appointments;
+    public void setMedical_record(MedicalRecord medical_record) {
+        this.medical_record = medical_record;
     }
     
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -158,10 +144,10 @@ public class Employee implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Employee)) {
+        if (!(object instanceof Patient)) {
             return false;
         }
-        Employee other = (Employee) object;
+        Patient other = (Patient) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -170,7 +156,7 @@ public class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Staff[ id=" + id + " ]";
+        return "entity.Patient[ id=" + id + " ]";
     }
     
 }

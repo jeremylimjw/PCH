@@ -45,7 +45,14 @@
             
              <h:column>
                 <f:facet name="header">Medication Quantity</f:facet>
-                <h:outputText value="#{medication.quantityOnHand}"/>
+                <h:outputText value="#{medication.quantity_on_hand}"/>
+            </h:column>
+            
+             <h:column>
+                <f:facet name="header">Conflicting Foods</f:facet>
+                <ui:repeat var="c" value="#{medication.conflicting_foods}">
+                    <h:outputText value="#{c}"/>,
+                </ui:repeat>
             </h:column>
             
             
