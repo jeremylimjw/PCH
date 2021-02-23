@@ -19,8 +19,10 @@ public interface MedicationEntitySessionBeanLocal {
     public List<Medication> retrieveAll();
     public Long create(Medication m);
 
-    public List<Medication> searchProductsByName(String searchString);
+
 
     public Medication retrieveByMedicineId(Long mId) throws MedicationEntityException;
+
+    public List<Medication> searchMedicinesByName(String searchString);
     
 }

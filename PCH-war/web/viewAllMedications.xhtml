@@ -16,11 +16,11 @@
             <br />
              <div style="text-align: center;">
                  <h:inputText id="txtSearchString" value="#{viewAllMedicationsManagedBean.searchString}" style="font-size: x-large;">
-                     <f:ajax event="keyup" execute="@this" render="formMain:dataTableMain" listener="#{viewAllMedicationsManagedBean.searchMedication()}" />
+                     <f:ajax event="keyup" execute="@this" render="formMain:dataTableMain" listener="#{viewAllMedicationsManagedBean.searchMedication}" />
                     </h:inputText>
                     &nbsp;
                     <h:commandButton value="Search" style="font-size: x-large;">
-                        <f:ajax event="click" execute="@this formMain:txtSearchString" render="formMain:dataTableMain" listener="#{searchProductsByNameManagedBean.searchProduct}" />
+                        <f:ajax event="click" execute="@this formMain:txtSearchString" render="formMain:dataTableMain" listener="#{viewAllMedicationsManagedBean.searchMedication}" />
                     </h:commandButton>
 
                  

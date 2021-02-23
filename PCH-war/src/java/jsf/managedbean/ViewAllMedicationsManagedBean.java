@@ -47,7 +47,7 @@ public class ViewAllMedicationsManagedBean implements Serializable{
         }
         else
         {
-            medications = medicationEntitySessionBeanLocal.searchProductsByName(getSearchString());
+            medications = medicationEntitySessionBeanLocal.searchMedicinesByName(getSearchString());
         }
     }
     
@@ -60,7 +60,7 @@ public class ViewAllMedicationsManagedBean implements Serializable{
         }
         else
         {
-            medications = medicationEntitySessionBeanLocal.searchProductsByName(getSearchString());
+            medications = medicationEntitySessionBeanLocal.searchMedicinesByName(getSearchString());
         }
         
     }
