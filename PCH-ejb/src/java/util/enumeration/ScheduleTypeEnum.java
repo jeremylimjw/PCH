@@ -9,30 +9,17 @@ package util.enumeration;
  *
  * @author USER
  */
-public enum StatusEnum {
-    BOOKED {
+public enum ScheduleTypeEnum {
+    APPOINTMENT {
         @Override
         public String toString() {
-            return "Booked";
+            return "Appointment";
         }
     },
-    IN_PROGRESS {
+    WALK_IN {
         @Override
         public String toString() {
-            return "In Progress";
-        }
-    },
-    COMPLETED {
-        @Override
-        public String toString() {
-            return "Completed";
-        }
-    },
-    CANCELLED {
-        @Override
-        public String toString() {
-            return "Cancelled";
+            return "Walk In";
         }
     };
-    
 }

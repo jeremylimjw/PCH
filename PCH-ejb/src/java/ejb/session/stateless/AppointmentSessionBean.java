@@ -23,6 +23,8 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.enumeration.AppointmentTypeEnum;
+import util.enumeration.ScheduleTypeEnum;
+import util.enumeration.StatusEnum;
 import util.exception.AppointmentEntityException;
 import util.exception.EmployeeEntityException;
 import util.exception.MedicalRecordEntityException;
@@ -53,20 +55,42 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     }
     
     @Override
-    public Long create(Long doctorId, Long patientRecordId, Date dateTime, AppointmentTypeEnum type) throws AppointmentEntityException {
+    public Long createAppointment(Long doctorId, Long patientRecordId, Date dateTime, AppointmentTypeEnum appointment_type) throws AppointmentEntityException {
         try {
             Employee doctor = employeeEntitySessionBeanLocal.retrieveById(doctorId);
             MedicalRecord medicalRecord = medicalRecordSessionBeanLocal.retrieveById(patientRecordId);
-            Appointment appointment = new Appointment(doctor, medicalRecord, dateTime, AppointmentTypeEnum.CONSULTATION);
+            Appointment appointment = new Appointment(doctor, medicalRecord, dateTime, ScheduleTypeEnum.APPOINTMENT, appointment_type);
 
             Set<ConstraintViolation<Appointment>> constraints = validator.validate(appointment);
             if (!constraints.isEmpty()) throw new AppointmentEntityException(getValidatorErrors(constraints));
 
             em.persist(appointment);
             em.flush();
-
+            
+            appointment.setQueue_no(String.format("A%03d", appointment.getId()));
+            
             return appointment.getId();
         } catch (EmployeeEntityException | MedicalRecordEntityException ex) {
+            throw new AppointmentEntityException(ex.getMessage());
+        }
+    }
+    
+    @Override
+    public Long createWalkIn(Long patientRecordId, AppointmentTypeEnum appointment_type) throws AppointmentEntityException {
+        try {
+            MedicalRecord medicalRecord = medicalRecordSessionBeanLocal.retrieveById(patientRecordId);
+            Appointment appointment = new Appointment(null, medicalRecord, new Date(), ScheduleTypeEnum.WALK_IN, appointment_type);
+
+            Set<ConstraintViolation<Appointment>> constraints = validator.validate(appointment);
+            if (!constraints.isEmpty()) throw new AppointmentEntityException(getValidatorErrors(constraints));
+
+            em.persist(appointment);
+            em.flush();
+            
+            appointment.setQueue_no(String.format("W%03d", appointment.getId()));
+
+            return appointment.getId();
+        } catch (MedicalRecordEntityException ex) {
             throw new AppointmentEntityException(ex.getMessage());
         }
     }
@@ -79,10 +103,34 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
         Date start = c.getTime();
         c.add(Calendar.DATE, 1);
         Date end = c.getTime();
-        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.employee.id = ?1 AND a.date_time >= ?2 AND a.date_time < ?3");
-        query.setParameter(1, doctor_id);
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 AND a.employee.id = ?2 AND a.date_time >= ?3 AND a.date_time < ?4 ORDER BY a.date_time");
+        query.setParameter(1, ScheduleTypeEnum.APPOINTMENT);
+        query.setParameter(2, doctor_id);
+        query.setParameter(3, start);
+        query.setParameter(4, end);
+        return query.getResultList();
+    }
+    
+    @Override
+    public List<Appointment> retrieveAppointmentsByDay(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.HOUR_OF_DAY, 0); c.set(Calendar.MINUTE, 0); c.set(Calendar.SECOND, 0);
+        Date start = c.getTime();
+        c.add(Calendar.DATE, 1);
+        Date end = c.getTime();
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 AND a.date_time >= ?2 AND a.date_time < ?3 ORDER BY a.date_time");
+        query.setParameter(1, ScheduleTypeEnum.APPOINTMENT);
         query.setParameter(2, start);
         query.setParameter(3, end);
+        return query.getResultList();
+    }
+    
+    @Override
+    public List<Appointment> retrieveOngoingQueue() {
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 AND a.status = ?2 ORDER BY a.date_time ASC");
+        query.setParameter(1, ScheduleTypeEnum.WALK_IN);
+        query.setParameter(2, StatusEnum.BOOKED);
         return query.getResultList();
     }
     

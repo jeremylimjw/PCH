@@ -5,6 +5,7 @@
  */
 package ejb.session.singleton;
 
+import ejb.session.stateless.AppointmentSessionBeanLocal;
 import ejb.session.stateless.MedicationEntitySessionBeanLocal;
 import entity.Appointment;
 import entity.Employee;
@@ -26,6 +27,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.AppointmentTypeEnum;
 import util.enumeration.RoleEnum;
+import util.enumeration.ScheduleTypeEnum;
+import util.exception.AppointmentEntityException;
 
 /**
  *
@@ -37,7 +40,7 @@ import util.enumeration.RoleEnum;
 public class DataInitSessionBean {
 
     @EJB
-    private MedicationEntitySessionBeanLocal medicationEntitySessionBeanLocal;
+    private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
     
     @PersistenceContext(unitName = "PCH-ejbPU")
     private EntityManager em;
@@ -59,20 +62,6 @@ public class DataInitSessionBean {
                 MedicalRecord desmondRecord = new MedicalRecord("Desmond", "S94626123A", "address1", new SimpleDateFormat("dd/MM/yyyy").parse("20/6/1996"), "82746726", "B+", new ArrayList<>(Arrays.asList("Drug 1")), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()); em.persist(desmondRecord);
                 Patient desmond = new Patient("desmond", "password", "desmond@gmail.com", desmondRecord); em.persist(desmond);
 
-                Calendar today = Calendar.getInstance();
-                today.set(Calendar.HOUR_OF_DAY, 9);
-                today.set(Calendar.MINUTE, 0);
-                today.set(Calendar.SECOND, 0);
-                em.persist(new Appointment(alice, desmondRecord, today.getTime(), AppointmentTypeEnum.CONSULTATION));
-                today.set(Calendar.HOUR_OF_DAY, 11);
-                em.persist(new Appointment(alice, desmondRecord, today.getTime(), AppointmentTypeEnum.CONSULTATION));
-                today.set(Calendar.HOUR_OF_DAY, 10);
-                today.set(Calendar.MINUTE, 45);
-                em.persist(new Appointment(alice, desmondRecord, today.getTime(), AppointmentTypeEnum.CONSULTATION));
-
-                today.set(Calendar.HOUR_OF_DAY, 12);
-                today.set(Calendar.MINUTE, 0);
-                em.persist(new Appointment(bob, desmondRecord, today.getTime(), AppointmentTypeEnum.CONSULTATION));
             } catch (ParseException ex) {
                 System.out.println(ex.getMessage());
             }

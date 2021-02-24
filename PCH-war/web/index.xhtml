@@ -12,48 +12,27 @@
     
     <ui:define name="main">
         
-<!--        <h:panelGroup id="test_appointments">
-            <ul>
-                <ui:repeat var="a" value="#{appointmentManagedBean.appointments.entrySet()}">
-
-                        <li>#{a.getKey()}</li>
-                        <ul>
-                            <ui:repeat var="b" value="#{a.getValue()}">
-                                <li>
-                                    #{b} 
-                                    <h:outputText value="#{b.date_time}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy h:mm a" />
-                                    </h:outputText>
-                                </li>
-                            </ui:repeat>
-                        </ul>
-
-                </ui:repeat>
-            </ul>
-        </h:panelGroup>-->
-        
-        
         <p:poll interval="5" listener="#{appointmentManagedBean.getAllAppointmentsForToday()}" update="appointments appointmentCount" />
-        <p:poll interval="5" update="queue queueCount" />
+        <p:poll interval="5" listener="#{appointmentManagedBean.getOngoingQueue()}" update="queue queueCount" />
         
         
         <h:panelGroup id="appointments" class="left-container">
             
-            <h:panelGroup rendered="#{appointmentManagedBean.getMyAppointments(sessionScope.user).isEmpty()}" class="error-message">NO APPOINTMENTS TODAY</h:panelGroup>
+            <h:panelGroup rendered="#{appointmentManagedBean.appointments.isEmpty()}" class="error-message">NO APPOINTMENTS TODAY</h:panelGroup>
 
-            <ui:repeat var="appointment" value="#{appointmentManagedBean.getMyAppointments(sessionScope.user)}">
+            <ui:repeat var="a" value="#{appointmentManagedBean.appointments}">
                 
                 <div class="row">
 
                     <div>
                         <div class="label-text">QUEUE NO</div>
-                        <div>A001</div>
+                        <div>#{a.queue_no}</div>
                     </div>
                     
                     <div>
                         <div class="label-text">APPT TIME</div>
                         <div>
-                            <h:outputText value="#{appointment.date_time}">
+                            <h:outputText value="#{a.date_time}">
                                 <f:convertDateTime pattern="h:mm a" />
                             </h:outputText>
                         </div>
@@ -61,13 +40,13 @@
 
                     <div>
                         <div class="label-text">PATIENT NAME</div>
-                        <div class="name" title="#{appointment.medical_record.name}">#{appointment.medical_record.name}</div>
+                        <div class="name" title="#{a.medical_record.name}">#{a.medical_record.name}</div>
                     </div>
 
                     <div>
                         <div class="label-text">AGE</div>
                         <div>
-                            <h:outputText value="#{appointment.medical_record.dob}">
+                            <h:outputText value="#{a.medical_record.dob}">
                                 <f:converter converterId="ageConverter" />
                             </h:outputText>
                         </div>
@@ -76,18 +55,16 @@
                     <div>
                         <div class="label-text">ALLERGY</div>
                         <div>
-                            <h:outputText value="#{appointment.medical_record.drug_allergys}">
+                            <h:outputText value="#{a.medical_record.drug_allergys}">
                                 <f:converter converterId="isListEmptyConverter" />
                             </h:outputText>
                         </div>
                     </div>
 
                     <div>
-                        <div class="label-text">JOINED</div>
+                        <div class="label-text">STATUS</div>
                         <div>
-                            <h:outputText value="#{appointment.medical_record.date_created}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText>
+                            <h:outputText value="#{a.status}" />
                         </div>
                     </div>
                     
@@ -107,12 +84,16 @@
 
                     <div>
                         <div class="label-text">QUEUE NO</div>
-                        <div>W001</div>
+                        <div>#{q.queue_no}</div>
                     </div>
                     
                     <div class="col">
-                        <div class="label-text">APPT TIME</div>
-                        <div>-</div>
+                        <div class="label-text">CREATED</div>
+                        <div>
+                            <h:outputText value="#{q.date_time}">
+                                <f:convertDateTime pattern="h:mm a" />
+                            </h:outputText>
+                        </div>
                     </div>
 
                     <div>
@@ -139,11 +120,9 @@
                     </div>
 
                     <div>
-                        <div class="label-text">JOINED</div>
+                        <div class="label-text">STATUS</div>
                         <div>
-                            <h:outputText value="#{q.medical_record.date_created}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </h:outputText>
+                            <h:outputText value="#{q.status}" />
                         </div>
                     </div>
                     

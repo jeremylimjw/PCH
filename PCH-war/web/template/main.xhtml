@@ -78,11 +78,11 @@
         <div class="sub-header">
             <div class="sub-header-item">
                 <div class="label">APPTS TODAY</div>
-                <div class="value"><h:outputText id="appointmentCount" value="#{appointmentManagedBean.getMyAppointmentCount(sessionScope.user)}" /></div>
+                <div class="value"><h:outputText id="appointmentCount" value="#{templateManagedBean.appointmentCount}" /></div>
             </div>
             <div class="sub-header-item">
                 <div class="label">IN QUEUE</div>
-                <div class="value"><h:outputText id="queueCount" value="#{appointmentManagedBean.queue.size()}" /></div>
+                <div class="value"><h:outputText id="queueCount" value="#{templateManagedBean.queueCount}" /></div>
             </div>
             <div class="sub-header-item">
                 <div class="label">GAS PRICE</div>
@@ -106,7 +106,7 @@
             </div>
             <div class="sub-header-right">
                         
-                <h:commandButton class="orange-button" value="ADD RANDOM APPOINTMENT" actionListener="#{appointmentManagedBean.addRandomAppointment(sessionScope.user)}">
+                <h:commandButton class="orange-button" value="ADD RANDOM APPOINTMENT" actionListener="#{appointmentManagedBean.addRandomAppointment()}">
                     <f:ajax execute="@this" render="appointments appointmentCount test_appointments" />
                 </h:commandButton>
 
