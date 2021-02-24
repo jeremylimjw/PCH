@@ -3,7 +3,7 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f = "http://java.sun.com/jsf/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="./template/main.xhtml">
 
     <ui:define name="head">
@@ -39,7 +39,7 @@
         
         <h:panelGroup id="appointments" class="left-container">
             
-            <!--<h:panelGroup class="error-message">NO APPOINTMENTS TODAY</h:panelGroup>>--> 
+            <h:panelGroup rendered="#{appointmentManagedBean.getMyAppointments(sessionScope.user).isEmpty()}" class="error-message">NO APPOINTMENTS TODAY</h:panelGroup>
 
             <ui:repeat var="appointment" value="#{appointmentManagedBean.getMyAppointments(sessionScope.user)}">
                 
@@ -98,7 +98,8 @@
         </h:panelGroup>
 
         <h:panelGroup id="queue" class="right-container">
-            <!-- <div class="error-message">NO ONE IN QUEUE</div> -->
+            
+            <h:panelGroup rendered="#{appointmentManagedBean.queue.isEmpty()}" class="error-message">NO ONE IN QUEUE</h:panelGroup> 
 
             <ui:repeat var="q" value="#{appointmentManagedBean.queue}">
                 
