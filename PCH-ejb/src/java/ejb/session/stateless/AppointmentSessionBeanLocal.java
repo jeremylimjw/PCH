@@ -21,8 +21,9 @@ import util.exception.AppointmentEntityException;
 public interface AppointmentSessionBeanLocal {
     public Long createAppointment(Long doctorId, Long patientRecordId, Date dateTime, AppointmentTypeEnum appointment_type) throws AppointmentEntityException;
     public Long createWalkIn(Long patientRecordId, AppointmentTypeEnum appointment_type) throws AppointmentEntityException;
-    public List<Appointment> retrieveAppointmentsByDoctorId(Long doctor_id, Date date);
+    public List<Appointment> retrieveAppointmentsByDoctorIdByDay(Long doctor_id, Date date);
     public List<Appointment> retrieveAppointmentsByDay(Date date);
     public List<Appointment> retrieveOngoingQueue();
     public void updateStatus(Long appointmentId, StatusEnum status) throws AppointmentEntityException;
+    public Appointment retrieveById(Long id) throws AppointmentEntityException;
 }

@@ -5,6 +5,7 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateful.QueueBoardSessionBeanLocal;
 import ejb.session.stateless.AppointmentSessionBeanLocal;
 import entity.Appointment;
 import entity.Employee;
@@ -24,6 +25,7 @@ import util.enumeration.AppointmentTypeEnum;
 import util.enumeration.RoleEnum;
 import util.enumeration.StatusEnum;
 import util.exception.AppointmentEntityException;
+import util.exception.EmployeeEntityException;
 
 /**
  *
@@ -32,6 +34,9 @@ import util.exception.AppointmentEntityException;
 @Named(value = "appointmentManagedBean")
 @RequestScoped
 public class AppointmentManagedBean implements Serializable {
+
+    @EJB
+    private QueueBoardSessionBeanLocal queueBoardSessionBeanLocal;
 
     @EJB
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
@@ -54,7 +59,7 @@ public class AppointmentManagedBean implements Serializable {
     
     public void getAllAppointmentsForToday() {
         if (user.getRole().equals(RoleEnum.DOCTOR)) {
-            appointments = appointmentSessionBeanLocal.retrieveAppointmentsByDoctorId(user.getId(), new Date());
+            appointments = appointmentSessionBeanLocal.retrieveAppointmentsByDoctorIdByDay(user.getId(), new Date());
         } else {
             appointments = appointmentSessionBeanLocal.retrieveAppointmentsByDay(new Date());
         }
@@ -66,11 +71,14 @@ public class AppointmentManagedBean implements Serializable {
     
     public void updateStatus(Appointment appointment, StatusEnum e) {
         try {
+            if (e.equals(StatusEnum.IN_PROGRESS)) {
+                queueBoardSessionBeanLocal.add(user.getId(), appointment.getId());
+            }
             appointmentSessionBeanLocal.updateStatus(appointment.getId(), e);
             getAllAppointmentsForToday();
             getOngoingQueue();
             FacesContext.getCurrentInstance().addMessage("message", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update appointment status.", ":("));
-        } catch(AppointmentEntityException ex) {
+        } catch(EmployeeEntityException | AppointmentEntityException ex) {
             System.out.println(ex.getMessage());
             FacesContext.getCurrentInstance().addMessage("message", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update appointment status.", ":("));
         }

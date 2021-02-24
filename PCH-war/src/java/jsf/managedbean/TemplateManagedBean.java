@@ -48,7 +48,7 @@ public class TemplateManagedBean {
         user = (Employee) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
         
         if (user.getRole().equals(RoleEnum.DOCTOR)) {
-            appointmentCount = appointmentSessionBeanLocal.retrieveAppointmentsByDoctorId(user.getId(), new Date()).size();
+            appointmentCount = appointmentSessionBeanLocal.retrieveAppointmentsByDoctorIdByDay(user.getId(), new Date()).size();
         } else {
             appointmentCount = appointmentSessionBeanLocal.retrieveAppointmentsByDay(new Date()).size();
         }

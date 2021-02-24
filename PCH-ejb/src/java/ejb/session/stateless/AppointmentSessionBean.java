@@ -95,7 +95,7 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     }
     
     @Override
-    public List<Appointment> retrieveAppointmentsByDoctorId(Long doctor_id, Date date) {
+    public List<Appointment> retrieveAppointmentsByDoctorIdByDay(Long doctor_id, Date date) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         c.set(Calendar.HOUR_OF_DAY, 0); c.set(Calendar.MINUTE, 0); c.set(Calendar.SECOND, 0);
@@ -139,6 +139,14 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
         Appointment appointment = em.find(Appointment.class, appointmentId);
         if (appointment == null) throw new AppointmentEntityException("Error: Appointment ID " + appointmentId + " does not exist!");
         appointment.setStatus(status);
+    }
+
+    @Override
+    public Appointment retrieveById(Long id) throws AppointmentEntityException {
+        if (id == null) throw new AppointmentEntityException("Error: Appointment ID is not provided!");
+        Appointment appointment = em.find(Appointment.class, id);
+        if (appointment == null) throw new AppointmentEntityException("Error: Appointment with ID " + id + " is not found!");
+        return appointment;
     }
     
     private String getValidatorErrors(Set<ConstraintViolation<Appointment>> constraints) {
