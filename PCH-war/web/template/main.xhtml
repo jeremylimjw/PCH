@@ -106,22 +106,22 @@
             </div>
             <div class="sub-header-right">
                         
-                <h:commandButton class="orange-button" value="ADD RANDOM APPOINTMENT" actionListener="#{appointmentManagedBean.addRandomAppointment()}">
-                    <f:ajax execute="@this" render="appointments appointmentCount test_appointments" />
+                <h:commandButton class="button orange-button" value="ADD RANDOM APPOINTMENT" actionListener="#{appointmentManagedBean.addRandomAppointment()}">
+                    <f:ajax execute="@this" render="appointments appointmentCount" />
                 </h:commandButton>
 
-                <h:commandButton class="orange-button" value="ADD RANDOM WALK-IN" actionListener="#{appointmentManagedBean.addRandomWalkIn()}">
-                    <f:ajax execute="@this" render="queue queueCount test_queue" />
+                <h:commandButton class="button orange-button" value="ADD RANDOM WALK-IN" actionListener="#{appointmentManagedBean.addRandomWalkIn()}">
+                    <f:ajax execute="@this" render="queue queueCount" />
                 </h:commandButton>
-                <button class="orange-button">BUTTON</button>
-                <button class="orange-button">BUTTON 2</button>
-                <button class="orange-button"><i class="fas fa-cog fa-lg" style="padding-top: 1px;"></i></button>
+                <button class="button orange-button">BUTTON</button>
+                <button class="button orange-button"><i class="fas fa-cog fa-lg" style="padding-top: 1px;"></i></button>
             </div>
         </div>
 
         <div id="main"  class="container">
             <ui:insert name="main">Main</ui:insert>            
         </div>
+
 
     </h:body>
 

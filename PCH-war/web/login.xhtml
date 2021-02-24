@@ -28,7 +28,7 @@
                 box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
             }
 
-            .row {
+            .form-div {
                 margin: 15px 0;
             }
 
@@ -77,21 +77,21 @@
             
             <h:form id="loginForm">
                 
-                <div class="row">
+                <div class="form-div">
                     <h:inputText id="username" class="input-text" value="#{loginManagedBean.username}" a:placeholder="Enter Username" required="true" requiredMessage="Username is required" maxlength="32">
                         <f:validateLength minimum="2" />
                     </h:inputText>
                     <h:message for="username" errorClass="errorText" fatalClass="errorText" />
                 </div>
 
-                <div class="row">
+                <div class="form-div">
                     <h:inputSecret id="password" class="input-text" value="#{loginManagedBean.password}" a:placeholder="Enter Password" required="true" requiredMessage="Password is required" maxlength="32">
                         <f:validateLength minimum="2" />
                     </h:inputSecret>
                     <h:message for="password" errorClass="errorText" fatalClass="errorText" />
                 </div>
 
-                <div class="row">
+                <div class="form-div">
                     <h:commandButton class="blue-button" type="submit" value="LOGIN" actionListener="#{loginManagedBean.login}" />
                     <h:messages errorClass="errorTexts" fatalClass="errorTexts" infoClass="infoTexts" globalOnly="true" />
                 </div>
@@ -99,7 +99,7 @@
             
             <!--FOR DEVELOPER'S USE ONLY, REMOVE DURING PRODUCTION!!!!-->
             <h:form>
-                <div class="row">
+                <div class="form-div">
                     <h:outputText value="Session ID: #{session.id}" /><br/>
                     <h:commandButton class="orange-button" type="submit" value="QUICK LOGIN" actionListener="#{loginManagedBean.quickLogin}" />
                 </div>

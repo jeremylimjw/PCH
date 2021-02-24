@@ -61,11 +61,23 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div style="width: 85px">
                         <div class="label-text">STATUS</div>
                         <div>
-                            <h:outputText value="#{a.status}" />
+                            <h:outputText value="#{a.status.toString()}" />
                         </div>
+                    </div>
+                    
+                    <div style="width: 100px;">
+                        <h:commandButton class="button green-button" rendered="#{a.status == 'BOOKED'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'ARRIVED')}" value="PRESENT">
+                            <f:ajax execute="@this" render="appointments" />
+                        </h:commandButton>
+                        <h:commandButton class="button blue-button" rendered="#{a.status == 'ARRIVED' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'IN_PROGRESS')}" value="CALL">
+                            <f:ajax execute="@this" render="appointments" />
+                        </h:commandButton>
+                        <h:commandButton class="button red-button" rendered="#{a.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'MISSED')}" value="SKIP">
+                            <f:ajax execute="@this" render="appointments appointmentCount" />
+                        </h:commandButton>
                     </div>
                     
                 </div>
@@ -78,7 +90,7 @@
             
             <h:panelGroup rendered="#{appointmentManagedBean.queue.isEmpty()}" class="error-message">NO ONE IN QUEUE</h:panelGroup> 
 
-            <ui:repeat var="q" value="#{appointmentManagedBean.queue}">
+            <ui:repeat var="q" value="#{appointmentManagedBean.queue}" varStatus="myVarStatus">
                 
                 <div class="row">
 
@@ -119,16 +131,25 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div style="width: 85px">
                         <div class="label-text">STATUS</div>
                         <div>
-                            <h:outputText value="#{q.status}" />
+                            <h:outputText value="#{q.status.toString()}" />
                         </div>
+                    </div>
+                    
+                    <div style="width: 100px;">
+                        <h:commandButton class="button blue-button 100-width" rendered="#{q.status == 'ARRIVED' and myVarStatus.index == 0 and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'IN_PROGRESS')}" value="CALL">
+                            <f:ajax execute="@this" render="queue" />
+                        </h:commandButton>
+                        <h:commandButton class="button red-button 100-width" rendered="#{q.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'MISSED')}" value="SKIP">
+                            <f:ajax execute="@this" render="queue queueCount" />
+                        </h:commandButton>
                     </div>
                     
                 </div>
                 
-            </ui:repeat>
+            </ui:repeat>        
             
         </h:panelGroup>
 

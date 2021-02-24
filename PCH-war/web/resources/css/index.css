@@ -30,24 +30,6 @@ and open the template in the editor.
     display: none;
 }
 
-.label-text {
-    font-family: 'Fira Sans', sans-serif;
-}
-
-.row {
-    padding: 15px 10px;
-    border-bottom: 1px solid rgb(191, 190, 189);
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    transition: background-color 0.3s;
-}
-
-.row:hover {
-    background-color: rgb(191, 190, 189);
-}
-
 .name {
     width: 120px;
     white-space: nowrap;
@@ -55,13 +37,4 @@ and open the template in the editor.
     text-overflow: ellipsis;
 }
 
-.error-message {
-    display: block;
-    font-family: 'Fira Sans', sans-serif;
-    color: rgb(185, 185, 185);
-    font-size: 22px;
-    margin: auto;
-    width: 200px;
-    text-align: center;
-    margin-top: calc(50vh - 62px - 62px);
-}
+.button { min-width: 100px; }

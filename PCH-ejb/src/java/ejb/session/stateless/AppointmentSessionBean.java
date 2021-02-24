@@ -17,7 +17,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TemporalType;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -59,7 +58,7 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
         try {
             Employee doctor = employeeEntitySessionBeanLocal.retrieveById(doctorId);
             MedicalRecord medicalRecord = medicalRecordSessionBeanLocal.retrieveById(patientRecordId);
-            Appointment appointment = new Appointment(doctor, medicalRecord, dateTime, ScheduleTypeEnum.APPOINTMENT, appointment_type);
+            Appointment appointment = new Appointment(doctor, medicalRecord, dateTime, ScheduleTypeEnum.APPOINTMENT, appointment_type, StatusEnum.BOOKED);
 
             Set<ConstraintViolation<Appointment>> constraints = validator.validate(appointment);
             if (!constraints.isEmpty()) throw new AppointmentEntityException(getValidatorErrors(constraints));
@@ -79,7 +78,7 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     public Long createWalkIn(Long patientRecordId, AppointmentTypeEnum appointment_type) throws AppointmentEntityException {
         try {
             MedicalRecord medicalRecord = medicalRecordSessionBeanLocal.retrieveById(patientRecordId);
-            Appointment appointment = new Appointment(null, medicalRecord, new Date(), ScheduleTypeEnum.WALK_IN, appointment_type);
+            Appointment appointment = new Appointment(null, medicalRecord, new Date(), ScheduleTypeEnum.WALK_IN, appointment_type, StatusEnum.ARRIVED);
 
             Set<ConstraintViolation<Appointment>> constraints = validator.validate(appointment);
             if (!constraints.isEmpty()) throw new AppointmentEntityException(getValidatorErrors(constraints));
@@ -128,10 +127,18 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     
     @Override
     public List<Appointment> retrieveOngoingQueue() {
-        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 AND a.status = ?2 ORDER BY a.date_time ASC");
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 AND a.status IN(?2,?3) ORDER BY a.date_time ASC");
         query.setParameter(1, ScheduleTypeEnum.WALK_IN);
-        query.setParameter(2, StatusEnum.BOOKED);
+        query.setParameter(2, StatusEnum.ARRIVED);
+        query.setParameter(3, StatusEnum.IN_PROGRESS);
         return query.getResultList();
+    }
+    
+    @Override
+    public void updateStatus(Long appointmentId, StatusEnum status) throws AppointmentEntityException {
+        Appointment appointment = em.find(Appointment.class, appointmentId);
+        if (appointment == null) throw new AppointmentEntityException("Error: Appointment ID " + appointmentId + " does not exist!");
+        appointment.setStatus(status);
     }
     
     private String getValidatorErrors(Set<ConstraintViolation<Appointment>> constraints) {

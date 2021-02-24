@@ -6,38 +6,52 @@ html, body {
     font-family: 'Roboto', sans-serif;
 }
 
+.row {
+    padding: 15px 10px;
+    border-bottom: 1px solid rgb(191, 190, 189);
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    transition: background-color 0.3s;
+}
 
+.row:hover {
+    background-color: rgb(191, 190, 189);
+}
 
-.orange-button {
+.label-text {
     font-family: 'Fira Sans', sans-serif;
-    background-color: rgb(242, 175, 103);
-    color: rgb(61, 58, 55);
+}
+
+.error-message {
+    display: block;
+    font-family: 'Fira Sans', sans-serif;
+    color: rgb(185, 185, 185);
+    font-size: 22px;
+    margin: auto;
+    width: 200px;
+    text-align: center;
+    margin-top: calc(50vh - 62px - 62px);
+}
+
+.button {
+    font-family: 'Fira Sans', sans-serif;
     border-radius: 5px;
     outline: none;
     border: none;
+    padding: 6px 12px;
+    height: 30px;
 }
 
-.orange-button:hover {
-    background-color: rgb(255, 210, 124);
-}
-
-.blue-button {
-    font-family: 'Fira Sans', sans-serif;
-    background-color: #4169E1;
-    color: rgb(61, 58, 55);
-    border-radius: 5px;
-    outline: none;
-    border: none;
-    color: white;
-}
-
-.blue-button:hover:enabled {
-    background-color: #6A5ACD;
-}
-
-.blue-button:disabled {
-    background-color: #1E90FF;
-}
+.orange-button { background-color: rgb(242, 175, 103); color: rgb(61, 58, 55); }
+.orange-button:hover:enabled { background-color: rgb(255, 210, 124); color: white; }
+.red-button                 { background-color: #CB4E4E; color: white; }
+.red-button:hover:enabled   { background-color: #ab3c3c; }
+.blue-button                { background-color: #4169E1; color: white; }
+.blue-button:hover:enabled  { background-color: #6254b8; }
+.green-button               { background-color: #59886b; color: white; }
+.green-button:hover:enabled { background-color: #506d5b; }
 
 .gray-button {
     font-family: 'Fira Sans', sans-serif;

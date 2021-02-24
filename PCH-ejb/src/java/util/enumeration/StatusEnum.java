@@ -16,6 +16,12 @@ public enum StatusEnum {
             return "Booked";
         }
     },
+    ARRIVED {
+        @Override
+        public String toString() {
+            return "Arrived";
+        }
+    },
     IN_PROGRESS {
         @Override
         public String toString() {
@@ -32,6 +38,12 @@ public enum StatusEnum {
         @Override
         public String toString() {
             return "Cancelled";
+        }
+    },
+    MISSED {
+        @Override
+        public String toString() {
+            return "Missed";
         }
     };
     

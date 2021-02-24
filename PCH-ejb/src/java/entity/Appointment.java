@@ -99,11 +99,11 @@ public class Appointment implements Serializable {
     public Appointment() {
     }
 
-    public Appointment(Employee employee, MedicalRecord medical_record, Date date_time, ScheduleTypeEnum schedule_type, AppointmentTypeEnum appointment_type) {
-        this.queue_no = "";
+    public Appointment(Employee employee, MedicalRecord medical_record, Date date_time, ScheduleTypeEnum schedule_type, AppointmentTypeEnum appointment_type, StatusEnum status) {
+        this.queue_no = "None";
         this.date_time = date_time;
         this.description = "";
-        this.status = StatusEnum.BOOKED;
+        this.status = status;
         this.schedule_type = schedule_type;
         this.appointment_type = appointment_type;
         this.total_price = new BigDecimal(0);

@@ -17,10 +17,12 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import util.enumeration.AppointmentTypeEnum;
 import util.enumeration.RoleEnum;
+import util.enumeration.StatusEnum;
 import util.exception.AppointmentEntityException;
 
 /**
@@ -60,6 +62,18 @@ public class AppointmentManagedBean implements Serializable {
     
     public void getOngoingQueue() {
         queue = appointmentSessionBeanLocal.retrieveOngoingQueue();
+    }
+    
+    public void updateStatus(Appointment appointment, StatusEnum e) {
+        try {
+            appointmentSessionBeanLocal.updateStatus(appointment.getId(), e);
+            getAllAppointmentsForToday();
+            getOngoingQueue();
+            FacesContext.getCurrentInstance().addMessage("message", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update appointment status.", ":("));
+        } catch(AppointmentEntityException ex) {
+            System.out.println(ex.getMessage());
+            FacesContext.getCurrentInstance().addMessage("message", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update appointment status.", ":("));
+        }
     }
     
     // ---- FOR TESTING ONLY ----

@@ -37,8 +37,7 @@
         <param-value>none</param-value>
     </context-param>-->
     
-<!--    HTTPS protocol crashes the application
-    <security-constraint>
+<!--    <security-constraint>
         <display-name>Secured Resources</display-name>
         <web-resource-collection>
             <web-resource-name>Secured Web Pages</web-resource-name>
