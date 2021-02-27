@@ -23,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import util.enumeration.AppointmentTypeEnum;
 import util.enumeration.RoleEnum;
+import util.enumeration.ScheduleTypeEnum;
 import util.enumeration.StatusEnum;
 import util.exception.AppointmentEntityException;
 import util.exception.EmployeeEntityException;
@@ -72,6 +73,7 @@ public class AppointmentManagedBean implements Serializable {
     public void updateStatus(Appointment appointment, StatusEnum e) {
         try {
             if (e.equals(StatusEnum.IN_PROGRESS)) {
+                if (appointment.getSchedule_type().equals(ScheduleTypeEnum.WALK_IN)) appointmentSessionBeanLocal.assignAppointment(appointment.getId(), user.getId());
                 queueBoardSessionBeanLocal.add(user.getId(), appointment.getId());
             }
             appointmentSessionBeanLocal.updateStatus(appointment.getId(), e);

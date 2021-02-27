@@ -136,9 +136,22 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     
     @Override
     public void updateStatus(Long appointmentId, StatusEnum status) throws AppointmentEntityException {
-        Appointment appointment = em.find(Appointment.class, appointmentId);
-        if (appointment == null) throw new AppointmentEntityException("Error: Appointment ID " + appointmentId + " does not exist!");
+        Appointment appointment = retrieveById(appointmentId);
         appointment.setStatus(status);
+    }
+    
+    @Override
+    public void assignAppointment(Long appointmentId, Long doctorId) throws AppointmentEntityException {
+        try {
+            Appointment appointment = retrieveById(appointmentId);
+            if (appointment.getEmployee() != null) throw new AppointmentEntityException("Error: Appointment ID " + appointmentId + " has already been assigned to a doctor!");
+            Employee doctor = employeeEntitySessionBeanLocal.retrieveById(doctorId);
+
+            appointment.setEmployee(doctor);
+        
+        } catch (EmployeeEntityException ex) {
+            throw new AppointmentEntityException(ex.getMessage());
+        }
     }
 
     @Override

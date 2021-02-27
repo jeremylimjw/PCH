@@ -25,5 +25,7 @@ public interface AppointmentSessionBeanLocal {
     public List<Appointment> retrieveAppointmentsByDay(Date date);
     public List<Appointment> retrieveOngoingQueue();
     public void updateStatus(Long appointmentId, StatusEnum status) throws AppointmentEntityException;
+    public void assignAppointment(Long appointmentId, Long doctorId) throws AppointmentEntityException;
     public Appointment retrieveById(Long id) throws AppointmentEntityException;
+
 }
