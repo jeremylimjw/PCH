@@ -9,6 +9,7 @@ import ejb.session.stateful.QueueBoardSessionBeanLocal;
 import ejb.session.stateless.AppointmentSessionBeanLocal;
 import entity.Appointment;
 import entity.Employee;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -33,7 +34,7 @@ import util.exception.EmployeeEntityException;
  * @author USER
  */
 @Named(value = "appointmentManagedBean")
-@RequestScoped
+@SessionScoped
 public class AppointmentManagedBean implements Serializable {
 
     @EJB
@@ -45,10 +46,14 @@ public class AppointmentManagedBean implements Serializable {
     private Employee user;
     private List<Appointment> appointments;
     private List<Appointment> queue;
+    private String calling;
+    private String previous;
     
     public AppointmentManagedBean() {
         appointments = new ArrayList<>();
         queue = new LinkedList<>();
+        calling = "-";
+        previous = "-";
     }
     
     @PostConstruct
@@ -71,19 +76,39 @@ public class AppointmentManagedBean implements Serializable {
     }
     
     public void updateStatus(Appointment appointment, StatusEnum e) {
-        try {
-            if (e.equals(StatusEnum.IN_PROGRESS)) {
-                if (appointment.getSchedule_type().equals(ScheduleTypeEnum.WALK_IN)) appointmentSessionBeanLocal.assignAppointment(appointment.getId(), user.getId());
-                queueBoardSessionBeanLocal.add(user.getId(), appointment.getId());
+        if (isCallingSomeone() && e.equals(StatusEnum.IN_PROGRESS)) {
+//            FacesContext.getCurrentInstance().addMessage("message", new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are already seeing someone.", ":("));
+            System.out.println("(TO BE DISPLAYED IN THE UI) You are already seeing someone");
+        } else {
+            try {
+                if (e.equals(StatusEnum.IN_PROGRESS)) {
+
+                    // If its a walk-in, associate it with the doctor
+                    if (appointment.getSchedule_type().equals(ScheduleTypeEnum.WALK_IN)) appointmentSessionBeanLocal.assignAppointment(appointment.getId(), user.getId());
+
+                    queueBoardSessionBeanLocal.add(user.getId(), appointment.getId());
+
+                    previous = calling;
+                    calling = appointment.getQueue_no();
+                }
+                appointmentSessionBeanLocal.updateStatus(appointment.getId(), e);
+                getAllAppointmentsForToday();
+                getOngoingQueue();
+            } catch(EmployeeEntityException | AppointmentEntityException ex) {
+                System.out.println(ex.getMessage());
+    //            FacesContext.getCurrentInstance().addMessage("message", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update appointment status.", ":("));
             }
-            appointmentSessionBeanLocal.updateStatus(appointment.getId(), e);
-            getAllAppointmentsForToday();
-            getOngoingQueue();
-            FacesContext.getCurrentInstance().addMessage("message", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update appointment status.", ":("));
-        } catch(EmployeeEntityException | AppointmentEntityException ex) {
-            System.out.println(ex.getMessage());
-            FacesContext.getCurrentInstance().addMessage("message", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update appointment status.", ":("));
         }
+    }
+    
+    public boolean isCallingSomeone() {
+        for (Appointment a : appointments) {
+            if (a.getStatus().equals(StatusEnum.IN_PROGRESS)) return true;
+        }
+        for (Appointment a : queue) {
+            if (a.getStatus().equals(StatusEnum.IN_PROGRESS)) return true;
+        }
+        return false;
     }
     
     // ---- FOR TESTING ONLY ----
@@ -129,5 +154,21 @@ public class AppointmentManagedBean implements Serializable {
 
     public void setQueue(List<Appointment> queue) {
         this.queue = queue;
+    }
+
+    public String getCalling() {
+        return calling;
+    }
+
+    public void setCalling(String calling) {
+        this.calling = calling;
+    }
+
+    public String getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(String previous) {
+        this.previous = previous;
     }
 }

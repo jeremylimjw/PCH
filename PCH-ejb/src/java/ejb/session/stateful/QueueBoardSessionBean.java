@@ -42,6 +42,6 @@ public class QueueBoardSessionBean implements QueueBoardSessionBeanLocal {
         queue.put(employee, appointment);
         
         for (Map.Entry<Employee, Appointment> e : queue.entrySet()) 
-            System.out.println("Key: " + e.getKey() + " Value: " + e.getValue()); 
+            System.out.println("ADDED TO QUEUEBOARD - Key: " + e.getKey() + " Value: " + e.getValue()); 
     }
 }

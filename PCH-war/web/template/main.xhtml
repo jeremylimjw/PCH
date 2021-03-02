@@ -43,24 +43,6 @@
                     </li>
                     <li>
                         <a href="#">
-                            <i class="fas fa-circle"></i>
-                            <span>NEED</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fas fa-circle"></i>
-                            <span>MORE</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fas fa-circle"></i>
-                            <span>CONTENTS</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
                             <i class="far fa-user"></i>
                             <span>ACCOUNT</span>
                         </a>
@@ -78,31 +60,19 @@
         <div class="sub-header">
             <div class="sub-header-item">
                 <div class="label">APPTS TODAY</div>
-                <div class="value"><h:outputText id="appointmentCount" value="#{templateManagedBean.appointmentCount}" /></div>
+                <div class="value"><h:outputText id="appointmentCount" value="#{appointmentManagedBean.appointments.size()}" /></div>
             </div>
             <div class="sub-header-item">
                 <div class="label">IN QUEUE</div>
-                <div class="value"><h:outputText id="queueCount" value="#{templateManagedBean.queueCount}" /></div>
+                <div class="value"><h:outputText id="queueCount" value="#{appointmentManagedBean.queue.size()}" /></div>
             </div>
             <div class="sub-header-item">
-                <div class="label">GAS PRICE</div>
-                <div class="value">2000000000</div>
+                <div class="label">CALLING</div>
+                <div class="value"><h:outputText id="callingQueueNo" value="#{appointmentManagedBean.calling}" /></div>
             </div>
             <div class="sub-header-item">
-                <div class="label">GAS LIMIT</div>
-                <div class="value">6721975</div>
-            </div>
-            <div class="sub-header-item">
-                <div class="label">HARDFORK</div>
-                <div class="value">MUIRGLACIER</div>
-            </div>
-            <div class="sub-header-item">
-                <div class="label">RPC SERVER</div>
-                <div class="value">HTTP://127.0.0.1:8545</div>
-            </div>
-            <div class="sub-header-item">
-                <div class="label">MINING STATUS</div>
-                <div class="value">AUTOMINING</div>
+                <div class="label">PREV</div>
+                <div class="value"><h:outputText id="previousQueueNo" value="#{appointmentManagedBean.previous}" /></div>
             </div>
             <div class="sub-header-right">
                         
@@ -121,7 +91,6 @@
         <div id="main"  class="container">
             <ui:insert name="main">Main</ui:insert>            
         </div>
-
 
     </h:body>
 
