@@ -7,6 +7,7 @@ package jsf.managedbean;
 
 import ejb.session.stateless.MedicationEntitySessionBeanLocal;
 import entity.Medication;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
 
 /**
@@ -63,6 +65,15 @@ public class ViewAllMedicationsManagedBean implements Serializable{
             medications = medicationEntitySessionBeanLocal.searchMedicinesByName(getSearchString());
         }
         
+    }
+    
+    
+     public void viewMedicationDetails(ActionEvent event) throws IOException
+    {
+        Long medicationIdToView = (Long)event.getComponent().getAttributes().get("medicineId");
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("medicationIdToView", medicationIdToView);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("backMode", "viewAllMedications");
+        FacesContext.getCurrentInstance().getExternalContext().redirect("viewMedicationDetails.xhtml");
     }
     
 

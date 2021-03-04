@@ -42,6 +42,7 @@ public class DataInitSessionBean {
             medicationEntitySessionBeanLocal.create(new Medication("Medication B","Brand A", "100ml", new BigDecimal(20), 12, null, null, null));
             medicationEntitySessionBeanLocal.create(new Medication("Medication C","Brand B", "23mg", new BigDecimal(30), 14, null, null, null));
             medicationEntitySessionBeanLocal.create(new Medication("Medication D","Brand B", "55mg", new BigDecimal(40), 12, null, null, null));
+           
             
             em.persist(new Employee("Alice", "alice", "password", "alice@gmail.com", RoleEnum.DOCTOR));
             em.persist(new Employee("Bob", "bob", "password", "bob@gmail.com", RoleEnum.DOCTOR));

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./template/main.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+
+    <ui:define name="main">
+          <div>
+        <h2>Medication Details</h2>
+        <br/>
+         <h:messages errorClass="errorTextsWithBullet" fatalClass="errorTextsWithBullet" infoClass="infoTextsWithBullet" globalOnly="true" />
+         <br/>
+        
+      
+         
+         
+       <h:form rendered="#{viewMedicationDetailsManagedBean.medicationIdToView != null}">
+           <h:commandLink value="Back" actionListener="#{viewMedicationDetailsManagedBean.back}" />&nbsp;|
+           <h:commandLink value="Update" actionListener="#{viewMedicationDetailsManagedBean.updateMedication}" />&nbsp;|
+       
+       </h:form>
+         <br/>
+         
+         <h:panelGrid columns="2" style="width: 100%;" rendered="#{viewMedicationDetailsManagedBean.medicationToView != null}">   
+            <h:outputText style="font-weight: bold; width: 20%;" value="Medicine ID"/>
+            <h:outputText style="width: 80%;" value="#{viewMedicationDetailsManagedBean.medicationToView.id}"/>     
+       
+            <h:outputText style="font-weight: bold; width: 20%;" value="Medicine Name"/>
+            <h:outputText style="width: 80%;" value="#{viewMedicationDetailsManagedBean.medicationToView.name}"/>     
+            
+             <h:outputText style="font-weight: bold; width: 20%;" value="Medicine Brand"/>
+             <h:outputText style="width: 80%;" value="#{viewMedicationDetailsManagedBean.medicationToView.brand}"/>   
+             
+               <h:outputText style="font-weight: bold; width: 20%;" value="Total Quantity"/>
+               <h:outputText style="width: 80%;" value="#{viewMedicationDetailsManagedBean.medicationToView.quantity_on_hand}"/>   
+               
+                 <h:outputText style="font-weight: bold; width: 20%;" value="Price Per Quantity"/>
+                 <h:outputText style="width: 80%;" value="#{viewMedicationDetailsManagedBean.medicationToView.price_per_quantity}"/> 
+                 
+                <h:outputText style="font-weight: bold; width: 20%;" value="Description"/>
+                <h:outputText style="width: 80%;" value="#{viewMedicationDetailsManagedBean.medicationToView.description}"/> 
+                    
+                  <h:outputText style="font-weight: bold; width: 20%;" value="Conflicting Food"/>
+                  <h:outputText style="width: 80%;" value="#{viewMedicationDetailsManagedBean.medicationToView.conflicting_foods}"/> 
+                  
+                <h:outputText style="font-weight: bold; width: 20%;" value="Prescription Quantity"/>
+                <h:outputText style="width: 80%;" value="#{viewMedicationDetailsManagedBean.medicationToView.prescription_quantity}"/>    
+                
+                <h:outputText style="font-weight: bold; width: 20%;" value="Conflicting Medication"/>
+                 <ui:repeat var="c" value="#{viewMedicationDetailsManagedBean.medicationToView.conflicting_medications}">
+                    <h:outputText style="width: 80%;" value="#{c.name}"/>,
+                </ui:repeat>
+              
+                        
+                         
+           
+         </h:panelGrid>
+          </div>
+    </ui:define>
+
+</ui:composition>
+

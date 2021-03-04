@@ -55,7 +55,21 @@
                 </ui:repeat>
             </h:column>
             
+              <h:column>
+                <f:facet name="header">Conflicting Medication</f:facet>
+                <ui:repeat var="c" value="#{medication.conflicting_medications}">
+                    <h:outputText value="#{c.name}"/>,
+                </ui:repeat>
+            </h:column>
             
+                 <h:column>    				
+                        <f:facet name = "header">Action</f:facet>
+                        <h:commandLink value="View" actionListener="#{viewAllMedicationsManagedBean.viewMedicationDetails}">
+                            <f:attribute name="medicineId" value="#{medication.id}" />
+                        </h:commandLink>
+                    </h:column>
+                
+                
         </h:dataTable>
         </h:form>
         

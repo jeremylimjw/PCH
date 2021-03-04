@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./template/main.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+
+    <ui:define name="main">
+          <div>
+        <h2>Update Medication</h2>
+        <br/>
+           <h:form id="formMain">
+                <h:messages errorClass="errorTextsWithBullet" fatalClass="errorTextsWithBullet" infoClass="infoTextsWithBullet" globalOnly="true" />
+                <br/>
+                <h:commandLink value="Back"  />
+                <br/><br/>
+         
+                
+                <h:panelGrid  columns="3" rendered="#{updateMedicationManagedBean.medicationToUpdate != null}">
+                <h:outputText style="font-weight: bold;" value="Product ID"/>
+                <h:outputText value="#{updateMedicationManagedBean.medicationToUpdate.id}"/>
+                <h:outputText value="" />
+                
+                <h:outputLabel style="font-weight: bold;" for="txtName" value="Medicine Name" />
+                <h:inputText id="txtName" value="#{updateMedicationManagedBean.medicationToUpdate.name}" required="true" requiredMessage="Description is required" />
+                <h:message errorClass="errorTextsNoMarginLeft" fatalClass="errorTextsNoMarginLeft" for="txtName" />
+                
+                <h:outputLabel style="font-weight: bold;" for="txtBrand" value="Medicine Brand" />
+                <h:inputText id="txtBrand" value="#{updateMedicationManagedBean.medicationToUpdate.brand}" required="true" requiredMessage="Description is required" />
+                <h:message errorClass="errorTextsNoMarginLeft" fatalClass="errorTextsNoMarginLeft" for="txtBrand" />
+                           
+                <h:outputLabel style="font-weight: bold;" for="txtQuantity" value="Total Quantity" />
+                <h:inputText id="txtQuantity" value="#{updateMedicationManagedBean.medicationToUpdate.quantity_on_hand}" required="true" requiredMessage="Description is required" />
+                <h:message errorClass="errorTextsNoMarginLeft" fatalClass="errorTextsNoMarginLeft" for="txtQuantity" />
+                           
+                <h:outputLabel style="font-weight: bold;" for="txtPrice" value="Price Per Quantity" />
+                <h:inputText id="txtPrice" value="#{updateMedicationManagedBean.medicationToUpdate.price_per_quantity}" required="true" requiredMessage="Description is required" />
+                <h:message errorClass="errorTextsNoMarginLeft" fatalClass="errorTextsNoMarginLeft" for="txtPrice" />
+                           
+                <h:outputLabel style="font-weight: bold;" for="txtDescription" value="Description" />
+                <h:inputText id="txtDescription" value="#{updateMedicationManagedBean.medicationToUpdate.description}" required="true" requiredMessage="Description is required" />
+                <h:message errorClass="errorTextsNoMarginLeft" fatalClass="errorTextsNoMarginLeft" for="txtDescription" />
+                           
+                <h:outputLabel style="font-weight: bold;" for="txtPrescription" value="Prescription Quantity" />
+                <h:inputText id="txtPrescription" value="#{updateMedicationManagedBean.medicationToUpdate.prescription_quantity}" required="true" requiredMessage="Description is required" />
+                <h:message errorClass="errorTextsNoMarginLeft" fatalClass="errorTextsNoMarginLeft" for="txtPrescription" />
+                           
+                <h:outputLabel style="font-weight: bold;" for="selCMeds" value="Conflicting Medication" />
+                <h:selectManyListbox id="selCMeds" value="#{updateMedicationManagedBean.conflict_med_ids}" size="#{updateMedicationManagedBean.conflict_med_ids.size()}" >
+                    <f:selectItems value="#{updateMedicationManagedBean.conflicting_med}" var="Medication" itemValue="#{Medication.id}" itemLabel="#{Medication.name}" />
+                    </h:selectManyListbox>
+                    <h:message errorClass="errorTextsNoMarginLeft" fatalClass="errorTextsNoMarginLeft" for="selCMeds" />
+                
+                    
+               
+
+                
+                </h:panelGrid>
+                     <h:commandButton value="Update" type="submit" rendered="#{updateMedicationManagedBean.medicationToUpdate != null}">
+                        <f:ajax event="click" execute="@form" render="@form" listener="#{updateMedicationManagedBean.updateMedication}" />
+                    </h:commandButton>
+            
+                   </h:form>
+                </div>
+    </ui:define>
+
+</ui:composition>
