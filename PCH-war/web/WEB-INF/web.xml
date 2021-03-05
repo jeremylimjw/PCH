@@ -31,11 +31,10 @@
         <param-value>true</param-value>
     </context-param>
     
-<!--    Remove Prime Faces Stylings
     <context-param>
         <param-name>primefaces.THEME</param-name>
-        <param-value>none</param-value>
-    </context-param>-->
+        <param-value>bootstrap</param-value>
+    </context-param>
     
 <!--    <security-constraint>
         <display-name>Secured Resources</display-name>

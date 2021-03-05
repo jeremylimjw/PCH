@@ -77,8 +77,7 @@ public class AppointmentManagedBean implements Serializable {
     
     public void updateStatus(Appointment appointment, StatusEnum e) {
         if (isCallingSomeone() && e.equals(StatusEnum.IN_PROGRESS)) {
-//            FacesContext.getCurrentInstance().addMessage("message", new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are already seeing someone.", ":("));
-            System.out.println("(TO BE DISPLAYED IN THE UI) You are already seeing someone");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are already seeing someone.", null));
         } else {
             try {
                 if (e.equals(StatusEnum.IN_PROGRESS)) {
@@ -95,8 +94,7 @@ public class AppointmentManagedBean implements Serializable {
                 getAllAppointmentsForToday();
                 getOngoingQueue();
             } catch(EmployeeEntityException | AppointmentEntityException ex) {
-                System.out.println(ex.getMessage());
-    //            FacesContext.getCurrentInstance().addMessage("message", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update appointment status.", ":("));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update appointment status.", null));
             }
         }
     }
@@ -122,7 +120,7 @@ public class AppointmentManagedBean implements Serializable {
         try {
             appointmentSessionBeanLocal.createAppointment(user.getId(), 1l, c.getTime(), AppointmentTypeEnum.CONSULTATION);
         } catch (AppointmentEntityException ex) {
-            System.out.println(ex.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
         
         getAllAppointmentsForToday();
@@ -134,7 +132,7 @@ public class AppointmentManagedBean implements Serializable {
         try {
             appointmentSessionBeanLocal.createWalkIn(1l, AppointmentTypeEnum.CONSULTATION);
         } catch (AppointmentEntityException ex) {
-            System.out.println(ex.getMessage());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
         
         getOngoingQueue();
