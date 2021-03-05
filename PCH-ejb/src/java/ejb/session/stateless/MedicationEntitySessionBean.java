@@ -120,7 +120,7 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
     }
     
     @Override
-    public void updateMedication(Medication medication , List<Long> medId ) throws MedicationEntityException
+    public void updateMedication(Medication medication , List<Long> medId ,List<String> cfood) throws MedicationEntityException
     {
          if(medication != null && medication.getId() != null)
         {
@@ -149,7 +149,7 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
                     medicationToUpdate.setPrescription_quantity(medication.getPrescription_quantity());
                     medicationToUpdate.setQuantity_on_hand(medication.getQuantity_on_hand());
                     medicationToUpdate.setDescription(medication.getDescription());
-                  
+                    medicationToUpdate.setConflicting_foods(cfood);
                    
                 for(Long medicationid :medId )
                 {

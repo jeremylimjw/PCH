@@ -29,7 +29,7 @@ public interface MedicationEntitySessionBeanLocal {
 
  
 
-    public void updateMedication(Medication medication , List<Long> medId ) throws MedicationEntityException;
+    public void updateMedication(Medication medication , List<Long> medId,List<String> cfood) throws MedicationEntityException;
 
     public Medication createNewMedication(Medication newMedication, List<Long> medId, List<String> cFood) throws MedicationEntityException;
     

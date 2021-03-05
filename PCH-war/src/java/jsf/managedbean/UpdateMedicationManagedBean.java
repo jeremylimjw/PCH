@@ -16,6 +16,7 @@ import javax.inject.Named;
 import javax.enterprise.context.Dependent;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
 import util.exception.MedicationEntityException;
 
@@ -25,7 +26,7 @@ import util.exception.MedicationEntityException;
  */
 @Named(value = "updateMedicationManagedBean")
 @ViewScoped
-public class UpdateMedicationManagedBean implements Serializable{
+public class UpdateMedicationManagedBean implements Serializable {
 
     @EJB
     private MedicationEntitySessionBeanLocal medicationEntitySessionBean;
@@ -34,48 +35,48 @@ public class UpdateMedicationManagedBean implements Serializable{
     private List<Medication> parent_med;
     private Long medicationToUpdateId;
     private List<Long> conflict_med_ids;
+    private List<String> c_food;
+    private String food;
     /**
      * Creates a new instance of UpdateMedicationManagedBean
      */
     public UpdateMedicationManagedBean() {
     }
-
-     @PostConstruct
-     public void postConstruct()
+    
+      public void addconflictFood(ActionEvent event)
     {
-        medicationToUpdateId = (Long)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("medicationToUpdateId");
-         conflicting_med = medicationEntitySessionBean.retrieveAll();
-        try
-        {
-            if(medicationToUpdateId != null)
-            {
-                medicationToUpdate =medicationEntitySessionBean.retrieveByMedicineId(medicationToUpdateId);
-            }else
-            {
+       
+        
+         
+      //  FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Created successfully", "New Food Name: " + foodName));
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        medicationToUpdateId = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("medicationToUpdateId");
+        conflicting_med = medicationEntitySessionBean.retrieveAll();
+        try {
+            if (medicationToUpdateId != null) {
+                medicationToUpdate = medicationEntitySessionBean.retrieveByMedicineId(medicationToUpdateId);
+            } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "No Medication has been selected", null));
             }
-        } catch(MedicationEntityException ex)
-        {
+        } catch (MedicationEntityException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while retrieving the Medication details: " + ex.getMessage(), null));
         }
     }
-    
-     
-     public void updateMedication()
-     {
-         try
-         {
-             medicationEntitySessionBean.updateMedication(medicationToUpdate,conflict_med_ids);
-              conflict_med_ids = new ArrayList<>();
-             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Medication updated successfully", null));
-         }
-        catch(MedicationEntityException ex)
-        {
-              FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating medication: " + ex.getMessage(), null));
+
+    public void updateMedication() {
+        try {
+            medicationEntitySessionBean.updateMedication(medicationToUpdate, conflict_med_ids, getC_food());
+            conflict_med_ids = new ArrayList<>();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Medication updated successfully", null));
+        } catch (MedicationEntityException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating medication: " + ex.getMessage(), null));
         }
-    
+
     }
-    
+
     /**
      * @return the medicationEntitySessionBean
      */
@@ -159,5 +160,33 @@ public class UpdateMedicationManagedBean implements Serializable{
     public void setConflict_med_ids(List<Long> conflict_med_ids) {
         this.conflict_med_ids = conflict_med_ids;
     }
-    
+
+    /**
+     * @return the c_food
+     */
+    public List<String> getC_food() {
+        return c_food;
+    }
+
+    /**
+     * @param c_food the c_food to set
+     */
+    public void setC_food(List<String> c_food) {
+        this.c_food = c_food;
+    }
+
+    /**
+     * @return the food
+     */
+    public String getFood() {
+        return food;
+    }
+
+    /**
+     * @param food the food to set
+     */
+    public void setFood(String food) {
+        this.food = food;
+    }
+
 }
