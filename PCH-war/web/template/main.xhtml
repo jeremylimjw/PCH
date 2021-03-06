@@ -93,9 +93,11 @@
             <ui:insert name="main">Main</ui:insert>            
         </div>
         
-        <p:growl>
-            <p:autoUpdate />
-        </p:growl>
+        <ui:insert name="growl">
+            <p:growl globalOnly="true">
+                <p:autoUpdate />
+            </p:growl>
+        </ui:insert>
 
     </h:body>
 
