@@ -1,0 +1,59 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 24 Feb, 2021, 6:19:19 AM
+    Author     : USER
+*/
+.container {
+    display: flex;
+}
+
+.left-container, .right-container {
+    width: 50%;
+    height: calc(100vh - 62px - 62px);
+    overflow: auto;
+    border-right: 1px solid rgb(51, 48, 46);
+}
+
+.left-container {
+    border-right: 1px solid rgb(51, 48, 46);
+}
+
+.right-container {
+    border-left: 1px solid rgb(51, 48, 46);
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.name {
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.row {
+    position: relative;
+}
+
+.row .button { 
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 110px; 
+    height: 100%;
+    border-radius: 0;
+}
+
+.row .button:hover:enabled {
+    color: #D3D3D3;
+}
+
+.row.MISSED, .row.COMPLETED, .row.CANCELLED {
+    color: #D3D3D3;
+}

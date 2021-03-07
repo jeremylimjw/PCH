@@ -1,3 +1,4 @@
+/* --- Header CSS --- */
 .header {
     font-family: 'Fira Sans', sans-serif;
     background-color: rgb(64, 61, 58);
@@ -35,35 +36,28 @@
 .header-right {
     margin-left: auto !important;
 }
-
-.gray-button {
-    padding: 0 30px;
-    height: 30px;
-}
 /* --- End of Header CSS --- */
 
-/* --- Sub Header CSS, To be componentalized together with subheader.xhtml --- */
+/* --- Sub Header CSS --- */
 .sub-header {
     font-family: 'Fira Sans', sans-serif;
     background-color: rgb(51, 48, 46);
     font-size: 12px;
     height: 62px;
-}
-
-.sub-header nav {
-    color: rgb(154, 153, 153);
-}
-
-.sub-header nav ul {
     margin: 0;
     padding: 0;
     display: flex;
+    align-items: center;
 }
 
-.sub-header nav li {
-    list-style: none;
+.sub-header-item  {
     padding: 15px;
     border-right: 1px solid rgb(64, 61, 58);
+    min-width: 70px;
+}
+
+.sub-header .label {
+    color: rgb(154, 153, 153);
 }
 
 .sub-header .value {
@@ -74,12 +68,9 @@
     margin-left: auto;
 }
 
-.sub-header-right button {
+.sub-header-right .orange-button {
     padding: 6px 12px;
     margin-right: 10px;
-}
-        
-.orange-button {
     height: 30px;
 }
 /* --- End of Sub Header CSS --- */
@@ -87,38 +78,4 @@
 .container {
     height: calc(100vh - 62px - 62px);
     overflow: auto;
-}
-
-.container .row {
-    padding: 15px 10px;
-    border-bottom: 1px solid rgb(191, 190, 189);
-    height: 50px;
-    display: flex;
-    align-items: center;
-}
-
-.label-text {
-    font-family: 'Fira Sans', sans-serif;
-}
-
-.row input {
-    padding: 5px;
-    border-radius: 5px;
-}
-
-.col {
-    margin-right: 20px;
-}
-
-.col-right {
-    margin-left: auto;
-    margin-right: 20px;
-}
-
-.col-right i {
-    transition: color 0.3s;
-}
-
-.col-right i:hover {
-    color: #6495ED;
 }

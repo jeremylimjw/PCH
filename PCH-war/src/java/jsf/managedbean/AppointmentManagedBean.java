@@ -1,0 +1,179 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package jsf.managedbean;
+
+import ejb.session.singleton.QueueBoardSessionBeanLocal;
+import ejb.session.stateless.AppointmentSessionBeanLocal;
+import entity.Appointment;
+import entity.Employee;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Named;
+import util.enumeration.AppointmentTypeEnum;
+import util.enumeration.RoleEnum;
+import util.enumeration.ScheduleTypeEnum;
+import util.enumeration.StatusEnum;
+import util.exception.AppointmentEntityException;
+import util.exception.EmployeeEntityException;
+
+/**
+ *
+ * @author USER
+ */
+@Named(value = "appointmentManagedBean")
+@SessionScoped
+public class AppointmentManagedBean implements Serializable {
+
+    @EJB
+    private QueueBoardSessionBeanLocal queueBoardSessionBeanLocal;
+
+    @EJB
+    private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
+    
+    private Employee user;
+    private List<Appointment> appointments;
+    private List<Appointment> queue;
+    private String calling;
+    private String previous;
+    
+    public AppointmentManagedBean() {
+        appointments = new ArrayList<>();
+        queue = new LinkedList<>();
+        calling = "-";
+        previous = "-";
+    }
+    
+    @PostConstruct
+    public void postConstruct() {
+        user = (Employee) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+        getAllAppointmentsForToday();
+    }
+    
+    public void getAllAppointmentsForToday() {
+        Date today = new Date();
+        if (user.getRole().equals(RoleEnum.DOCTOR)) {
+            appointments = appointmentSessionBeanLocal.retrieveAppointmentsByDoctorIdByDay(user.getId(), today);
+            queue = appointmentSessionBeanLocal.retrieveWalkInByDoctorIdByDay(user.getId(), today);
+        } else {
+            appointments = appointmentSessionBeanLocal.retrieveAppointmentsByDay(ScheduleTypeEnum.APPOINTMENT, today);
+            queue = appointmentSessionBeanLocal.retrieveAppointmentsByDay(ScheduleTypeEnum.WALK_IN, today);
+        }
+    }
+    
+    public void updateStatus(Appointment appointment, StatusEnum e) {
+        try {
+            if (e.equals(StatusEnum.IN_PROGRESS)) {     // When user clicks the 'CALL' button
+                
+                if (isCallingSomeone()) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are already seeing someone.", null));
+                    return;
+                }
+                
+                // Associate it with the doctor that called the appointment, if its from the walk-in queue.
+                if (appointment.getSchedule_type().equals(ScheduleTypeEnum.WALK_IN)) 
+                    appointmentSessionBeanLocal.assignAppointment(appointment.getId(), user.getId());
+                
+                // Broadcast to QueueBoard
+                queueBoardSessionBeanLocal.add(user.getId(), appointment.getId());
+
+                previous = calling;
+                calling = appointment.getQueue_no();
+                
+            } else if (e.equals(StatusEnum.MISSED)) {   // When user clicks the 'SKIP' button
+                if (!appointment.getEmployee().equals(user)) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are not the original caller.", null));
+                    return;
+                }
+            }
+            
+            appointmentSessionBeanLocal.updateStatus(appointment.getId(), e);
+            getAllAppointmentsForToday();
+            
+        } catch(EmployeeEntityException | AppointmentEntityException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
+        }
+    }
+    
+    public boolean isCallingSomeone() {
+        for (Appointment a : appointments) {
+            if (a.getStatus().equals(StatusEnum.IN_PROGRESS)) return true;
+        }
+        for (Appointment a : queue) {
+            if (a.getStatus().equals(StatusEnum.IN_PROGRESS) && a.getEmployee().equals(user)) return true;
+        }
+        return false;
+    }
+    
+    // ---- FOR TESTING ONLY ----
+    // ADD SAMPLE APPOINTMENT
+    public void addRandomAppointment() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, (int)(Math.random()*((23-0)+1))+0);
+        c.set(Calendar.MINUTE, (int)(Math.random()*((60-0)+1))+0);
+        c.set(Calendar.SECOND, 0);
+        
+        try {
+            appointmentSessionBeanLocal.createAppointment(user.getId(), 1l, c.getTime(), AppointmentTypeEnum.CONSULTATION);
+        } catch (AppointmentEntityException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
+        }
+        
+        getAllAppointmentsForToday();
+    }
+    
+    // ---- FOR TESTING ONLY ----
+    // ADD SAMPLE WALK IN
+    public void addRandomWalkIn() {
+        try {
+            appointmentSessionBeanLocal.createWalkIn(1l, AppointmentTypeEnum.CONSULTATION);
+        } catch (AppointmentEntityException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
+        }
+        
+        getAllAppointmentsForToday();
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
+    }
+
+    public List<Appointment> getQueue() {
+        return queue;
+    }
+
+    public void setQueue(List<Appointment> queue) {
+        this.queue = queue;
+    }
+
+    public String getCalling() {
+        return calling;
+    }
+
+    public void setCalling(String calling) {
+        this.calling = calling;
+    }
+
+    public String getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(String previous) {
+        this.previous = previous;
+    }
+}

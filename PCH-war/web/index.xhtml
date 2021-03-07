@@ -3,17 +3,166 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="./template/main.xhtml">
 
+    <ui:define name="head">
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/index.css" />
+    </ui:define>
+    
     <ui:define name="main">
         
-        <div style="border:1px solid black; padding: 15px;display:inline-table;margin: 5px 0;">
-            <h:outputText value="isLogin: #{sessionScope.isLogin}" /><br/>
-            <h:outputText value="Session ID: #{session.id}" /><br/>
-        </div>
+        <p:poll interval="5" listener="#{appointmentManagedBean.getAllAppointmentsForToday()}" update="appointments appointmentCount queue queueCount" ignoreAutoUpdate="true" />
+        
+        <h:panelGroup id="appointments" class="left-container">
+            
+            <h:panelGroup rendered="#{appointmentManagedBean.appointments.isEmpty()}" class="error-message">NO APPOINTMENTS TODAY</h:panelGroup>
+
+            <ui:repeat var="a" value="#{appointmentManagedBean.appointments}">
+                
+                <h:link outcome="servePatient.xhtml?id=#{a.id}" style="color: inherit; text-decoration: inherit;">
+
+                    <div class="row #{a.status}">
+
+                        <div>
+                            <div class="label-text">QUEUE NO</div>
+                            <div>#{a.queue_no}</div>
+                        </div>
+
+                        <div>
+                            <div class="label-text">APPT TIME</div>
+                            <div>
+                                <h:outputText value="#{a.date_time}">
+                                    <f:convertDateTime pattern="h:mm a" />
+                                </h:outputText>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="label-text">PATIENT NAME</div>
+                            <div class="name" title="#{a.medical_record.name}">#{a.medical_record.name}</div>
+                        </div>
+
+                        <div>
+                            <div class="label-text">AGE</div>
+                            <div>
+                                <h:outputText value="#{a.medical_record.dob}">
+                                    <f:converter converterId="ageConverter" />
+                                </h:outputText>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="label-text">ALLERGY</div>
+                            <div>
+                                <h:outputText value="#{a.medical_record.drug_allergys}">
+                                    <f:converter converterId="isListEmptyConverter" />
+                                </h:outputText>
+                            </div>
+                        </div>
+
+                        <div style="width: 85px">
+                            <div class="label-text">STATUS</div>
+                            <div>
+                                <h:outputText value="#{a.status.toString()}" />
+                            </div>
+                        </div>
+
+                        <div style="width: 100px;">
+                            <h:commandButton class="button green-button" rendered="#{a.status == 'BOOKED' and sessionScope.user.role == 'NURSE'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'ARRIVED')}" value="PRESENT">
+                                <f:ajax execute="@this" render="appointments" />
+                            </h:commandButton>
+                            <h:commandButton class="button blue-button" rendered="#{a.status == 'ARRIVED' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'IN_PROGRESS')}" value="CALL">
+                                <f:ajax execute="@this" render="appointments callingQueueNo previousQueueNo" />
+                            </h:commandButton>
+                            <h:commandButton class="button red-button" rendered="#{a.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'MISSED')}" value="SKIP">
+                                <f:ajax execute="@this" render="appointments appointmentCount" />
+                            </h:commandButton>
+                        </div>
+
+                    </div>
+                    
+                </h:link>
+                
+            </ui:repeat>
+
+        </h:panelGroup>
+
+        <h:panelGroup id="queue" class="right-container">
+            
+            <h:panelGroup rendered="#{appointmentManagedBean.queue.isEmpty()}" class="error-message">NO ONE IN QUEUE</h:panelGroup> 
+
+            <ui:repeat var="q" value="#{appointmentManagedBean.queue}" varStatus="varStatus">
+                
+                <h:link outcome="servePatient.xhtml?id=#{q.id}" style="color: inherit; text-decoration: inherit;">
+                    
+                    <div class="row #{q.status}">
+
+                        <div>
+                            <div class="label-text">QUEUE NO</div>
+                            <div>#{q.queue_no}</div>
+                        </div>
+
+                        <div class="col">
+                            <div class="label-text">ARRIVED</div>
+                            <div>
+                                <h:outputText value="#{q.date_time}">
+                                    <f:convertDateTime pattern="h:mm a" />
+                                </h:outputText>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="label-text">PATIENT NAME</div>
+                            <div class="name" title="#{q.medical_record.name}">#{q.medical_record.name}</div>
+                        </div>
+
+                        <div>
+                            <div class="label-text">AGE</div>
+                            <div>
+                                <h:outputText value="#{q.medical_record.dob}">
+                                    <f:converter converterId="ageConverter" />
+                                </h:outputText>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="label-text">ALLERGY</div>
+                            <div>
+                                <h:outputText value="#{q.medical_record.drug_allergys}">
+                                    <f:converter converterId="isListEmptyConverter" />
+                                </h:outputText>
+                            </div>
+                        </div>
+
+                        <div style="width: 85px">
+                            <div class="label-text">STATUS</div>
+                            <div>
+                                <h:outputText value="#{q.status.toString()}" />
+                            </div>
+                        </div>
+
+                        <div style="width: 100px;">
+                            <h:commandButton class="button blue-button 100-width" value="CALL" rendered="#{q.status == 'ARRIVED' and varStatus.index == 0 and !appointmentManagedBean.isCallingSomeone() and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'IN_PROGRESS')}">
+                                <f:ajax execute="@this" render="queue callingQueueNo previousQueueNo" />
+                            </h:commandButton>
+                            <h:commandButton class="button red-button 100-width" value="SKIP" rendered="#{q.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'MISSED')}">
+                                <f:ajax execute="@this" render="queue queueCount" />
+                            </h:commandButton>
+                        </div>
+
+                    </div>
+                    
+                </h:link>
+                
+            </ui:repeat>        
+            
+        </h:panelGroup>
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
-            <div style="border:1px solid black; padding: 15px;display:inline-table;margin: 5px 0;">
+            <div style="border:1px solid black; padding: 15px;display:inline-table;margin: 5px 0;position: fixed; bottom: 0; margin: 5px;background-color: white;">
+                <h:outputText value="isLogin: #{sessionScope.isLogin}" /><br/>
+                <h:outputText value="Session ID: #{session.id}" /><br/><br />
                 <b>Logged in as:</b> <br />
                 <h:outputText value="Emp ID: #{sessionScope.user.id}" /><br/>
                 <h:outputText value="Name: #{sessionScope.user.name}" /><br/>

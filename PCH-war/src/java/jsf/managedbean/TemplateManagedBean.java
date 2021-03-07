@@ -5,8 +5,6 @@
  */
 package jsf.managedbean;
 
-import entity.Medication;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -34,7 +32,6 @@ public class TemplateManagedBean {
     public void postConstruct() {
         FacesContext ctx = FacesContext.getCurrentInstance();
         HttpServletRequest servletRequest = (HttpServletRequest) ctx.getExternalContext().getRequest();
-        // returns something like "/myapplication/home.faces"
         url = servletRequest.getRequestURI();
     }
     

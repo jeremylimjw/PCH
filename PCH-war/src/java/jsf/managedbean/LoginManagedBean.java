@@ -35,9 +35,9 @@ public class LoginManagedBean {
     }
     
     // FOR DEVELOPING PURPOSE ONLY, REMOVE DURING PRODUCTION
-    public void quickLogin(ActionEvent login) throws IOException {
+    public void quickLogin(String username, String password) throws IOException {
         try {
-            Employee employee = employeeEntitySessionBeanLocal.login("alice", "password");
+            Employee employee = employeeEntitySessionBeanLocal.login(username, password);
             FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", employee);

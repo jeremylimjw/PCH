@@ -34,11 +34,6 @@ public class Patient implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false, length = 32)
-    @Size(min = 1, max = 32)
-    @NotNull
-    private String name;
-    
     @Column(nullable = false, length = 32, unique = true)
     @Size(min = 1, max = 32)
     @NotNull
@@ -68,8 +63,7 @@ public class Patient implements Serializable {
     public Patient() {
     }
 
-    public Patient(String name, String username, String password, String email, MedicalRecord medical_record) {
-        this.name = name;
+    public Patient(String username, String password, String email, MedicalRecord medical_record) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -83,14 +77,6 @@ public class Patient implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUsername() {

@@ -29,6 +29,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import util.enumeration.AppointmentTypeEnum;
+import util.enumeration.ScheduleTypeEnum;
 import util.enumeration.StatusEnum;
 
 /**
@@ -43,13 +44,17 @@ public class Appointment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @Column(length = 32)
+    @Size(max = 32)
+    private String queue_no;
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     @NotNull
     private Date date_time;
     
     @Column(length = 128)
-    @Size(min = 1, max = 128)
+    @Size(max = 128)
     private String description;
     
     @Enumerated(EnumType.STRING)
@@ -60,7 +65,12 @@ public class Appointment implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @NotNull
-    private AppointmentTypeEnum type;
+    private ScheduleTypeEnum schedule_type;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @NotNull
+    private AppointmentTypeEnum appointment_type;
     
     @Column(nullable = false, precision = 11, scale = 2)
     @NotNull
@@ -77,7 +87,6 @@ public class Appointment implements Serializable {
     private List<Medication> medications;
     
     @ManyToOne
-    @JoinColumn(nullable = false)
     private Employee employee;
     
     @ManyToOne
@@ -90,11 +99,13 @@ public class Appointment implements Serializable {
     public Appointment() {
     }
 
-    public Appointment(Employee employee, MedicalRecord medical_record, Date date_time, String description, AppointmentTypeEnum type) {
+    public Appointment(Employee employee, MedicalRecord medical_record, Date date_time, ScheduleTypeEnum schedule_type, AppointmentTypeEnum appointment_type, StatusEnum status) {
+        this.queue_no = "None";
         this.date_time = date_time;
-        this.description = description;
-        this.status = StatusEnum.BOOKED;
-        this.type = type;
+        this.description = "";
+        this.status = status;
+        this.schedule_type = schedule_type;
+        this.appointment_type = appointment_type;
         this.total_price = new BigDecimal(0);
         this.medications = new ArrayList<>();
         this.employee = employee;
@@ -109,6 +120,14 @@ public class Appointment implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getQueue_no() {
+        return queue_no;
+    }
+
+    public void setQueue_no(String queue_no) {
+        this.queue_no = queue_no;
     }
 
     public Date getDate_time() {
@@ -135,12 +154,20 @@ public class Appointment implements Serializable {
         this.status = status;
     }
 
-    public AppointmentTypeEnum getType() {
-        return type;
+    public ScheduleTypeEnum getSchedule_type() {
+        return schedule_type;
     }
 
-    public void setType(AppointmentTypeEnum type) {
-        this.type = type;
+    public void setSchedule_type(ScheduleTypeEnum schedule_type) {
+        this.schedule_type = schedule_type;
+    }
+
+    public AppointmentTypeEnum getAppointment_type() {
+        return appointment_type;
+    }
+
+    public void setAppointment_type(AppointmentTypeEnum appointment_type) {
+        this.appointment_type = appointment_type;
     }
 
     public BigDecimal getTotal_price() {

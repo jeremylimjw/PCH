@@ -39,7 +39,7 @@ public class DefaultFilter implements Filter {
     
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
         
-        System.out.println("---- DefaultFilter.doFilter()");
+//        System.out.println("---- DefaultFilter.doFilter()");
         
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;

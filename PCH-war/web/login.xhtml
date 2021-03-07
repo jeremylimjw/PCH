@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <title>PCH System</title>
@@ -28,7 +29,7 @@
                 box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
             }
 
-            .row {
+            .form-div {
                 margin: 15px 0;
             }
 
@@ -53,9 +54,6 @@
             }
             
             ul {
-                padding-inline-start: 0;
-                margin-block-start: 0;
-                margin-block-end: 0;
                 list-style: none;
                 width: 250px;
             }
@@ -77,36 +75,45 @@
             
             <h:form id="loginForm">
                 
-                <div class="row">
+                <div class="form-div">
                     <h:inputText id="username" class="input-text" value="#{loginManagedBean.username}" a:placeholder="Enter Username" required="true" requiredMessage="Username is required" maxlength="32">
                         <f:validateLength minimum="2" />
                     </h:inputText>
                     <h:message for="username" errorClass="errorText" fatalClass="errorText" />
                 </div>
 
-                <div class="row">
+                <div class="form-div">
                     <h:inputSecret id="password" class="input-text" value="#{loginManagedBean.password}" a:placeholder="Enter Password" required="true" requiredMessage="Password is required" maxlength="32">
                         <f:validateLength minimum="2" />
                     </h:inputSecret>
                     <h:message for="password" errorClass="errorText" fatalClass="errorText" />
                 </div>
 
-                <div class="row">
+                <div class="form-div">
                     <h:commandButton class="blue-button" type="submit" value="LOGIN" actionListener="#{loginManagedBean.login}" />
-                    <h:messages errorClass="errorTexts" fatalClass="errorTexts" infoClass="infoTexts" globalOnly="true" />
                 </div>
             </h:form>
             
             <!--FOR DEVELOPER'S USE ONLY, REMOVE DURING PRODUCTION!!!!-->
             <h:form>
-                <div class="row">
+                <div class="form-div">
                     <h:outputText value="Session ID: #{session.id}" /><br/>
-                    <h:commandButton class="orange-button" type="submit" value="QUICK LOGIN" actionListener="#{loginManagedBean.quickLogin}" />
+                </div>
+                <div class="form-div" style="width: 290px;display:flex;">
+                    <h:commandButton class="orange-button" type="submit" value="DOCTOR 1" actionListener="#{loginManagedBean.quickLogin('alice', 'password')}" style="margin-right: 10px;"/>
+                    <h:commandButton class="orange-button" type="submit" value="DOCTOR 2" actionListener="#{loginManagedBean.quickLogin('bob', 'password')}" />
+                </div>
+                <div class="form-div">
+                    <h:commandButton class="orange-button" type="submit" value="NURSE" actionListener="#{loginManagedBean.quickLogin('charlie', 'password')}" />
                 </div>
             </h:form>
                 
             
         </div>
+        
+        <p:growl sticky="true" globalOnly="true">
+            <p:autoUpdate />
+        </p:growl>
         
     </h:body>
 </html>

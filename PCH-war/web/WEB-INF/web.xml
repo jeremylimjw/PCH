@@ -26,14 +26,17 @@
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
     
-<!--    Remove Prime Faces Stylings
+    <context-param>
+        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    
     <context-param>
         <param-name>primefaces.THEME</param-name>
-        <param-value>none</param-value>
-    </context-param>-->
+        <param-value>bootstrap</param-value>
+    </context-param>
     
-<!--    HTTPS protocol crashes the application
-    <security-constraint>
+<!--    <security-constraint>
         <display-name>Secured Resources</display-name>
         <web-resource-collection>
             <web-resource-name>Secured Web Pages</web-resource-name>
