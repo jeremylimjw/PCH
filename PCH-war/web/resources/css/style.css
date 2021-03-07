@@ -123,9 +123,7 @@ input::-webkit-inner-spin-button {
     padding-left: 5px;
     padding-top: 5px;
     float: none;
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
     width: 40vw;
 }
 
@@ -142,6 +140,11 @@ input::-webkit-inner-spin-button {
     display: block;
     font-weight: normal;
     margin-left: 10px;
+    float: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 40vw;
 }
 
 .ui-state-highlight .ui-icon {

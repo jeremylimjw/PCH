@@ -5,11 +5,10 @@
  */
 package jsf.managedbean;
 
-import ejb.session.stateful.QueueBoardSessionBeanLocal;
+import ejb.session.singleton.QueueBoardSessionBeanLocal;
 import ejb.session.stateless.AppointmentSessionBeanLocal;
 import entity.Appointment;
 import entity.Employee;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,42 +59,50 @@ public class AppointmentManagedBean implements Serializable {
     public void postConstruct() {
         user = (Employee) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
         getAllAppointmentsForToday();
-        getOngoingQueue();
     }
     
     public void getAllAppointmentsForToday() {
+        Date today = new Date();
         if (user.getRole().equals(RoleEnum.DOCTOR)) {
-            appointments = appointmentSessionBeanLocal.retrieveAppointmentsByDoctorIdByDay(user.getId(), new Date());
+            appointments = appointmentSessionBeanLocal.retrieveAppointmentsByDoctorIdByDay(user.getId(), today);
+            queue = appointmentSessionBeanLocal.retrieveWalkInByDoctorIdByDay(user.getId(), today);
         } else {
-            appointments = appointmentSessionBeanLocal.retrieveAppointmentsByDay(new Date());
+            appointments = appointmentSessionBeanLocal.retrieveAppointmentsByDay(ScheduleTypeEnum.APPOINTMENT, today);
+            queue = appointmentSessionBeanLocal.retrieveAppointmentsByDay(ScheduleTypeEnum.WALK_IN, today);
         }
     }
     
-    public void getOngoingQueue() {
-        queue = appointmentSessionBeanLocal.retrieveOngoingQueue();
-    }
-    
     public void updateStatus(Appointment appointment, StatusEnum e) {
-        if (isCallingSomeone() && e.equals(StatusEnum.IN_PROGRESS)) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are already seeing someone.", null));
-        } else {
-            try {
-                if (e.equals(StatusEnum.IN_PROGRESS)) {
-
-                    // If its a walk-in, associate it with the doctor
-                    if (appointment.getSchedule_type().equals(ScheduleTypeEnum.WALK_IN)) appointmentSessionBeanLocal.assignAppointment(appointment.getId(), user.getId());
-
-                    queueBoardSessionBeanLocal.add(user.getId(), appointment.getId());
-
-                    previous = calling;
-                    calling = appointment.getQueue_no();
+        try {
+            if (e.equals(StatusEnum.IN_PROGRESS)) {     // When user clicks the 'CALL' button
+                
+                if (isCallingSomeone()) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are already seeing someone.", null));
+                    return;
                 }
-                appointmentSessionBeanLocal.updateStatus(appointment.getId(), e);
-                getAllAppointmentsForToday();
-                getOngoingQueue();
-            } catch(EmployeeEntityException | AppointmentEntityException ex) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update appointment status.", null));
+                
+                // Associate it with the doctor that called the appointment, if its from the walk-in queue.
+                if (appointment.getSchedule_type().equals(ScheduleTypeEnum.WALK_IN)) 
+                    appointmentSessionBeanLocal.assignAppointment(appointment.getId(), user.getId());
+                
+                // Broadcast to QueueBoard
+                queueBoardSessionBeanLocal.add(user.getId(), appointment.getId());
+
+                previous = calling;
+                calling = appointment.getQueue_no();
+                
+            } else if (e.equals(StatusEnum.MISSED)) {   // When user clicks the 'SKIP' button
+                if (!appointment.getEmployee().equals(user)) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are not the original caller.", null));
+                    return;
+                }
             }
+            
+            appointmentSessionBeanLocal.updateStatus(appointment.getId(), e);
+            getAllAppointmentsForToday();
+            
+        } catch(EmployeeEntityException | AppointmentEntityException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
     }
     
@@ -104,7 +111,7 @@ public class AppointmentManagedBean implements Serializable {
             if (a.getStatus().equals(StatusEnum.IN_PROGRESS)) return true;
         }
         for (Appointment a : queue) {
-            if (a.getStatus().equals(StatusEnum.IN_PROGRESS)) return true;
+            if (a.getStatus().equals(StatusEnum.IN_PROGRESS) && a.getEmployee().equals(user)) return true;
         }
         return false;
     }
@@ -135,7 +142,7 @@ public class AppointmentManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
         
-        getOngoingQueue();
+        getAllAppointmentsForToday();
     }
 
     public List<Appointment> getAppointments() {

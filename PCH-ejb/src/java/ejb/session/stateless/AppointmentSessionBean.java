@@ -95,7 +95,7 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     }
     
     @Override
-    public List<Appointment> retrieveAppointmentsByDoctorIdByDay(Long doctor_id, Date date) {
+    public List<Appointment> retrieveAppointmentsByDoctorIdByDay(Long doctorId, Date date) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         c.set(Calendar.HOUR_OF_DAY, 0); c.set(Calendar.MINUTE, 0); c.set(Calendar.SECOND, 0);
@@ -104,14 +104,14 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
         Date end = c.getTime();
         Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 AND a.employee.id = ?2 AND a.date_time >= ?3 AND a.date_time < ?4 ORDER BY a.date_time");
         query.setParameter(1, ScheduleTypeEnum.APPOINTMENT);
-        query.setParameter(2, doctor_id);
+        query.setParameter(2, doctorId);
         query.setParameter(3, start);
         query.setParameter(4, end);
         return query.getResultList();
     }
     
     @Override
-    public List<Appointment> retrieveAppointmentsByDay(Date date) {
+    public List<Appointment> retrieveAppointmentsByDay(ScheduleTypeEnum scheduleType, Date date) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         c.set(Calendar.HOUR_OF_DAY, 0); c.set(Calendar.MINUTE, 0); c.set(Calendar.SECOND, 0);
@@ -119,18 +119,27 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
         c.add(Calendar.DATE, 1);
         Date end = c.getTime();
         Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 AND a.date_time >= ?2 AND a.date_time < ?3 ORDER BY a.date_time");
-        query.setParameter(1, ScheduleTypeEnum.APPOINTMENT);
+        query.setParameter(1, scheduleType);
         query.setParameter(2, start);
         query.setParameter(3, end);
         return query.getResultList();
     }
     
     @Override
-    public List<Appointment> retrieveOngoingQueue() {
-        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 AND a.status IN(?2,?3) ORDER BY a.date_time ASC");
+    public List<Appointment> retrieveWalkInByDoctorIdByDay(Long doctorId, Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.HOUR_OF_DAY, 0); c.set(Calendar.MINUTE, 0); c.set(Calendar.SECOND, 0);
+        Date start = c.getTime();
+        c.add(Calendar.DATE, 1);
+        Date end = c.getTime();
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE (a.schedule_type = ?1 AND a.status  = ?2) OR (a.status = ?3 AND a.employee.id = ?4) AND a.date_time >= ?5 AND a.date_time < ?6  ORDER BY a.date_time ASC");
         query.setParameter(1, ScheduleTypeEnum.WALK_IN);
         query.setParameter(2, StatusEnum.ARRIVED);
         query.setParameter(3, StatusEnum.IN_PROGRESS);
+        query.setParameter(4, doctorId);
+        query.setParameter(5, start);
+        query.setParameter(6, end);
         return query.getResultList();
     }
     

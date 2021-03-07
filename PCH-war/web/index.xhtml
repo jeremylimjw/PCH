@@ -23,7 +23,7 @@
                 
                 <h:link outcome="servePatient.xhtml?id=#{a.id}" style="color: inherit; text-decoration: inherit;">
 
-                    <div class="row">
+                    <div class="row #{a.status}">
 
                         <div>
                             <div class="label-text">QUEUE NO</div>
@@ -70,7 +70,7 @@
                         </div>
 
                         <div style="width: 100px;">
-                            <h:commandButton class="button green-button" rendered="#{a.status == 'BOOKED'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'ARRIVED')}" value="PRESENT">
+                            <h:commandButton class="button green-button" rendered="#{a.status == 'BOOKED' and sessionScope.user.role == 'NURSE'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'ARRIVED')}" value="PRESENT">
                                 <f:ajax execute="@this" render="appointments" />
                             </h:commandButton>
                             <h:commandButton class="button blue-button" rendered="#{a.status == 'ARRIVED' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'IN_PROGRESS')}" value="CALL">
@@ -93,11 +93,11 @@
             
             <h:panelGroup rendered="#{appointmentManagedBean.queue.isEmpty()}" class="error-message">NO ONE IN QUEUE</h:panelGroup> 
 
-            <ui:repeat var="q" value="#{appointmentManagedBean.queue}" varStatus="myVarStatus">
+            <ui:repeat var="q" value="#{appointmentManagedBean.queue}" varStatus="varStatus">
                 
                 <h:link outcome="servePatient.xhtml?id=#{q.id}" style="color: inherit; text-decoration: inherit;">
                     
-                    <div class="row">
+                    <div class="row #{q.status}">
 
                         <div>
                             <div class="label-text">QUEUE NO</div>
@@ -105,7 +105,7 @@
                         </div>
 
                         <div class="col">
-                            <div class="label-text">CREATED</div>
+                            <div class="label-text">ARRIVED</div>
                             <div>
                                 <h:outputText value="#{q.date_time}">
                                     <f:convertDateTime pattern="h:mm a" />
@@ -144,10 +144,10 @@
                         </div>
 
                         <div style="width: 100px;">
-                            <h:commandButton class="button blue-button 100-width" rendered="#{q.status == 'ARRIVED' and myVarStatus.index == 0 and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'IN_PROGRESS')}" value="CALL">
+                            <h:commandButton class="button blue-button 100-width" value="CALL" rendered="#{q.status == 'ARRIVED' and varStatus.index == 0 and !appointmentManagedBean.isCallingSomeone() and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'IN_PROGRESS')}">
                                 <f:ajax execute="@this" render="queue callingQueueNo previousQueueNo" />
                             </h:commandButton>
-                            <h:commandButton class="button red-button 100-width" rendered="#{q.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'MISSED')}" value="SKIP">
+                            <h:commandButton class="button red-button 100-width" value="SKIP" rendered="#{q.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'MISSED')}">
                                 <f:ajax execute="@this" render="queue queueCount" />
                             </h:commandButton>
                         </div>

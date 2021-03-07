@@ -60,6 +60,15 @@
         
         <div class="sub-header">
             <div class="sub-header-item">
+                <div class="label">TODAY</div>
+                <div class="value">
+                    <h:outputText value="#{session.lastAccessedTime}">
+                        <f:convertDateTime pattern="EEEEEEEE d/M/yyyy" type="date"/>
+                    </h:outputText>
+                </div>
+            </div>
+            
+            <div class="sub-header-item">
                 <div class="label">APPTS TODAY</div>
                 <div class="value"><h:outputText id="appointmentCount" value="#{appointmentManagedBean.appointments.size()}" /></div>
             </div>
@@ -67,14 +76,14 @@
                 <div class="label">IN QUEUE</div>
                 <div class="value"><h:outputText id="queueCount" value="#{appointmentManagedBean.queue.size()}" /></div>
             </div>
-            <div class="sub-header-item">
+            <h:panelGroup class="sub-header-item" rendered="#{sessionScope.user.role == 'DOCTOR'}">
                 <div class="label">CALLING</div>
                 <div class="value"><h:outputText id="callingQueueNo" value="#{appointmentManagedBean.calling}" /></div>
-            </div>
-            <div class="sub-header-item">
+            </h:panelGroup>
+            <h:panelGroup class="sub-header-item" rendered="#{sessionScope.user.role == 'DOCTOR'}">
                 <div class="label">PREV</div>
                 <div class="value"><h:outputText id="previousQueueNo" value="#{appointmentManagedBean.previous}" /></div>
-            </div>
+            </h:panelGroup>
             <div class="sub-header-right">
                         
                 <h:commandButton class="button orange-button" value="ADD RANDOM APPOINTMENT" actionListener="#{appointmentManagedBean.addRandomAppointment()}">

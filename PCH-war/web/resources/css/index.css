@@ -53,3 +53,7 @@ and open the template in the editor.
 .row .button:hover:enabled {
     color: #D3D3D3;
 }
+
+.row.MISSED, .row.COMPLETED, .row.CANCELLED {
+    color: #D3D3D3;
+}
