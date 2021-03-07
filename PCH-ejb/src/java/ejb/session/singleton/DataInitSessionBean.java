@@ -48,7 +48,6 @@ public class DataInitSessionBean {
     @PostConstruct
     public void postConstruct() {
         if (em.find(Medication.class, 1l) == null) {
-
             try {
                 em.persist(new Medication("Medication A","Brand A", "10mg", new BigDecimal(10), 10, new ArrayList<>(Arrays.asList("Food 1", "Food 2")), null, null));
                 em.persist(new Medication("Medication B","Brand A", "100ml", new BigDecimal(20), 12, null, null, null));
@@ -66,7 +65,6 @@ public class DataInitSessionBean {
             } catch (ParseException ex) {
                 System.out.println(ex.getMessage());
             }
-
         }
     }
     

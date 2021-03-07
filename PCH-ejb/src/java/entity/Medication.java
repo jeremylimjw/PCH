@@ -15,7 +15,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.DecimalMin;
@@ -30,10 +29,6 @@ import javax.validation.constraints.Size;
  */
 @Entity
 public class Medication implements Serializable {
-
- 
-
-
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -79,23 +74,15 @@ public class Medication implements Serializable {
     @NotNull
     private boolean deleted;
     
-    
-    @ManyToMany
-    private List<Medication> parent_medications;
-    
-    @ManyToMany(mappedBy = "parent_medications", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "parent_medication", fetch = FetchType.EAGER)
     private List<Medication> conflicting_medications;
-  
+    @ManyToOne
+    private Medication parent_medication;
     
     public Medication() {
-         this.conflicting_medications = new ArrayList<>();
-         this.parent_medications = new ArrayList<>();
-         this.conflicting_foods = new ArrayList<>();
     }
 
     public Medication(String name, String brand, String prescription_quantity, BigDecimal price_per_quantity, int quantity_on_hand, List<String> conflicting_foods, String description, String url) {
-        
-        super();
         this.name = name;
         this.brand = brand;
         this.prescription_quantity = prescription_quantity;
@@ -105,12 +92,9 @@ public class Medication implements Serializable {
         this.description = description;
         this.url = url;
         this.deleted = false;
-
-        
+        this.conflicting_medications = new ArrayList<>();
+        this.parent_medication = null;
     }
-
-    
-    
 
     public Long getId() {
         return id;
@@ -200,23 +184,14 @@ public class Medication implements Serializable {
         this.conflicting_medications = conflicting_medications;
     }
 
-     /**
-     * @return the parent_medications
-     */
-    public List<Medication> getParent_medications() {
-        return parent_medications;
+    public Medication getParent_medication() {
+        return parent_medication;
     }
 
-    /**
-     * @param parent_medications the parent_medications to set
-     */
-    public void setParent_medications(List<Medication> parent_medications) {
-        this.parent_medications = parent_medications;
+    public void setParent_medication(Medication parent_medication) {
+        this.parent_medication = parent_medication;
     }
     
-    public boolean hasConflictingMedicationAssociated(){
-        return(!this.conflicting_medications.isEmpty());
-    }
     
 
     @Override
