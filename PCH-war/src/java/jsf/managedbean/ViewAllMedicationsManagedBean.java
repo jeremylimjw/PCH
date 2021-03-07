@@ -34,13 +34,12 @@ public class ViewAllMedicationsManagedBean implements Serializable{
 
     @EJB
     private MedicationEntitySessionBeanLocal medicationEntitySessionBeanLocal;
-    
+    //inject for composite component
     @Inject
     private ViewMedicationManagedBean viewMedicationManagedBean;
     
-    private String searchString;
+    //view
     private List<Medication> medications;
-    private List<Medication> newMedicationList;
     //Create
     private Medication newMedication;
     private String foodName;
@@ -65,9 +64,7 @@ public class ViewAllMedicationsManagedBean implements Serializable{
         
        
         
-        setSearchString((String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("medicationSearchString"));
        
-     
         
         medications = getMedicationEntitySessionBeanLocal().retrieveAll();
        
@@ -81,18 +78,7 @@ public class ViewAllMedicationsManagedBean implements Serializable{
     }
     
     
-    public void searchMedication(){
-         if(getSearchString() == null || getSearchString().trim().length() == 0)
-        {
-        
-        medications = getMedicationEntitySessionBeanLocal().retrieveAll();
-        }
-        else
-        {
-            medications = getMedicationEntitySessionBeanLocal().searchMedicinesByName(getSearchString());
-        }
-        
-    }
+    
     
     
      public void viewMedicationDetails(ActionEvent event) throws IOException
@@ -185,19 +171,7 @@ public class ViewAllMedicationsManagedBean implements Serializable{
         this.medications = medications;
     }
 
-    /**
-     * @return the searchString
-     */
-    public String getSearchString() {
-        return searchString;
-    }
 
-    /**
-     * @param searchString the searchString to set
-     */
-    public void setSearchString(String searchString) {
-        this.searchString = searchString;
-    }
 
     /**
      * @return the medicationEntitySessionBeanLocal
@@ -324,17 +298,5 @@ public class ViewAllMedicationsManagedBean implements Serializable{
     public void setConflict_med_ids_to_update(List<Long> conflict_med_ids_to_update) {
         this.conflict_med_ids_to_update = conflict_med_ids_to_update;
     }
-        /**
-     * @return the newMedicationList
-     */
-    public List<Medication> getNewMedicationList() {
-        return newMedicationList = getMedicationEntitySessionBeanLocal().retrieveAll();
-    }
-
-    /**
-     * @param newMedicationList the newMedicationList to set
-     */
-    public void setNewMedicationList(List<Medication> newMedicationList) {
-        this.newMedicationList = newMedicationList;
-    }
+    
 }
