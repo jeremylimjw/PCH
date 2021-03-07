@@ -93,7 +93,9 @@
                 <h:commandButton class="button orange-button" value="ADD RANDOM WALK-IN" actionListener="#{appointmentManagedBean.addRandomWalkIn()}">
                     <f:ajax execute="@this" render="queue queueCount" />
                 </h:commandButton>
-                <button class="button orange-button">BUTTON</button>
+                <h:link outcome="chat.xhtml">
+                    <button class="button orange-button">CHAT</button>
+                </h:link>
                 <button class="button orange-button"><i class="fas fa-cog fa-lg" style="padding-top: 1px;"></i></button>
             </div>
         </div>
