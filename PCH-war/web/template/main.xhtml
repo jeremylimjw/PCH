@@ -26,16 +26,20 @@
                             <span>HOME</span>
                         </h:link>
                     </li>
-                    <li class="#{templateManagedBean.isUrl('/viewAllMedications.xhtml', '/createNewMedication.xhtml')}">
-                        <h:link outcome="viewAllMedications.xhtml">
+                    <li class="#{templateManagedBean.isUrl('/MedicationManagement.xhtml', '/createNewMedication.xhtml')}">
+                        <h:link outcome="MedicationManagement.xhtml">
                             <i class="fas fa-capsules"></i>
                             <span>MEDICATIONS</span>
                         </h:link>
                     </li>
                     <li>
                         <a href="#">
+                            <h:link outcome="">
+
                             <i class="fas fa-user-injured"></i>
                             <span>PATIENTS</span>
+                            </h:link>
+                            
                         </a>
                     </li>
                     <li>

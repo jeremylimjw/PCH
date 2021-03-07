@@ -214,6 +214,10 @@ public class Medication implements Serializable {
         this.parent_medications = parent_medications;
     }
     
+    public boolean hasConflictingMedicationAssociated(){
+        return(!this.conflicting_medications.isEmpty());
+    }
+    
 
     @Override
     public int hashCode() {

@@ -47,7 +47,8 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
     
     @Override
     public List<Medication> retrieveAll() {
-        Query query = em.createQuery("SELECT m FROM Medication m");
+        Query query = em.createQuery("SELECT m FROM Medication m WHERE m.deleted =?1 ");
+        query.setParameter(1, false);
         return query.getResultList();
     }
     
@@ -149,7 +150,7 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
                     medicationToUpdate.setPrescription_quantity(medication.getPrescription_quantity());
                     medicationToUpdate.setQuantity_on_hand(medication.getQuantity_on_hand());
                     medicationToUpdate.setDescription(medication.getDescription());
-                    medicationToUpdate.setConflicting_foods(cfood);
+                    medicationToUpdate.setConflicting_foods(medication.getConflicting_foods());
                    
                 for(Long medicationid :medId )
                 {
@@ -190,7 +191,57 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
         }
     }
     
-     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Medication>>constraintViolations)
+    
+    @Override
+    public Long deleteMedication(Long medication_id, List<Medication> medication) throws MedicationEntityException{
+        
+        
+          Medication medication_to_delete = retrieveByMedicineId(medication_id);
+         
+          for(int i =0; i<medication.size(); i++)
+          {
+              if(medication.get(i).getConflicting_medications().contains(medication_to_delete))
+              {
+                  medication.get(i).getConflicting_medications().remove(medication_to_delete);
+                  medication.get(i).getParent_medications().remove(medication_to_delete);
+              }
+              
+          }
+          for(Medication dissMed: medication_to_delete.getConflicting_medications())
+          {
+              dissMed.getParent_medications().remove(medication_to_delete);
+          }
+          medication_to_delete.getConflicting_medications().clear();
+          Long id = delete(medication_to_delete.getId());
+        
+        return id;
+    }
+
+     
+    @Override
+     public Long delete(Long medication_id) throws MedicationEntityException{
+         
+         
+         Medication medication_to_delete = retrieveByMedicineId(medication_id);
+         if(medication_to_delete.isDeleted()){
+             throw new MedicationEntityException("Error: Medication with ID "+ medication_id + " has already been deleted!");
+         }
+               
+                    
+                    
+                     if(medication_to_delete.hasConflictingMedicationAssociated()){
+             throw new MedicationEntityException("Error: Medication is associated with a conflicting medication and cannot be deleted!");
+                     }
+             
+                    medication_to_delete.setDeleted(true);
+                    
+         return medication_to_delete.getId();
+     }
+     
+     
+     
+     
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Medication>>constraintViolations)
     {
         String msg = "Input data validation error!:";
             
@@ -201,5 +252,5 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
         
         return msg;
     }
-    
+     
 }

@@ -68,7 +68,7 @@ public class UpdateMedicationManagedBean implements Serializable {
 
     public void updateMedication() {
         try {
-            medicationEntitySessionBean.updateMedication(medicationToUpdate, conflict_med_ids, getC_food());
+            medicationEntitySessionBean.updateMedication(medicationToUpdate, conflict_med_ids, c_food);
             conflict_med_ids = new ArrayList<>();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Medication updated successfully", null));
         } catch (MedicationEntityException ex) {

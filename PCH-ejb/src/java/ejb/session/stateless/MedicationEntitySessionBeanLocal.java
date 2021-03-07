@@ -32,5 +32,9 @@ public interface MedicationEntitySessionBeanLocal {
     public void updateMedication(Medication medication , List<Long> medId,List<String> cfood) throws MedicationEntityException;
 
     public Medication createNewMedication(Medication newMedication, List<Long> medId, List<String> cFood) throws MedicationEntityException;
+
+    public Long delete(Long medication_id) throws MedicationEntityException;
+
+    public Long deleteMedication(Long medication_id, List<Medication> medication) throws MedicationEntityException;
     
 }
