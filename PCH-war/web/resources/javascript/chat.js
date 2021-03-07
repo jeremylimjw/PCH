@@ -58,3 +58,7 @@ function addText(message) {
     '</div>';
 }
 
+function doTheFocus(data) {
+    document.getElementById('sendForm:txt-message').focus();
+}
+

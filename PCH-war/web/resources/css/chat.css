@@ -13,10 +13,15 @@ html, body {
     font-family: 'Roboto', sans-serif;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 .left {
     background-image: linear-gradient(#24B3A8, #1D8D84);
     width: calc(100vw - 150px);
     height: calc(100vh - 50px);
+    overflow: auto;
 }
 
 .right {

@@ -39,14 +39,14 @@
 
         </div>
 
-        <h:form id="messageForm">
+        <h:form id="sendForm">
             <div class="bottom">
                 <div class="input-div">
-                    <h:inputText value="#{chatManagedBean.message}" a:placeholder="Enter message" />
+                    <h:inputText id="txt-message" value="#{chatManagedBean.message}" a:placeholder="Enter message" autocomplete="off" a:autofocus="true" required="true" />
                 </div>
                 <div class="submit-div">
                     <h:commandButton class="blue-button" actionListener="#{chatManagedBean.sendMessage}" value="SEND">
-                        <f:ajax execute="messageForm" />
+                        <f:ajax execute="sendForm" render="sendForm" onevent="doTheFocus" />
                     </h:commandButton>
                 </div>
             </div>
