@@ -1,0 +1,353 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./template/main.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+
+
+  <ui:define name="main">
+        
+      <div> 
+        <h2>Medications</h2>
+        
+        
+        <h:form>
+            <p:menubar>
+                
+                <p:submenu label="Create Medication" icon="ui-icon-document">
+                        <p:menuitem value="Create New Medication" onclick="PF('dialogCreateNewMedication').show()" icon="pi pi-plus" />
+                    </p:submenu>                                        
+            </p:menubar>
+            <br />
+        </h:form>
+        
+           <h:form id="formAllMedications">      
+            <p:messages id="messages" redisplay="false" closable="true" />
+               
+            <p:dataTable id="dataTableAllMedications" widgetVar="dataTableAllMedications"  value="#{viewAllMedicationsManagedBean.medications}" var="medication" rowKey="#{medication.id}" rowIndexVar="row"
+                           rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+            <f:facet name="header">
+                        <p:outputPanel style="text-align: right;">
+                            <h:outputText value="Search all fields:" />
+                            <p:inputText id="globalFilter" onkeyup="PF('dataTableAllMedications').filter()" style="width:300px" placeholder="Enter keyword"/>
+                        </p:outputPanel>
+                    </f:facet>
+             
+                <p:column headerText="Medication ID" sortBy="#{medication.id}" filterBy="#{medication.id}" filterMatchMode="contains">
+                        <h:outputText value="#{medication.id}" />
+              </p:column>
+                
+                <p:column headerText="Medication Name" sortBy="#{medication.name}" filterBy="#{medication.name}" filterMatchMode="contains">
+                        <h:outputText value="#{medication.name}" />
+              </p:column>
+                  <p:column headerText="Medication Brand" sortBy="#{medication.brand}" filterBy="#{medication.brand}" filterMatchMode="contains">
+                      <h:outputText value="#{medication.brand}" />
+              </p:column>
+                <p:column headerText="Description" sortBy="#{medication.description}" filterBy="#{medication.description}" filterMatchMode="contains">
+                        <h:outputText value="#{medication.description}" />
+              </p:column>
+            
+               <p:column headerText="Quantity" sortBy="#{medication.quantity_on_hand}" filterBy="#{medication.quantity_on_hand}" filterMatchMode="contains">
+                        <h:outputText value="#{medication.quantity_on_hand}" />
+              </p:column>
+            
+                <p:column headerText="Conflicting Food"  filterBy="#{medication.conflicting_foods}" filterMatchMode="contains">
+                    <p:repeat value ="#{medication.conflicting_foods}"  var ="c"> 
+                    <h:outputText value=" #{c} |" />
+                    </p:repeat>
+              </p:column>
+                
+                <p:column headerText="Conflicting Medications" filterBy="#{medication.conflicting_medications}" filterMatchMode="contains">
+                    <p:repeat value ="#{medication.conflicting_medications}"  var ="c"> 
+                        <h:outputText value=" #{c.name} |" />
+                    </p:repeat>
+              </p:column>
+                
+                <p:column headerText="Parent Medications" filterBy="#{medication.parent_medications}" filterMatchMode="contains">
+                    <p:repeat value ="#{medication.parent_medications}"  var ="c"> 
+                        <h:outputText value=" #{c.name} |" />
+                    </p:repeat>
+              </p:column>
+                   <p:column headerText="Action" >
+                        <p:commandButton update="ccViewMedication:formViewMedication" oncomplete="PF('dialogViewMedication').show()" icon="ui-icon-document" title="View">
+                            <f:setPropertyActionListener value="#{medication}" target="#{viewAllMedicationsManagedBean.viewMedicationManagedBean.meditcationToView}" />
+                        </p:commandButton>
+                       <p:commandButton actionListener="#{viewAllMedicationsManagedBean.doUpdate}" update="formUpdateMedication" oncomplete="PF('dialogUpdateMedication').show()" icon="ui-icon-pencil" title="Update">
+                            <f:attribute name="MedicationToUpdate" value="#{medication}" />
+                        </p:commandButton>
+                       
+                       <p:commandButton icon="ui-icon-trash" actionListener="#{viewAllMedicationsManagedBean.deleteMedication}" update="formAllMedications:dataTableAllMedications formAllMedications:messages">
+                            <f:attribute name="medicationToDelete" value="#{medication}" />
+                            <p:confirm header="Confirmation" message="Are you sure you want to delete #{medication.name}?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+            </p:dataTable>
+                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+               
+           </h:form>
+        
+            
+             <ez:ViewMedication id="ccViewMedication" />
+            
+            
+            <h:form id="formCreateMedication">
+            
+            <p:dialog id="dialogCreateNewMedication" widgetVar="dialogCreateNewMedication" header="Create New Medication" closable="true">
+
+                    <p:messages id="messagesCreateNewMedication" redisplay="false" />
+
+                    <p:panelGrid>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="Name" value="Medication Name: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="Name" value="#{viewAllMedicationsManagedBean.newMedication.name}" placeholder="Medication Name" required="true" requiredMessage="Medication Name is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="Name" />
+                            </p:column>
+                        </p:row>
+                        
+                            <p:row>
+                            <p:column>
+                                <p:outputLabel for="Brand" value="Medication Brand: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="Brand" value="#{viewAllMedicationsManagedBean.newMedication.brand}" placeholder="Medication Brand" required="true" requiredMessage="Medication Brand is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="Brand" />
+                            </p:column>
+                        </p:row>
+                        
+                            <p:row>
+                            <p:column>
+                                <p:outputLabel for="Description" value="Medication Description: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="Description" value="#{viewAllMedicationsManagedBean.newMedication.description}" placeholder="Medication Description" required="true" requiredMessage="Medication Description    is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="Description" />
+                            </p:column>
+                        </p:row>
+                        
+                             <p:row>
+                            <p:column>
+                                <p:outputLabel for="prescription_quantity" value="Prescription Quantity: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                 <p:spinner id="prescription_quantity" value="#{viewAllMedicationsManagedBean.newMedication.prescription_quantity}" placeholder="100" min="0" max="1000000" required="true" requiredMessage="Prescription Quantity is required" />
+                               
+                            </p:column>
+                            <p:column>
+                                <p:message for="prescription_quantity" />
+                            </p:column>
+                        </p:row>
+                        
+                            <p:row>
+                            <p:column>
+                                <p:outputLabel for="price_per_quantity" value="Price Per Quantity: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                 <p:spinner id="price_per_quantity" value="#{viewAllMedicationsManagedBean.newMedication.price_per_quantity}"  required="true" placeholder="10.00" min="0" max="1000000" stepFactor="0.01" requiredMessage="Price Per Quantity is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="price_per_quantity" />
+                            </p:column>
+                        </p:row>
+                        
+                         <p:row>
+                            <p:column>
+                                <p:outputLabel for="quantity" value="Quantity on Hand: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                 <p:spinner id="quantity" value="#{viewAllMedicationsManagedBean.newMedication.quantity_on_hand}" placeholder="Quantity On Hand " required="true" requiredMessage="Quantity is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="quantity" />
+                            </p:column>
+                        </p:row>
+                        
+                         <p:row>
+                            <p:column>
+                                <p:outputLabel for="cMed" value="Conflicting Medication: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                            <p:selectManyMenu id="cMed" value="#{viewAllMedicationsManagedBean.conflict_med_ids}" filter ="true" showCheckbox="true"  >
+                                <f:selectItems value="#{viewAllMedicationsManagedBean.medications}" var="Medication" itemValue="#{Medication.id}" itemLabel="#{Medication.name}"  />
+                             </p:selectManyMenu>
+                            </p:column>
+                             <p:column>
+                                <p:message for="cMed" />
+                            </p:column>
+                         </p:row>
+                        
+                         <p:row>
+                            <p:column>
+                                <p:outputLabel for="cFood" value="Conflicting Food: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                            <p:autoComplete id="cFood" multiple ="true" value ="#{viewAllMedicationsManagedBean.cfoodArray}" >
+                                <p:column>
+                                 <span id="cFood" style="width: 30px; height: 20px"/>
+                                 <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{viewAllMedicationsManagedBean.foodName}"/>
+                                </p:column>
+   
+                            </p:autoComplete>
+                            </p:column>
+                             <p:column>
+                                 <p:commandButton  value="Add Food" update="cFood" actionListener="#{viewAllMedicationsManagedBean.addconflictFood}"  />
+                            </p:column>
+                         </p:row>
+                         <p:row>
+                            <p:column colspan="3">
+                                <p:commandButton type="reset" value="Clear" />&nbsp;
+                                <p:commandButton  value="Create New Medication" update="@form formAllMedications:dataTableAllMedications" actionListener="#{viewAllMedicationsManagedBean.createNewMedication}" oncomplete="PF('dialogCreateNewMedication').show();" />
+                            </p:column>
+                        </p:row>
+                        
+                        
+                        
+                            </p:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+             
+              <h:form id="formUpdateMedication">
+
+                <p:dialog id="dialogUpdateMedication" widgetVar="dialogUpdateMedication" header="Update Medication" closable="true">
+
+                    <p:messages id="messagesUpdateMedication" redisplay="false" />
+
+                    <p:panelGrid>
+                            
+                      <p:row>
+                           <p:column>
+                                <p:outputLabel for="name" value="Medication Name: " style="font-weight: bold;"/>
+                            </p:column>
+                           <p:column>
+                               <p:inputText id="name" value="#{viewAllMedicationsManagedBean.selectedMedicationEntityToUpdate.name}" placeholder="Medication Name" required="true" requiredMessage="Medication Name is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="name" />
+                            </p:column>
+                        </p:row>
+                        
+                         <p:row>
+                           <p:column>
+                                <p:outputLabel for="brand" value="Medication Brand: " style="font-weight: bold;"/>
+                            </p:column>
+                           <p:column>
+                               <p:inputText id="brand" value="#{viewAllMedicationsManagedBean.selectedMedicationEntityToUpdate.brand}" placeholder="Medication Brand" required="true" requiredMessage="Medication Brand is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="brand" />
+                            </p:column>
+                        </p:row>
+                         <p:row>
+                            <p:column>
+                                <p:outputLabel for="Description" value="Medication Description: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="Description" value="#{viewAllMedicationsManagedBean.selectedMedicationEntityToUpdate.description}" placeholder="Medication Description" required="true" requiredMessage="Medication Description    is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="Description" />
+                            </p:column>
+                        </p:row>
+                        
+                             <p:row>
+                            <p:column>
+                                <p:outputLabel for="prescription_quantity" value="Prescription Quantity: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                 <p:spinner id="prescription_quantity" value="#{viewAllMedicationsManagedBean.selectedMedicationEntityToUpdate.prescription_quantity}" placeholder="100" min="0" max="1000000" required="true" requiredMessage="Prescription Quantity is required" />
+                               
+                            </p:column>
+                            <p:column>
+                                <p:message for="prescription_quantity" />
+                            </p:column>
+                        </p:row>
+                        
+                            <p:row>
+                            <p:column>
+                                <p:outputLabel for="price_per_quantity" value="Price Per Quantity: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                 <p:spinner id="price_per_quantity" value="#{viewAllMedicationsManagedBean.selectedMedicationEntityToUpdate.price_per_quantity}"  required="true" placeholder="10.00" min="0" max="1000000" stepFactor="0.01" requiredMessage="Price Per Quantity is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="price_per_quantity" />
+                            </p:column>
+                        </p:row>
+                        
+                         <p:row>
+                            <p:column>
+                                <p:outputLabel for="quantity" value="Quantity on Hand: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                 <p:spinner id="quantity" value="#{viewAllMedicationsManagedBean.selectedMedicationEntityToUpdate.quantity_on_hand}" placeholder="Quantity On Hand " required="true" requiredMessage="Quantity is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="quantity" />
+                            </p:column>
+                        </p:row>
+                        
+                         <p:row>
+                            <p:column>
+                                <p:outputLabel for="cMed" value="Conflicting Medication: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:selectManyMenu id="cMed" value="#{viewAllMedicationsManagedBean.conflict_med_ids_to_update}" filter ="true" showCheckbox="true"  >
+                                <f:selectItems value="#{viewAllMedicationsManagedBean.medications}" var="Medication" itemValue="#{Medication.id}" itemLabel="#{Medication.name}"  />
+                             </p:selectManyMenu>
+                            </p:column>
+                             <p:column>
+                                <p:message for="cMed" />
+                            </p:column>
+                         </p:row>
+                        
+                         <p:row>
+                            <p:column>
+                                <p:outputLabel for="cFood" value="Conflicting Food: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:autoComplete id="cFood" multiple ="true" value ="#{viewAllMedicationsManagedBean.selectedMedicationEntityToUpdate.conflicting_foods}" >
+                            </p:autoComplete>
+                            </p:column>
+                             <p:column>
+                                 <p:commandButton  value="Add Food" update="cFood" actionListener="#{viewAllMedicationsManagedBean.addconflictFood}"  />
+                            </p:column>
+                         </p:row>
+                        
+                        
+                        <p:row>
+                            <p:column colspan="3">
+                                <p:commandButton value="Update" update="@form formAllMedications:dataTableAllMedications" actionListener="#{viewAllMedicationsManagedBean.updateMedication}" oncomplete="PF('dialogUpdateMedication').show();" />
+                            </p:column>
+                        </p:row>
+                        
+                        
+                        
+                        
+               </p:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+            
+  </div>
+        
+    </ui:define>
+
+</ui:composition>
