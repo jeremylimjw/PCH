@@ -39,16 +39,16 @@
 
         </div>
 
-        <h:form id="sendForm">
+        <h:form id="messageForm">
             <div class="bottom">
-                    <div class="input-div">
-                        <h:inputText value="#{chatManagedBean.message}" a:placeholder="Enter message" />
-                    </div>
-                    <div class="submit-div">
-                        <h:commandButton class="orange-button" actionListener="#{chatManagedBean.sendMessage}" value="SEND">
-                            <f:ajax execute="sendForm" render="sendForm" />
-                        </h:commandButton>
-                    </div>
+                <div class="input-div">
+                    <h:inputText value="#{chatManagedBean.message}" a:placeholder="Enter message" />
+                </div>
+                <div class="submit-div">
+                    <h:commandButton class="blue-button" actionListener="#{chatManagedBean.sendMessage}" value="SEND">
+                        <f:ajax execute="messageForm" />
+                    </h:commandButton>
+                </div>
             </div>
         </h:form>
         
