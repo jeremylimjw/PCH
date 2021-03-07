@@ -12,8 +12,7 @@
     
     <ui:define name="main">
         
-        <p:poll interval="5" listener="#{appointmentManagedBean.getAllAppointmentsForToday()}" update="appointments appointmentCount" ignoreAutoUpdate="true" />
-        <p:poll interval="5" listener="#{appointmentManagedBean.getOngoingQueue()}" update="queue queueCount" ignoreAutoUpdate="true" />
+        <p:poll interval="5" listener="#{appointmentManagedBean.getAllAppointmentsForToday()}" update="appointments appointmentCount queue queueCount" ignoreAutoUpdate="true" />
         
         <h:panelGroup id="appointments" class="left-container">
             
