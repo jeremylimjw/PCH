@@ -1,12 +1,157 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
-</html>
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./template/main.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <ui:define name="main">
+        
+        <h2>Employee Profile</h2>
+        
+        <p:panel header="Employee Profile">
+            <h:form id="formMain">
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="font-weight: bold;" value="Employee ID"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.id}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="font-weight: bold;" value="Name"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.name}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="font-weight: bold;" value="Email"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.email}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="font-weight: bold;" value="Username"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.username}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel style="font-weight: bold;" value="Role"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.role}"/>
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+                
+                <p:commandButton actionListener="#{viewEmployeeProfileDetailsManagedBean.doUpdateUserDetails}" update="formUpdateEmployee" oncomplete="PF('dialogUpdateEmployee').show()" icon="ui-icon-pencil" value="Update Profile Details" title="Update">
+                    <f:attribute name="user" value="#{viewEmployeeProfileDetailsManagedBean.user}" />
+                </p:commandButton>
+                
+<!--                <p:commandButton actionListener="#{viewEmployeeProfileDetailsManagedBean.doUpdateUserDetails}" update="formUpdateEmployee" oncomplete="PF('dialogUpdateEmployee').show()" icon="ui-icon-pencil" value="Change Password" title="Update">
+                    <f:attribute name="user" value="#{viewEmployeeProfileDetailsManagedBean.user}" />
+                </p:commandButton>-->
+            </h:form>
+        </p:panel>
+        
+        <h:form id="formUpdateEmployee">
+
+                <p:dialog id="dialogUpdateEmployee" widgetVar="dialogUpdateEmployee" header="Update Employee Details" closable="true">
+
+                    <p:messages id="messagesUpdateEmployee" redisplay="false" />
+
+                    <p:panelGrid>
+
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Employee ID" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.id}" />
+                            </p:column>
+<!--                            <p:column>
+                                &nbsp;
+                            </p:column>-->
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="name" value="Name" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="name" value="#{viewEmployeeProfileDetailsManagedBean.user.name}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.name}" required="true" requiredMessage="Name is required" />
+                            </p:column>
+<!--                            <p:column>
+                                <p:message for="name" />
+                            </p:column>-->
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="email" value="Email" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="email" value="#{viewEmployeeProfileDetailsManagedBean.user.email}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.email}" required="true" requiredMessage="Email is required" />
+                            </p:column>
+<!--                            <p:column>
+                                <p:message for="email" />
+                            </p:column>-->
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="username" value="Username" />
+                            </p:column>
+                            <p:column>
+                                <p:spinner id="username" value="#{viewEmployeeProfileDetailsManagedBean.user.username}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.username}" required="true" requiredMessage="Username is required" />
+                            </p:column>
+<!--                            <p:column>
+                                <p:message for="username" />
+                            </p:column>-->
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Role" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.role}" />
+                            </p:column>
+<!--                            <p:column>
+                                &nbsp;
+                            </p:column>-->
+                        </p:row>
+
+                        <p:row>
+                            <p:column colspan="3">
+                                <p:commandButton value="Update Details" update="@form formMain" actionListener="#{viewEmployeeProfileDetailsManagedBean.updateUserDetails}" oncomplete="PF('dialogUpdateEmployee').show();" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+        
+        
+    </ui:define>
+</ui:composition>
 

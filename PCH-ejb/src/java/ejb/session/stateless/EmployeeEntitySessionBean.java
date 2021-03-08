@@ -55,6 +55,7 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanLocal
         return query.getResultList();
     }
 
+    @Override
     public Employee retrieveByUsername(String username) throws EmployeeEntityException {
         Query query = em.createQuery("SELECT e FROM Employee e WHERE e.username = ?1");
         query.setParameter(1, username);
@@ -64,5 +65,26 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanLocal
         } catch(NoResultException | NonUniqueResultException e) {
             throw new EmployeeEntityException("Username " + username + " does not exist!");
         }
+    }
+    
+    @Override
+    public void updateEmployeeDetails(Employee employee) throws EmployeeEntityException {
+        if (employee != null && employee.getId() != null) {
+            
+            Employee employeeToUpdate = retrieveById(employee.getId());
+            
+            if (employeeToUpdate.getUsername().equals(employee.getUsername())) {
+                
+                employeeToUpdate.setName(employee.getName());
+                employeeToUpdate.setEmail(employee.getEmail());
+                employeeToUpdate.setUsername(employee.getUsername());
+            }
+        } else {
+            throw new EmployeeEntityException("Employee ID not provided");
+        }
+    }
+    
+    public void updateEmployeePassword(Employee employee) throws EmployeeEntityException {
+        
     }
 }
