@@ -143,7 +143,7 @@
                         </div>
 
                         <div style="width: 100px;">
-                            <h:commandButton class="button blue-button 100-width" value="CALL" rendered="#{q.status == 'ARRIVED' and varStatus.index == 0 and !appointmentManagedBean.isCallingSomeone() and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'IN_PROGRESS')}">
+                            <h:commandButton class="button blue-button 100-width" value="CALL" rendered="#{q.status == 'ARRIVED' and varStatus.index == 0 and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'IN_PROGRESS')}">
                                 <f:ajax execute="@this" render="queue callingQueueNo previousQueueNo" />
                             </h:commandButton>
                             <h:commandButton class="button red-button 100-width" value="SKIP" rendered="#{q.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'MISSED')}">
