@@ -12,6 +12,7 @@ function init() {
 function receivePush(message, channel, event) {
     if (message.type == "MESSAGE") {
         addText(message);
+        scrollToBottom();
     } else if (message.type == "USER_JOIN") {
         addUser(message.name);
     } else if (message.type == "USER_LEFT") {
@@ -60,5 +61,10 @@ function addText(message) {
 
 function doTheFocus(data) {
     document.getElementById('sendForm:txt-message').focus();
+}
+
+function scrollToBottom(){
+    var container = document.getElementById('text-container');
+    container.scrollTop = container.scrollHeight;
 }
 

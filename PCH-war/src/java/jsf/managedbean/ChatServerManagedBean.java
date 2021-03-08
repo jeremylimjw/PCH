@@ -81,7 +81,7 @@ public class ChatServerManagedBean {
         try{
             Long userId = event.getUser();
             Employee user = employeeEntitySessionBeanLocal.retrieveById(userId);
-            users.add(user);
+            users.remove(user);
             for (Employee u : users) {
                 pushContext.send(new Message(user.getName(), user.getName() + " has left the chat.", null, "USER_LEFT"), u.getId());
             }
