@@ -35,7 +35,7 @@ public class ChatManagedBean {
     }
     
     public void sendMessage(ActionEvent event) {
-        chatServerManagedBean.sendMessage(user.getName(), message);
+        chatServerManagedBean.sendMessage(user, message);
         message = "";
     }
 

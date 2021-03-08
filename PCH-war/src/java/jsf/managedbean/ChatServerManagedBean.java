@@ -5,12 +5,17 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.EmployeeEntitySessionBeanLocal;
+import entity.Employee;
 import entity.Message;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -31,25 +36,28 @@ import javax.inject.Inject;
 public class ChatServerManagedBean {
     @Inject @Push(channel = "chatChannel")
     private PushContext pushContext;
+
+    @EJB(name = "EmployeeEntitySessionBeanLocal")
+    private EmployeeEntitySessionBeanLocal employeeEntitySessionBeanLocal;
     
-    private List<String> users;
+    private Set<Employee> users;
 
     public ChatServerManagedBean() {
     }
     
     @PostConstruct
     public void postConstruct() {        
-        users = new ArrayList<>();
+        users = new HashSet<>();
     }
     
-    public void sendMessage(String user, String message) {
+    public void sendMessage(Employee user, String message) {
         try{
             String pattern = "h:mm a";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(new Date());
             
-            for (String u : users) {
-                pushContext.send(new Message(user, message, date, "MESSAGE"), u);
+            for (Employee u : users) {
+                pushContext.send(new Message(user.getName(), message, date, "MESSAGE"), u.getId());
             }
         } catch(Exception ex) {
             ex.printStackTrace();
@@ -57,11 +65,12 @@ public class ChatServerManagedBean {
     }
     
     public void onOpen(@Observes @Opened WebsocketEvent event) {
-        String user = event.getUser();
-        users.add(user);
         try{
-            for (String u : users) {
-                pushContext.send(new Message(user, user + " has joined the chat.", null, "USER_JOIN"), u);
+            Long userId = event.getUser();
+            Employee user = employeeEntitySessionBeanLocal.retrieveById(userId);
+            users.add(user);
+            for (Employee u : users) {
+                pushContext.send(new Message(user.getName(), user.getName() + " has joined the chat.", null, "USER_JOIN"), u.getId());
             }
         } catch(Exception ex) {
             ex.printStackTrace();
@@ -69,22 +78,23 @@ public class ChatServerManagedBean {
      }
 
      public void onClose(@Observes @Closed WebsocketEvent event) {
-        String user = event.getUser();
-        users.remove(user);
         try{
-            for (String u : users) {
-                pushContext.send(new Message(user, user + " has left the chat.", null, "USER_LEFT"), u);
+            Long userId = event.getUser();
+            Employee user = employeeEntitySessionBeanLocal.retrieveById(userId);
+            users.add(user);
+            for (Employee u : users) {
+                pushContext.send(new Message(user.getName(), user.getName() + " has left the chat.", null, "USER_LEFT"), u.getId());
             }
         } catch(Exception ex) {
             ex.printStackTrace();
         }
      }
 
-    public List<String> getUsers() {
+    public Set<Employee> getUsers() {
         return users;
     }
 
-    public void setUsers(List<String> users) {
+    public void setUsers(Set<Employee> users) {
         this.users = users;
     }
     

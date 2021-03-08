@@ -19,7 +19,7 @@
     
         <script src="#{request.contextPath}/resources/javascript/chat.js"></script>
         
-        <f:websocket id="webSocketChatChannel" channel="chatChannel" user="#{sessionScope.user.name}" onmessage="receivePush" />
+        <f:websocket id="webSocketChatChannel" channel="chatChannel" user="#{sessionScope.user.id}" onmessage="receivePush" />
         
         <div style="display: flex;">
 
@@ -31,7 +31,7 @@
                 <ul id="user-list">
                     
                     <ui:repeat value="#{chatServerManagedBean.users}" var="u">
-                        <li>#{u}</li>
+                        <li>#{u.name}</li>
                     </ui:repeat>
                     
                 </ul>
