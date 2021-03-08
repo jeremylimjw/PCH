@@ -73,83 +73,83 @@
         
         <h:form id="formUpdateEmployee">
 
-                <p:dialog id="dialogUpdateEmployee" widgetVar="dialogUpdateEmployee" header="Update Employee Details" closable="true">
+            <p:dialog id="dialogUpdateEmployee" widgetVar="dialogUpdateEmployee" header="Update Employee Details" closable="true">
 
-                    <p:messages id="messagesUpdateEmployee" redisplay="false" />
+                <p:messages id="messagesUpdateEmployee" redisplay="false" />
 
-                    <p:panelGrid>
+                <p:panelGrid>
 
-                        <p:row>
-                            <p:column>
-                                <h:outputLabel value="Employee ID" />
-                            </p:column>
-                            <p:column>
-                                <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.id}" />
-                            </p:column>
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Employee ID" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.id}" />
+                        </p:column>
 <!--                            <p:column>
-                                &nbsp;
-                            </p:column>-->
-                        </p:row>
+                            &nbsp;
+                        </p:column>-->
+                    </p:row>
 
-                        <p:row>
-                            <p:column>
-                                <p:outputLabel for="name" value="Name" />
-                            </p:column>
-                            <p:column>
-                                <p:inputText id="name" value="#{viewEmployeeProfileDetailsManagedBean.user.name}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.name}" required="true" requiredMessage="Name is required" />
-                            </p:column>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="name" value="Name" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="name" value="#{viewEmployeeProfileDetailsManagedBean.user.name}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.name}" required="true" requiredMessage="Name is required" />
+                        </p:column>
 <!--                            <p:column>
-                                <p:message for="name" />
-                            </p:column>-->
-                        </p:row>
+                            <p:message for="name" />
+                        </p:column>-->
+                    </p:row>
 
-                        <p:row>
-                            <p:column>
-                                <p:outputLabel for="email" value="Email" />
-                            </p:column>
-                            <p:column>
-                                <p:inputText id="email" value="#{viewEmployeeProfileDetailsManagedBean.user.email}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.email}" required="true" requiredMessage="Email is required" />
-                            </p:column>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="email" value="Email" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="email" value="#{viewEmployeeProfileDetailsManagedBean.user.email}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.email}" required="true" requiredMessage="Email is required" />
+                        </p:column>
 <!--                            <p:column>
-                                <p:message for="email" />
-                            </p:column>-->
-                        </p:row>
+                            <p:message for="email" />
+                        </p:column>-->
+                    </p:row>
 
-                        <p:row>
-                            <p:column>
-                                <p:outputLabel for="username" value="Username" />
-                            </p:column>
-                            <p:column>
-                                <p:spinner id="username" value="#{viewEmployeeProfileDetailsManagedBean.user.username}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.username}" required="true" requiredMessage="Username is required" />
-                            </p:column>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="username" value="Username" />
+                        </p:column>
+                        <p:column>
+                            <p:spinner id="username" value="#{viewEmployeeProfileDetailsManagedBean.user.username}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.username}" required="true" requiredMessage="Username is required" />
+                        </p:column>
 <!--                            <p:column>
-                                <p:message for="username" />
-                            </p:column>-->
-                        </p:row>
+                            <p:message for="username" />
+                        </p:column>-->
+                    </p:row>
 
-                        <p:row>
-                            <p:column>
-                                <h:outputLabel value="Role" />
-                            </p:column>
-                            <p:column>
-                                <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.role}" />
-                            </p:column>
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Role" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.role}" />
+                        </p:column>
 <!--                            <p:column>
-                                &nbsp;
-                            </p:column>-->
-                        </p:row>
+                            &nbsp;
+                        </p:column>-->
+                    </p:row>
 
-                        <p:row>
-                            <p:column colspan="3">
-                                <p:commandButton value="Update Details" update="@form formMain" actionListener="#{viewEmployeeProfileDetailsManagedBean.updateUserDetails}" oncomplete="PF('dialogUpdateEmployee').show();" />
-                            </p:column>
-                        </p:row>
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton value="Update Details" update="@form formMain" actionListener="#{viewEmployeeProfileDetailsManagedBean.updateUserDetails}" oncomplete="PF('dialogUpdateEmployee').show();" />
+                        </p:column>
+                    </p:row>
 
-                    </p:panelGrid>
+                </p:panelGrid>
 
-                </p:dialog>
+            </p:dialog>
 
-            </h:form>
+        </h:form>
         
         
     </ui:define>
