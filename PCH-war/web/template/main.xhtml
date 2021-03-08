@@ -38,12 +38,8 @@
                     </li>
                     <li>
                         <a href="#">
-                            <h:link outcome="">
-
                             <i class="fas fa-user-injured"></i>
                             <span>PATIENTS</span>
-                            </h:link>
-                            
                         </a>
                     </li>
                     <li>
@@ -89,6 +85,7 @@
                 <div class="value"><h:outputText id="previousQueueNo" value="#{appointmentManagedBean.previous}" /></div>
             </h:panelGroup>
             <div class="sub-header-right">
+
                         
                 <h:commandButton class="button orange-button" value="ADD RANDOM APPOINTMENT" actionListener="#{appointmentManagedBean.addRandomAppointment()}">
                     <f:ajax execute="@this" render="appointments appointmentCount" />
@@ -97,8 +94,10 @@
                 <h:commandButton class="button orange-button" value="ADD RANDOM WALK-IN" actionListener="#{appointmentManagedBean.addRandomWalkIn()}">
                     <f:ajax execute="@this" render="queue queueCount" />
                 </h:commandButton>
-                <button class="button orange-button">BUTTON</button>
-                <button class="button orange-button"><i class="fas fa-cog fa-lg" style="padding-top: 1px;"></i></button>
+                        
+                <h:commandButton class="button orange-button" value="CALL NEXT PATIENT" actionListener="#{appointmentManagedBean.callNextPatient()}" rendered="#{sessionScope.user.role == 'DOCTOR'}">
+                    <f:ajax execute="@this" render="appointments queue callingQueueNo previousQueueNo" />
+                </h:commandButton>
             </div>
         </div>
 
@@ -111,6 +110,11 @@
                 <p:autoUpdate />
             </p:growl>
         </ui:insert>
+        
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" />
+        </p:confirmDialog>
 
     </h:body>
 

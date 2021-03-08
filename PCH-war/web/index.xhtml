@@ -69,15 +69,15 @@
                         </div>
 
                         <div style="width: 100px;">
-                            <h:commandButton class="button green-button" rendered="#{a.status == 'BOOKED' and sessionScope.user.role == 'NURSE'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'ARRIVED')}" value="PRESENT">
+                            <h:commandButton class="button green-button" value="PRESENT" rendered="#{a.status == 'BOOKED' and sessionScope.user.role == 'NURSE'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'ARRIVED')}">
                                 <f:ajax execute="@this" render="appointments" />
                             </h:commandButton>
-                            <h:commandButton class="button blue-button" rendered="#{a.status == 'ARRIVED' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'IN_PROGRESS')}" value="CALL">
+                            <h:commandButton class="button blue-button" value="CALL" rendered="#{a.status == 'ARRIVED' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'IN_PROGRESS')}">
                                 <f:ajax execute="@this" render="appointments callingQueueNo previousQueueNo" />
                             </h:commandButton>
-                            <h:commandButton class="button red-button" rendered="#{a.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'MISSED')}" value="SKIP">
-                                <f:ajax execute="@this" render="appointments appointmentCount" />
-                            </h:commandButton>
+                            <p:commandButton class="button red-button" value="SKIP" rendered="#{a.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(a, 'MISSED')}" update="appointments appointmentCount">
+                                <p:confirm header="Confirm Skip" message="Are you sure you want to skip? This action cannot be undone." />
+                            </p:commandButton>
                         </div>
 
                     </div>
@@ -143,12 +143,12 @@
                         </div>
 
                         <div style="width: 100px;">
-                            <h:commandButton class="button blue-button 100-width" value="CALL" rendered="#{q.status == 'ARRIVED' and varStatus.index == 0 and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'IN_PROGRESS')}">
+                            <h:commandButton class="button blue-button" value="CALL" rendered="#{q.status == 'ARRIVED' and varStatus.index == 0 and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'IN_PROGRESS')}">
                                 <f:ajax execute="@this" render="queue callingQueueNo previousQueueNo" />
                             </h:commandButton>
-                            <h:commandButton class="button red-button 100-width" value="SKIP" rendered="#{q.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'MISSED')}">
-                                <f:ajax execute="@this" render="queue queueCount" />
-                            </h:commandButton>
+                            <p:commandButton class="button red-button" value="SKIP" rendered="#{q.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}" actionListener="#{appointmentManagedBean.updateStatus(q, 'MISSED')}" update="queue queueCount">
+                                <p:confirm header="Confirm Skip" message="Are you sure you want to skip? This action cannot be undone." />
+                            </p:commandButton>
                         </div>
 
                     </div>

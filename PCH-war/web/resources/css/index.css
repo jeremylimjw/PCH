@@ -57,3 +57,14 @@ and open the template in the editor.
 .row.MISSED, .row.COMPLETED, .row.CANCELLED {
     color: #D3D3D3;
 }
+
+/*--- Remove Primefaces Style ---*/
+.ui-button {
+    background-image: none;
+    text-shadow: 0;
+    background-repeat: initial;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-size: initial;
+    margin: 0;
+}
