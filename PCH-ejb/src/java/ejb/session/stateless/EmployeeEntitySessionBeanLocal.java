@@ -23,4 +23,6 @@ public interface EmployeeEntitySessionBeanLocal {
     public Employee retrieveByUsername(String username) throws EmployeeEntityException;
 
     public void updateEmployeeDetails(Employee employee) throws EmployeeEntityException;
+
+    public void updateEmployeePassword(Employee employee) throws EmployeeEntityException;
 }

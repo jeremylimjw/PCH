@@ -84,7 +84,17 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanLocal
         }
     }
     
+    @Override
     public void updateEmployeePassword(Employee employee) throws EmployeeEntityException {
-        
+        if (employee != null && employee.getId() != null) {
+            
+            Employee employeeToUpdate = retrieveById(employee.getId());
+            
+            if (employeeToUpdate.getUsername().equals(employee.getUsername())) {
+                employeeToUpdate.setPassword(employee.getPassword());
+            }
+        } else {
+            throw new EmployeeEntityException("Employee ID not provided");
+        }
     }
 }

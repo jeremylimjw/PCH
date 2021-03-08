@@ -57,6 +57,10 @@ public class ViewEmployeeProfileDetailsManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
+    
+    public void updateUserPassword() {
+        
+    }
 
 
     public Employee getUser() {
