@@ -30,8 +30,8 @@
                             <span>HOME</span>
                         </h:link>
                     </li>
-                    <li class="#{templateManagedBean.isUrl('/viewAllMedications.xhtml', '/createNewMedication.xhtml')}">
-                        <h:link outcome="viewAllMedications.xhtml">
+                    <li class="#{templateManagedBean.isUrl('/viewAllMedication.xhtml', '/createNewMedication.xhtml')}">
+                        <h:link outcome="viewAllMedication.xhtml">
                             <i class="fas fa-capsules"></i>
                             <span>MEDICATIONS</span>
                         </h:link>
@@ -85,6 +85,7 @@
                 <div class="value"><h:outputText id="previousQueueNo" value="#{appointmentManagedBean.previous}" /></div>
             </h:panelGroup>
             <div class="sub-header-right">
+
                         
                 <h:commandButton class="button orange-button" value="ADD RANDOM APPOINTMENT" actionListener="#{appointmentManagedBean.addRandomAppointment()}">
                     <f:ajax execute="@this" render="appointments appointmentCount" />
@@ -93,8 +94,12 @@
                 <h:commandButton class="button orange-button" value="ADD RANDOM WALK-IN" actionListener="#{appointmentManagedBean.addRandomWalkIn()}">
                     <f:ajax execute="@this" render="queue queueCount" />
                 </h:commandButton>
+                
+                <h:commandButton class="button orange-button" value="CALL NEXT PATIENT" actionListener="#{appointmentManagedBean.callNextPatient()}" rendered="#{sessionScope.user.role == 'DOCTOR'}">
+                    <f:ajax execute="@this" render="appointments queue callingQueueNo previousQueueNo" />
+                </h:commandButton>
+                
                 <button class="button orange-button" onclick="window.open('chat.xhtml', 'newwindow', 'width=800,height=500'); return false;">CHAT</button>
-                <button class="button orange-button"><i class="fas fa-cog fa-lg" style="padding-top: 1px;"></i></button>
             </div>
         </div>
 
@@ -107,6 +112,11 @@
                 <p:autoUpdate />
             </p:growl>
         </ui:insert>
+        
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" />
+        </p:confirmDialog>
 
     </h:body>
 

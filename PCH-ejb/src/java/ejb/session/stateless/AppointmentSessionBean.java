@@ -133,7 +133,7 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
         Date start = c.getTime();
         c.add(Calendar.DATE, 1);
         Date end = c.getTime();
-        Query query = em.createQuery("SELECT a FROM Appointment a WHERE (a.schedule_type = ?1 AND a.status  = ?2) OR (a.status = ?3 AND a.employee.id = ?4) AND a.date_time >= ?5 AND a.date_time < ?6  ORDER BY a.date_time ASC");
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE (a.schedule_type = ?1 AND a.status  = ?2) OR (a.schedule_type = ?1 AND a.status = ?3 AND a.employee.id = ?4) AND a.date_time >= ?5 AND a.date_time < ?6  ORDER BY a.date_time ASC");
         query.setParameter(1, ScheduleTypeEnum.WALK_IN);
         query.setParameter(2, StatusEnum.ARRIVED);
         query.setParameter(3, StatusEnum.IN_PROGRESS);
