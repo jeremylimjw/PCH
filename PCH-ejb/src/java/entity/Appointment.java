@@ -54,9 +54,8 @@ public class Appointment implements Serializable {
     @NotNull
     private Date date_time;
     
-    @Column(length = 128)
-    @Size(max = 128)
-    private String description;
+    @Column
+    private String patient_notes;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -103,7 +102,7 @@ public class Appointment implements Serializable {
     public Appointment(Employee employee, MedicalRecord medical_record, Date date_time, ScheduleTypeEnum schedule_type, AppointmentTypeEnum appointment_type, StatusEnum status) {
         this.queue_no = "None";
         this.date_time = date_time;
-        this.description = "";
+        this.patient_notes = "";
         this.status = status;
         this.schedule_type = schedule_type;
         this.appointment_type = appointment_type;
@@ -139,12 +138,12 @@ public class Appointment implements Serializable {
         this.date_time = date_time;
     }
 
-    public String getDescription() {
-        return description;
+    public String getPatient_notes() {
+        return patient_notes;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPatient_notes(String patient_notes) {
+        this.patient_notes = patient_notes;
     }
 
     public StatusEnum getStatus() {

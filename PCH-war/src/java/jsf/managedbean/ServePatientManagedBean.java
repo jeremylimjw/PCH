@@ -68,6 +68,8 @@ public class ServePatientManagedBean implements Serializable {
             else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.HEALTH_CHECKUP)) basicRate = new BigDecimal(20);
             else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.VACCINATION)) basicRate = new BigDecimal(10);
             else  basicRate = new BigDecimal(40);
+            
+            appointment.setTotal_price(basicRate);
         } catch (NumberFormatException | AppointmentEntityException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error retrieving selected appointment.", null));
         }

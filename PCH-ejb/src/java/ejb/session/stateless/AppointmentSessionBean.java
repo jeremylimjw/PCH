@@ -174,7 +174,7 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
             oldAppointment.setPrescriptions(appointment.getPrescriptions());
             oldAppointment.setTotal_price(appointment.getTotal_price());
             oldAppointment.setStatus(appointment.getStatus());
-            oldAppointment.setDescription(appointment.getDescription());
+            oldAppointment.setPatient_notes(appointment.getPatient_notes());
 
             medicalRecordSessionBeanLocal.update(appointment.getMedical_record());
         } catch (MedicalRecordEntityException ex) {

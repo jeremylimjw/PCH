@@ -365,7 +365,7 @@
                 <div class="patient-notes">
                     <p:outputLabel for="patient_notes" value="Patient Notes" class="label-text"/>
                     <p:inputTextarea id="patient_notes" rows="8" placeholder="Write patient notes here." 
-                                     value="#{servePatientManagedBean.appointment.description}" 
+                                     value="#{servePatientManagedBean.appointment.patient_notes}" 
                                      disabled="#{sessionScope.user.role != 'DOCTOR'}"/>
                 </div>
 
