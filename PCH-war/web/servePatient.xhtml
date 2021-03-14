@@ -300,10 +300,10 @@
                     </p:tab>
                     
                     <p:tab title="Bill">
-                        <p:dataTable var="c" value="#{servePatientManagedBean.CONSULTATION_RATE}" emptyMessage="No items.">
+                        <p:dataTable var="c" value="#{servePatientManagedBean.basicRate}" emptyMessage="No items.">
                             
-                            <p:column headerText="Consultation" colspan="7">
-                                <h:outputText value="Basic Rate" />
+                            <p:column headerText="Basic Rate" colspan="7">
+                                <h:outputText value="#{servePatientManagedBean.appointment.appointment_type.toString()}" />
                             </p:column>
                             
                             <p:column headerText="Subtotal ">
@@ -314,7 +314,7 @@
                             
                         </p:dataTable>
                         
-                        <p:dataTable var="p" value="#{servePatientManagedBean.appointment.prescriptions}" emptyMessage="No items.">
+                        <p:dataTable var="p" value="#{servePatientManagedBean.appointment.prescriptions}" emptyMessage="No prescriptions.">
                             
                             <p:column headerText="Medication ID">
                                 <h:outputText value="#{p.medication.id}" />
