@@ -12,8 +12,6 @@
     
     <ui:define name="main">
         
-        <p:poll interval="5" listener="#{appointmentManagedBean.getAllAppointmentsForToday()}" update="appointments appointmentCount queue queueCount" ignoreAutoUpdate="true" />
-        
         <h:panelGroup id="appointments" class="left-container">
             
             <h:panelGroup rendered="#{appointmentManagedBean.appointments.isEmpty()}" class="error-message">NO APPOINTMENTS TODAY</h:panelGroup>

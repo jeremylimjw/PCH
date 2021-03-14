@@ -16,4 +16,5 @@ import util.exception.MedicalRecordEntityException;
 @Local
 public interface MedicalRecordSessionBeanLocal {
     public MedicalRecord retrieveById(Long id) throws MedicalRecordEntityException;
+    public void update(MedicalRecord medicalRecord) throws MedicalRecordEntityException;
 }

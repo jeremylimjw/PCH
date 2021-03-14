@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -33,7 +33,7 @@ import util.exception.EmployeeEntityException;
  * @author USER
  */
 @Named(value = "appointmentManagedBean")
-@SessionScoped
+@RequestScoped
 public class AppointmentManagedBean implements Serializable {
 
     @EJB

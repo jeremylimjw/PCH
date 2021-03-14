@@ -6,8 +6,6 @@
 package ejb.session.singleton;
 
 import ejb.session.stateless.AppointmentSessionBeanLocal;
-import ejb.session.stateless.MedicationEntitySessionBeanLocal;
-import entity.Appointment;
 import entity.Employee;
 import entity.MedicalRecord;
 import entity.Medication;
@@ -17,7 +15,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -25,10 +22,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import util.enumeration.AppointmentTypeEnum;
 import util.enumeration.RoleEnum;
-import util.enumeration.ScheduleTypeEnum;
-import util.exception.AppointmentEntityException;
 
 /**
  *
@@ -60,7 +54,12 @@ public class DataInitSessionBean {
                 Employee charlie = new Employee("Charlie", "charlie", "password", "charlie@gmail.com", RoleEnum.NURSE); em.persist(charlie);
 
 
-                MedicalRecord desmondRecord = new MedicalRecord("Desmond", "S94626123A", "address1", new SimpleDateFormat("dd/MM/yyyy").parse("20/6/1996"), "82746726", "B+", new ArrayList<>(Arrays.asList("Drug 1")), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()); em.persist(desmondRecord);
+                MedicalRecord desmondRecord = new MedicalRecord("Desmond", "S94626123A", "address1", 
+                        new SimpleDateFormat("dd/MM/yyyy").parse("20/6/1996"), "82746726", "B+", 
+                        new ArrayList<>(Arrays.asList("Drug 1", "Drug 2", "Drug 3")), 
+                        new ArrayList<>(Arrays.asList("Family History 1", "Family History 2", "Family History 3")), 
+                        new ArrayList<>(Arrays.asList("Past History 1", "Past History 2", "Past History 3")), 
+                        new ArrayList<>(Arrays.asList("Vaccination 1", "Vaccination 2", "Vaccination 3"))); em.persist(desmondRecord);
                 Patient desmond = new Patient("desmond", "password", "desmond@gmail.com", desmondRecord); em.persist(desmond);
 
             } catch (ParseException ex) {
