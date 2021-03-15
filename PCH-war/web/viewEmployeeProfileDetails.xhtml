@@ -65,9 +65,11 @@
                     <f:attribute name="user" value="#{viewEmployeeProfileDetailsManagedBean.user}" />
                 </p:commandButton>
                 
-<!--                <p:commandButton actionListener="#{viewEmployeeProfileDetailsManagedBean.doUpdateUserDetails}" update="formUpdateEmployee" oncomplete="PF('dialogUpdateEmployee').show()" icon="ui-icon-pencil" value="Change Password" title="Update">
-                    <f:attribute name="user" value="#{viewEmployeeProfileDetailsManagedBean.user}" />
-                </p:commandButton>-->
+                <p:commandButton actionListener="#{viewEmployeeProfileDetailsManagedBean.doUpdateUserDetails}" update="formUpdatePassword" oncomplete="PF('dialogUpdatePassword').show()" icon='ui-icon-locked' value='Update Password' title='UpdatePassword'>
+                    <f:attribute name="user" value="#{viewEmployeeProfileDetailsManagedBean.user}"/>
+                </p:commandButton>
+                
+
             </h:form>
         </p:panel>
         
@@ -86,9 +88,6 @@
                         <p:column>
                             <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.id}" />
                         </p:column>
-<!--                            <p:column>
-                            &nbsp;
-                        </p:column>-->
                     </p:row>
 
                     <p:row>
@@ -98,9 +97,6 @@
                         <p:column>
                             <p:inputText id="name" value="#{viewEmployeeProfileDetailsManagedBean.user.name}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.name}" required="true" requiredMessage="Name is required" />
                         </p:column>
-<!--                            <p:column>
-                            <p:message for="name" />
-                        </p:column>-->
                     </p:row>
 
                     <p:row>
@@ -110,9 +106,6 @@
                         <p:column>
                             <p:inputText id="email" value="#{viewEmployeeProfileDetailsManagedBean.user.email}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.email}" required="true" requiredMessage="Email is required" />
                         </p:column>
-<!--                            <p:column>
-                            <p:message for="email" />
-                        </p:column>-->
                     </p:row>
 
                     <p:row>
@@ -122,9 +115,6 @@
                         <p:column>
                             <p:spinner id="username" value="#{viewEmployeeProfileDetailsManagedBean.user.username}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.username}" required="true" requiredMessage="Username is required" />
                         </p:column>
-<!--                            <p:column>
-                            <p:message for="username" />
-                        </p:column>-->
                     </p:row>
 
                     <p:row>
@@ -134,9 +124,6 @@
                         <p:column>
                             <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.role}" />
                         </p:column>
-<!--                            <p:column>
-                            &nbsp;
-                        </p:column>-->
                     </p:row>
 
                     <p:row>
@@ -144,11 +131,71 @@
                             <p:commandButton value="Update Details" update="@form formMain" actionListener="#{viewEmployeeProfileDetailsManagedBean.updateUserDetails}" oncomplete="PF('dialogUpdateEmployee').show();" />
                         </p:column>
                     </p:row>
-
+ 
                 </p:panelGrid>
 
             </p:dialog>
 
+        </h:form>
+        
+        <h:form id="formUpdatePassword">
+            <p:dialog id="dialogUpdatePassword" widgetVar="dialogUpdatePassword" header="Update Employee Password" closable="true">
+                <p:messages id="messagesUpdatePassword" redisplay="false" />
+                
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Employee ID" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.id}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Name" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.name}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="oldPassword" value="Enter old password"/>
+                        </p:column>
+                        <p:column>
+                            <p:password id="oldPassword" required="true" requiredMessage="Please enter old password!" validator="oldPasswordValidator"/>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="newPassword1" value="Enter new password"/>
+                        </p:column>
+                        <p:column>
+                            <p:password id="newPassword1" value="#{viewEmployeeProfileDetailsManagedBean.user.password}" match="newPassword2" required="true" requiredMessage="Password is required"/>                  
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="newPassword2" value="Re-enter new password "/>
+                        </p:column>
+                        <p:column>
+                            <p:password id="newPassword2" value="#{viewEmployeeProfileDetailsManagedBean.user.password}" required="true" requiredMessage="Must re-enter password!"/>                  
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton value="Update Password" update="@form formMain" actionListener="#{viewEmployeeProfileDetailsManagedBean.updateUserPassword}" oncomplete="PF('dialogUpdatePassword').show();" />
+                        </p:column>
+                    </p:row>
+                    
+                </p:panelGrid>
+            </p:dialog>
         </h:form>
         
         

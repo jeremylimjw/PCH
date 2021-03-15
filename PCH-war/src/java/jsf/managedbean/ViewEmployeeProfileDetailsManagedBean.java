@@ -9,6 +9,8 @@ import ejb.session.stateless.EmployeeEntitySessionBeanLocal;
 import entity.Employee;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -58,7 +60,15 @@ public class ViewEmployeeProfileDetailsManagedBean implements Serializable {
         }
     }
     
-    public void updateUserPassword() {
+    public void updateUserPassword(ActionEvent event) {
+        try {
+            employeeEntitySessionBean.updateEmployeePassword(user);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Employee details updated successfully", null));
+        } catch (EmployeeEntityException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating employee details: " + ex.getMessage(), null));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+        }
         
     }
 
