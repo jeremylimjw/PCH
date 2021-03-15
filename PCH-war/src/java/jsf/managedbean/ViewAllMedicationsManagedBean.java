@@ -103,7 +103,7 @@ public class ViewAllMedicationsManagedBean implements Serializable{
        // Long id = medicationEntitySessionBeanLocal.create(newMedication);
         try{
          
-             Medication med = getMedicationEntitySessionBeanLocal().createNewMedication(getNewMedication(), getConflict_med_ids(), cfoodArray, cfoodArray);
+             Medication med = getMedicationEntitySessionBeanLocal().createNewMedication(getNewMedication(), getConflict_med_ids(), cfoodArray, cdrugArray);
               
              conflict_med_ids = new ArrayList<>();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Created successfully", "New Medication Name: " + med.getName()));
