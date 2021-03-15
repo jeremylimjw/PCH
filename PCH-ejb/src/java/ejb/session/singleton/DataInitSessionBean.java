@@ -44,10 +44,12 @@ public class DataInitSessionBean {
         if (em.find(Medication.class, 1l) == null) {
 
             try {
-                em.persist(new Medication("Medication A","Brand A", "10mg", new BigDecimal(10), 10, new ArrayList<>(Arrays.asList("Food 1", "Food 2")), null, null));
-                em.persist(new Medication("Medication B","Brand A", "100ml", new BigDecimal(20), 12, null, null, null));
-                em.persist(new Medication("Medication C","Brand B", "23mg", new BigDecimal(30), 14, null, null, null));
-                em.persist(new Medication("Medication D","Brand B", "55mg", new BigDecimal(40), 12, null, null, null));
+                em.persist(new Medication("Medication A","Brand A", "10mg", new BigDecimal(10), 10, 
+                        new ArrayList<>(Arrays.asList("Food 1", "Food 2")), 
+                        new ArrayList<>(Arrays.asList("Ibuprofen", "Penicillin", "Aspirin")), "This is med A", null));
+                em.persist(new Medication("Medication B","Brand A", "100ml", new BigDecimal(20), 12, new ArrayList<>(), new ArrayList<>(), null, null));
+                em.persist(new Medication("Medication C","Brand B", "23mg", new BigDecimal(30), 14, new ArrayList<>(), new ArrayList<>(), null, null));
+                em.persist(new Medication("Medication D","Brand B", "55mg", new BigDecimal(40), 12, new ArrayList<>(), new ArrayList<>(), null, null));
 
                 Employee alice = new Employee("Alice", "alice", "password", "alice@gmail.com", RoleEnum.DOCTOR); em.persist(alice);
                 Employee bob = new Employee("Bob", "bob", "password", "bob@gmail.com", RoleEnum.DOCTOR); em.persist(bob);
@@ -56,7 +58,7 @@ public class DataInitSessionBean {
 
                 MedicalRecord desmondRecord = new MedicalRecord("Desmond", "S94626123A", "address1", 
                         new SimpleDateFormat("dd/MM/yyyy").parse("20/6/1996"), "82746726", "B+", 
-                        new ArrayList<>(Arrays.asList("Drug 1", "Drug 2", "Drug 3")), 
+                        new ArrayList<>(Arrays.asList("Ibuprofen", "Drug 1", "Drug 2", "Drug 3")), 
                         new ArrayList<>(Arrays.asList("Family History 1", "Family History 2", "Family History 3")), 
                         new ArrayList<>(Arrays.asList("Past History 1", "Past History 2", "Past History 3")), 
                         new ArrayList<>(Arrays.asList("Vaccination 1", "Vaccination 2", "Vaccination 3"))); em.persist(desmondRecord);

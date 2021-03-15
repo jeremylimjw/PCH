@@ -94,8 +94,9 @@ public class ServePatientManagedBean implements Serializable {
     }
     
     public void validateAndUpdate() throws AppointmentEntityException {
-        if (appointment.getStatus().equals(StatusEnum.IN_PROGRESS)) {
-            List<Prescription> set = new ArrayList<>();
+        if (appointment.getStatus().equals(StatusEnum.IN_PROGRESS)) { // Validate these fields only if appointment is ongoing
+            // Create new list to combine duplicated prescriptions
+            List<Prescription> set = new ArrayList<>(); 
             for (Prescription p : appointment.getPrescriptions()) {
                 for (Prescription s : set) {
                     if (s.getMedication().equals(p.getMedication())) {
@@ -105,17 +106,31 @@ public class ServePatientManagedBean implements Serializable {
                 }
                 set.add(new Prescription(p.getQuantity(), p.getMedication()));
             }
+            
+            // Check if medication stock satisfies
             for (Prescription p : set) {
                 if (p.getMedication().getQuantity_on_hand() < p.getQuantity()) throw new AppointmentEntityException(p.getMedication().getName() + " does not have enough stock (Stock: " + p.getMedication().getQuantity_on_hand() + ").");
             }
-        }
-        
-        if (appointment.getMedical_certificate() == null && (mc_start_date != null || mc_end_date != null)) {
-            if (mc_start_date == null || mc_end_date == null) throw new AppointmentEntityException("Start/end date cannot be empty.");
-            if (mc_end_date.getTime() < mc_start_date.getTime()) throw new AppointmentEntityException("End date cannot be before start date.");
+            
+            // Check if drug allergy conflicts
+            for (Prescription p : set) {
+                for (String containing_drug : p.getMedication().getContaining_drugs()) {
+                    for (String drug_allergy : appointment.getMedical_record().getDrug_allergys()) {
+                        if (containing_drug.toLowerCase().equals(drug_allergy.toLowerCase())) {
+                            throw new AppointmentEntityException("Patient has drug allergy " + drug_allergy + " that is conflicted with " + p.getMedication().getName()+ ".");
+                        }
+                    }
+                }
+            }
+            
+            if (appointment.getMedical_certificate() == null && (mc_start_date != null || mc_end_date != null)) { // Check if MC date fields are filled up by the user
+                if (mc_start_date == null || mc_end_date == null) throw new AppointmentEntityException("MC start/end date cannot be empty.");
+                if (mc_end_date.getTime() < mc_start_date.getTime()) throw new AppointmentEntityException("MC end date cannot be before start date.");
 
-            MedicalCertificate mc = new MedicalCertificate(mc_start_date, mc_end_date, null);
-            appointment.setMedical_certificate(mc);
+                MedicalCertificate mc = new MedicalCertificate(mc_start_date, mc_end_date, null);
+                appointment.setMedical_certificate(mc);
+            }
+            
         }
         
         appointmentSessionBeanLocal.update(appointment);
@@ -134,8 +149,8 @@ public class ServePatientManagedBean implements Serializable {
         try {
             if (!appointment.getStatus().equals(StatusEnum.IN_PROGRESS)) throw new AppointmentEntityException("Patient is not called in or the appointment has past.");
             
-            appointment.setStatus(StatusEnum.COMPLETED);
             validateAndUpdate();
+            appointmentSessionBeanLocal.updateStatus(appointment.getId(), StatusEnum.COMPLETED);
             medicationEntitySessionBeanLocal.processPrescriptions(appointment.getPrescriptions()); //  This will throw error if somehow any quantity exceeds stock in hand
             
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
