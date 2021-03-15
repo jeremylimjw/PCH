@@ -31,8 +31,8 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanLocal
         Employee employee = retrieveByUsername(username);
         
         if (employee.getPassword().equals(password)) {
-            em.detach(employee);
-            employee.setPassword("");
+            //em.detach(employee);
+            //employee.setPassword("");
             return employee;
         } else {
             throw new EmployeeEntityException("Invalid password!");
