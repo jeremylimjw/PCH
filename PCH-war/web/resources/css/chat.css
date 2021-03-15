@@ -1,0 +1,99 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 8 Mar, 2021, 1:10:27 AM
+    Author     : USER
+*/
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.left {
+    background-image: linear-gradient(#24B3A8, #1D8D84);
+    width: calc(100vw - 150px);
+    height: calc(100vh - 50px);
+    overflow: auto;
+}
+
+.right {
+    background-image: linear-gradient(#DCDCDC, #C0C0C0);
+    width: 150px;
+}
+
+.right p {
+    padding-left: 20px;
+}
+
+.bottom {
+    height: 50px;
+    display: flex;
+}
+
+.input-div {
+    width: calc(100vw - 100px);
+    height: 100%;
+}
+
+.input-div input {
+    width: 100%;
+    height: 48px;
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+    padding-left: 15px;
+}
+
+.submit-div {
+    width: 100px;
+    height: 100%;
+}
+
+.submit-div input {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+}
+
+.message {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    display: flex;
+    background-color: white;
+}
+
+.text {
+    width: calc(100% - 55px);
+    overflow-wrap: break-word;
+}
+
+.text .name {
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.time {
+    position: relative;
+    width: 55px;
+    font-size: 12px;
+    color: gray;
+}
+
+.time div {
+    position: absolute;
+    bottom: -5px;
+    right: 0;
+}
+
+.blue-button {
+    font-family: 'Fira Sans', sans-serif;
+    border-radius: 5px;
+}
