@@ -43,9 +43,11 @@ public class ViewAllMedicationsManagedBean implements Serializable{
     //Create
     private Medication newMedication;
     private String foodName;
+    private String drugName;
     private List<String> cfoodArray;
     private List<Medication> conflict_medicine;
     private List<Long> conflict_med_ids;
+    private List<String> cdrugArray;
     
     //Update and Delete
     private Medication selectedMedicationEntityToUpdate;
@@ -57,6 +59,7 @@ public class ViewAllMedicationsManagedBean implements Serializable{
     public ViewAllMedicationsManagedBean() {
         newMedication = new Medication();
         cfoodArray = new ArrayList<>();
+        cdrugArray = new ArrayList<>();
     }
     
     @PostConstruct
@@ -100,7 +103,7 @@ public class ViewAllMedicationsManagedBean implements Serializable{
        // Long id = medicationEntitySessionBeanLocal.create(newMedication);
         try{
          
-             Medication med = getMedicationEntitySessionBeanLocal().createNewMedication(getNewMedication(), getConflict_med_ids(), cfoodArray);
+             Medication med = getMedicationEntitySessionBeanLocal().createNewMedication(getNewMedication(), getConflict_med_ids(), cfoodArray, cdrugArray);
               
              conflict_med_ids = new ArrayList<>();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Created successfully", "New Medication Name: " + med.getName()));
@@ -121,17 +124,18 @@ public class ViewAllMedicationsManagedBean implements Serializable{
           
            conflict_med_ids_to_update = new ArrayList<>();
            cfoodArray= new ArrayList<>();
-
+           cdrugArray = new ArrayList<>();
         for(Medication medication:selectedMedicationEntityToUpdate.getConflicting_medications())
         {
             conflict_med_ids_to_update.add(medication.getId());
         }
           cfoodArray=selectedMedicationEntityToUpdate.getConflicting_foods();
+          cdrugArray = selectedMedicationEntityToUpdate.getContaining_drugs();
       }
      
     public void updateMedication(ActionEvent event) {
         try {
-            medicationEntitySessionBeanLocal.updateMedication(selectedMedicationEntityToUpdate, conflict_med_ids_to_update, cfoodArray);
+            medicationEntitySessionBeanLocal.updateMedication(selectedMedicationEntityToUpdate, conflict_med_ids_to_update, cfoodArray,cdrugArray);
             conflict_med_ids = new ArrayList<>();
             
            
@@ -297,6 +301,34 @@ public class ViewAllMedicationsManagedBean implements Serializable{
      */
     public void setConflict_med_ids_to_update(List<Long> conflict_med_ids_to_update) {
         this.conflict_med_ids_to_update = conflict_med_ids_to_update;
+    }
+
+    /**
+     * @return the cdrugArray
+     */
+    public List<String> getCdrugArray() {
+        return cdrugArray;
+    }
+
+    /**
+     * @param cdrugArray the cdrugArray to set
+     */
+    public void setCdrugArray(List<String> cdrugArray) {
+        this.cdrugArray = cdrugArray;
+    }
+
+    /**
+     * @return the drugName
+     */
+    public String getDrugName() {
+        return drugName;
+    }
+
+    /**
+     * @param drugName the drugName to set
+     */
+    public void setDrugName(String drugName) {
+        this.drugName = drugName;
     }
     
 }
