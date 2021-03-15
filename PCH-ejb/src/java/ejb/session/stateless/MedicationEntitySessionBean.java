@@ -6,10 +6,14 @@
 package ejb.session.stateless;
 
 import entity.Medication;
+import entity.Prescription;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Resource;
+import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -28,6 +32,9 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
 
     @PersistenceContext(unitName = "PCH-ejbPU")
     private EntityManager em;
+    
+    @Resource
+    private EJBContext eJBContext;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -237,9 +244,21 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
                     
          return medication_to_delete.getId();
      }
-     
-     
-     
+    
+    @TransactionAttribute
+    @Override
+    public void processPrescriptions(List<Prescription> prescriptions) throws MedicationEntityException {
+        try {
+            for (Prescription p : prescriptions) {
+                Medication medication = retrieveByMedicineId(p.getMedication().getId());
+                if (medication.getQuantity_on_hand() < p.getQuantity()) throw new MedicationEntityException(medication.getName() + " does not have sufficient stock in hand!");
+                medication.setQuantity_on_hand(medication.getQuantity_on_hand() - p.getQuantity());
+            }
+        } catch (MedicationEntityException ex) {
+            eJBContext.setRollbackOnly();
+            throw ex;
+        }
+    }
      
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Medication>>constraintViolations)
     {

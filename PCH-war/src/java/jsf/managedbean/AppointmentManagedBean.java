@@ -17,9 +17,10 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import util.enumeration.AppointmentTypeEnum;
 import util.enumeration.RoleEnum;
@@ -33,7 +34,7 @@ import util.exception.EmployeeEntityException;
  * @author USER
  */
 @Named(value = "appointmentManagedBean")
-@SessionScoped
+@RequestScoped
 public class AppointmentManagedBean implements Serializable {
 
     @EJB
@@ -42,17 +43,16 @@ public class AppointmentManagedBean implements Serializable {
     @EJB
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
     
+    @Inject
+    private SessionManagedBean sessionManagedBean;
+    
     private Employee user;
     private List<Appointment> appointments;
     private List<Appointment> queue;
-    private String calling;
-    private String previous;
     
     public AppointmentManagedBean() {
         appointments = new ArrayList<>();
         queue = new LinkedList<>();
-        calling = "-";
-        previous = "-";
     }
     
     @PostConstruct
@@ -106,8 +106,7 @@ public class AppointmentManagedBean implements Serializable {
         // Broadcast to QueueBoard
         queueBoardSessionBeanLocal.add(user.getId(), appointment.getId());
 
-        previous = calling;
-        calling = appointment.getQueue_no();
+        sessionManagedBean.updateCalling(appointment.getQueue_no());
         
         appointmentSessionBeanLocal.updateStatus(appointment.getId(), StatusEnum.IN_PROGRESS);
         getAllAppointmentsForToday();
@@ -193,21 +192,5 @@ public class AppointmentManagedBean implements Serializable {
 
     public void setQueue(List<Appointment> queue) {
         this.queue = queue;
-    }
-
-    public String getCalling() {
-        return calling;
-    }
-
-    public void setCalling(String calling) {
-        this.calling = calling;
-    }
-
-    public String getPrevious() {
-        return previous;
-    }
-
-    public void setPrevious(String previous) {
-        this.previous = previous;
     }
 }

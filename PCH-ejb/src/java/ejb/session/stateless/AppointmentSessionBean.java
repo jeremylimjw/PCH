@@ -8,12 +8,16 @@ package ejb.session.stateless;
 import entity.Appointment;
 import entity.Employee;
 import entity.MedicalRecord;
+import entity.Prescription;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -44,7 +48,9 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     @PersistenceContext(unitName = "PCH-ejbPU")
     private EntityManager em;
     
-
+    @Resource
+    private EJBContext eJBContext;
+    
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
     
@@ -102,11 +108,14 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
         Date start = c.getTime();
         c.add(Calendar.DATE, 1);
         Date end = c.getTime();
-        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 AND a.employee.id = ?2 AND a.date_time >= ?3 AND a.date_time < ?4 ORDER BY a.date_time");
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 AND a.employee.id = ?2 AND a.date_time >= ?3 AND a.date_time < ?4 ORDER BY CASE a.status WHEN ?5 THEN 0 WHEN ?6 THEN 1 WHEN ?7 THEN 2 ELSE 3 END, a.date_time");
         query.setParameter(1, ScheduleTypeEnum.APPOINTMENT);
         query.setParameter(2, doctorId);
         query.setParameter(3, start);
         query.setParameter(4, end);
+        query.setParameter(5, StatusEnum.IN_PROGRESS);
+        query.setParameter(6, StatusEnum.ARRIVED);
+        query.setParameter(7, StatusEnum.COMPLETED);
         return query.getResultList();
     }
     
@@ -118,10 +127,13 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
         Date start = c.getTime();
         c.add(Calendar.DATE, 1);
         Date end = c.getTime();
-        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 AND a.date_time >= ?2 AND a.date_time < ?3 ORDER BY a.date_time");
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 AND a.date_time >= ?2 AND a.date_time < ?3 ORDER BY CASE a.status WHEN ?4 THEN 0 WHEN ?5 THEN 1 WHEN ?6 THEN 2 ELSE 3 END, a.date_time");
         query.setParameter(1, scheduleType);
         query.setParameter(2, start);
         query.setParameter(3, end);
+        query.setParameter(4, StatusEnum.BOOKED);
+        query.setParameter(5, StatusEnum.IN_PROGRESS);
+        query.setParameter(6, StatusEnum.ARRIVED);
         return query.getResultList();
     }
     
@@ -147,6 +159,28 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     public void updateStatus(Long appointmentId, StatusEnum status) throws AppointmentEntityException {
         Appointment appointment = retrieveById(appointmentId);
         appointment.setStatus(status);
+    }
+    
+    @TransactionAttribute
+    @Override
+    public void update(Appointment appointment) throws AppointmentEntityException {
+        try {
+            Set<ConstraintViolation<Appointment>> constraints = validator.validate(appointment);
+            if (!constraints.isEmpty()) throw new AppointmentEntityException(getValidatorErrors(constraints));
+
+            Appointment oldAppointment = retrieveById(appointment.getId());
+
+            oldAppointment.setMedical_certificate(appointment.getMedical_certificate());
+            oldAppointment.setPrescriptions(appointment.getPrescriptions());
+            oldAppointment.setTotal_price(appointment.getTotal_price());
+            oldAppointment.setStatus(appointment.getStatus());
+            oldAppointment.setPatient_notes(appointment.getPatient_notes());
+
+            medicalRecordSessionBeanLocal.update(appointment.getMedical_record());
+        } catch (MedicalRecordEntityException ex) {
+            eJBContext.setRollbackOnly();
+            throw new AppointmentEntityException(ex.getMessage());
+        }
     }
     
     @Override

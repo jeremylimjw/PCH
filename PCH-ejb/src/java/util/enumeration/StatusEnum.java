@@ -16,16 +16,16 @@ public enum StatusEnum {
             return "Booked";
         }
     },
-    ARRIVED {
-        @Override
-        public String toString() {
-            return "Arrived";
-        }
-    },
     IN_PROGRESS {
         @Override
         public String toString() {
             return "In Progress";
+        }
+    },
+    ARRIVED {
+        @Override
+        public String toString() {
+            return "Arrived";
         }
     },
     COMPLETED {

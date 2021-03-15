@@ -67,6 +67,9 @@ public class Medication implements Serializable {
     @Column
     private List<String> conflicting_foods;
     
+    @Column
+    private List<String> containing_drugs;
+    
     @Column(length = 128)
     @Size(min = 1, max = 128)
     private String description;
@@ -91,9 +94,10 @@ public class Medication implements Serializable {
          this.conflicting_medications = new ArrayList<>();
          this.parent_medications = new ArrayList<>();
          this.conflicting_foods = new ArrayList<>();
+         this.containing_drugs = new ArrayList<>();
     }
 
-    public Medication(String name, String brand, String prescription_quantity, BigDecimal price_per_quantity, int quantity_on_hand, List<String> conflicting_foods, String description, String url) {
+    public Medication(String name, String brand, String prescription_quantity, BigDecimal price_per_quantity, int quantity_on_hand, List<String> conflicting_foods, List<String> containing_drugs, String description, String url) {
         
         super();
         this.name = name;
@@ -102,6 +106,7 @@ public class Medication implements Serializable {
         this.price_per_quantity = price_per_quantity;
         this.quantity_on_hand = quantity_on_hand;
         this.conflicting_foods = conflicting_foods;
+        this.containing_drugs = containing_drugs;
         this.description = description;
         this.url = url;
         this.deleted = false;
@@ -166,6 +171,14 @@ public class Medication implements Serializable {
 
     public void setConflicting_foods(List<String> conflicting_foods) {
         this.conflicting_foods = conflicting_foods;
+    }
+
+    public List<String> getContaining_drugs() {
+        return containing_drugs;
+    }
+
+    public void setContaining_drugs(List<String> containing_drugs) {
+        this.containing_drugs = containing_drugs;
     }
 
     public String getDescription() {
