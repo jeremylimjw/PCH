@@ -32,7 +32,7 @@ public class MedicalRecord implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long Id;
     
     @Column(nullable = false, length = 32)
     @Size(min = 1, max = 32)
@@ -58,7 +58,7 @@ public class MedicalRecord implements Serializable {
     @NotNull
     private String contact_number;
     
-    @Column(nullable = false, length = 32)
+    @Column(length = 32)
     @Size(min = 1, max = 32)
     private String blood_type;
     
@@ -104,11 +104,11 @@ public class MedicalRecord implements Serializable {
     }
     
     public Long getId() {
-        return id;
+        return Id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long Id) {
+        this.Id = Id;
     }
 
     public String getName() {
@@ -210,18 +210,18 @@ public class MedicalRecord implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (Id != null ? Id.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the Id fields are not set
         if (!(object instanceof MedicalRecord)) {
             return false;
         }
         MedicalRecord other = (MedicalRecord) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.Id == null && other.Id != null) || (this.Id != null && !this.Id.equals(other.Id))) {
             return false;
         }
         return true;
@@ -229,7 +229,16 @@ public class MedicalRecord implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.MedicalRecord[ id=" + id + " ]";
+        return "entity.MedicalRecord[ id=" + Id + " ]";
     }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+    
     
 }

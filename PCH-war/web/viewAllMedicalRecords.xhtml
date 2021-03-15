@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./template/main.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="main">
+        <h2>
+            Patient Medical Records
+        </h2>
+        
+        <p:messages globalOnly="true" />
+        
+        <h:form>
+            <p:menubar>
+                <p:submenu label="Create New Patient Medical Record" icon="ui-user">
+                        <p:menuitem value="Add new record" onclick="PF('dialogCreateNewMedicalRecord').show()" icon="pi-user-plus" />
+                    </p:submenu>                                        
+            </p:menubar>
+            <br />
+        </h:form>
+        
+        <h:form id="formCreateMedicalRecord">
+            
+            <p:dialog id="dialogCreateNewMedicalRecord" widgetVar="dialogCreateNewMedicalRecord" header="Create New Patient Medical Record" closable="true">
+
+                    <p:messages id="messagesCreateNewMedicalRecord" redisplay="false" />
+
+                    <p:panelGrid>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="Name" value="Patient Name: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="Name" value="#{MedicalRecordManagementManagedBean.newRecord.name}" placeholder="John Doe" required="true" requiredMessage="Patient Name is required" />
+                            </p:column>
+<!--                            <p:column>
+                                <p:message for="Name" />
+                            </p:column>-->
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="nric" value="NRIC: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="nric" value="#{MedicalRecordManagementManagedBean.newRecord.nric}" placeholder="SXXXX123A" required="true" requiredMessage="Patient NRIC is required" />
+                            </p:column>
+<!--                            <p:column>
+                                <p:message for="nric" />
+                            </p:column>-->
+                        </p:row>                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="address" value="Address: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="address" value="#{MedicalRecordManagementManagedBean.newRecord.address}" placeholder="123 Riverdale" required="true" requiredMessage="Patient Address is required" />
+                            </p:column>
+<!--                            <p:column>
+                                <p:message for="address" />
+                            </p:column>-->
+                        </p:row>                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="dob" value="Date of Birth: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:calendar id="dob" value="#{MedicalRecordManagementManagedBean.newRecord.dob}" required="true" requiredMessage="Patient Address is required" />
+                            </p:column>
+<!--                            <p:column>
+                                <p:message for="dob" />
+                            </p:column>-->
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="contact_number" value="Contact Number: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="contact_number" value="#{MedicalRecordManagementManagedBean.newRecord.contact_number}" placeholder="12345678" required="true" requiredMessage="Contact Number is required" />
+                            </p:column>
+<!--                            <p:column>
+                                <p:message for="contact_number" />
+                            </p:column>-->
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="blood_type" value="Blood Type: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="blood_type" value="#{MedicalRecordManagementManagedBean.newRecord.blood_type}" required="false" requiredMessage="Contact Number is required" />
+                            </p:column>
+<!--                            <p:column>
+                                <p:message for="blood_type" />
+                            </p:column>-->
+                        </p:row>
+<!--                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="drug_allergys" value="Drug Allergy(s): " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                            <p:selectManyMenu id="drug_allergys" value="#{MedicalRecordManagementManagedBean.newRecord.drug_allergys}" filter ="true" showCheckbox="true"  >
+                                <f:selectItems value="#{viewAllMedicationsManagedBean.medications}" var="Medication" itemValue="#{Medication.name}" itemLabel="#{Medication.name}"  />
+                             </p:selectManyMenu>
+                            </p:column>
+                             <p:column>
+                                <p:message for="adrug_allergys" />
+                            </p:column>
+                        </p:row>-->
+                        
+                            
+                        <p:row>
+                            <p:column colspan="3">
+                                <p:commandButton type="reset" value="Clear" />&nbsp;
+                                <p:commandButton  process='@form' value="Create New Medical Record" update="@form formViewAllMedicalRecords" actionListener="#{MedicalRecordManagementManagedBean.createNewMedicalRecord}" oncomplete="PF('dialogCreateNewMedicalRecord').show();" />
+                            </p:column>
+                        </p:row>
+                        
+                        
+                        
+                            </p:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+        
+        <h:form id="formViewAllMedicalRecords">
+            <p:panel header ="View All Patient Medical Records">
+                <p:dataTable id="dataTableViewAllMedicalRecords" widgetVar="dataTableViewAllMedicalRecords" value="#{MedicalRecordManagementManagedBean.records}" var="record">
+                    <p:column headerText='Patient Name' sortBy='#{record.name}'>
+                        #{record.name}
+                    </p:column>
+                    <p:column headerText="NRIC" sortBy='#{record.nric}'>
+                        <h:outputText value='#{record.nric}'/>
+                    </p:column>
+                    <p:column headerText="Date Of Birth" sortBy='#{record.dob}'>
+                        <h:outputText value='#{record.dob}'/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        
+        
+        
+    </ui:define>
+
+</ui:composition>
