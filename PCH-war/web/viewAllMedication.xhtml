@@ -66,9 +66,9 @@
                     </p:repeat>
               </p:column>
                 
-                <p:column headerText="Parent Medications" filterBy="#{medication.parent_medications}" filterMatchMode="contains">
-                    <p:repeat value ="#{medication.parent_medications}"  var ="c"> 
-                        <h:outputText value=" #{c.name} |" />
+                <p:column headerText="Containing Drugs" filterBy="#{medication.containing_drugs}" filterMatchMode="contains">
+                    <p:repeat value ="#{medication.containing_drugs}"  var ="c"> 
+                        <h:outputText value=" #{c} |" />
                     </p:repeat>
               </p:column>
                    <p:column headerText="Action" >
@@ -204,8 +204,28 @@
    
                             </p:autoComplete>
                             </p:column>
+                             
                              <p:column>
                                  <p:commandButton  value="Add Food" update="cFood" actionListener="#{viewAllMedicationsManagedBean.addconflictFood}"  />
+                            </p:column>
+                         </p:row>
+                        
+                         <p:row>
+                            <p:column>
+                                <p:outputLabel for="cDrug" value="Conflicting Drugs: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:autoComplete id="cDrug" multiple ="true" value ="#{viewAllMedicationsManagedBean.cdrugArray}" >
+                                <p:column>
+                                 <span id="cDrug" style="width: 30px; height: 20px"/>
+                                 <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{viewAllMedicationsManagedBean.drugName}"/>
+                                </p:column>
+   
+                            </p:autoComplete>
+                            </p:column>
+                             
+                             <p:column>
+                                 <p:commandButton  value="Add Drug" update="cDrug" actionListener="#{viewAllMedicationsManagedBean.addconflictFood}"  />
                             </p:column>
                          </p:row>
                          <p:row>
@@ -329,7 +349,18 @@
                                  <p:commandButton  value="Add Food" update="cFood" actionListener="#{viewAllMedicationsManagedBean.addconflictFood}"  />
                             </p:column>
                          </p:row>
-                        
+                          <p:row>
+                            <p:column>
+                                <p:outputLabel for="cDrug" value="Containing Drugs: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:autoComplete id="cDrug" multiple ="true" value ="#{viewAllMedicationsManagedBean.selectedMedicationEntityToUpdate.containing_drugs}" >
+                            </p:autoComplete>
+                            </p:column>
+                             <p:column>
+                                 <p:commandButton  value="Add Drugs" update="cDrug" actionListener="#{viewAllMedicationsManagedBean.addconflictFood}"  />
+                            </p:column>
+                         </p:row>
                         
                         <p:row>
                             <p:column colspan="3">
