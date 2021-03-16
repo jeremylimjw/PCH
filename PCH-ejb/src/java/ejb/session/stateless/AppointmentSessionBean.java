@@ -202,6 +202,13 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
         Query query = em.createQuery("SELECT a FROM Appointment a ORDER BY a.date_created DESC");
         return query.getResultList();
     }
+    
+    @Override
+    public List<Appointment> retrieveByMedicalRecordId(Long medicalRecordId) {
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.medical_record.id = ?1 ORDER BY a.date_created DESC");
+        query.setParameter(1, medicalRecordId);
+        return query.getResultList();
+    }
 
     @Override
     public Appointment retrieveById(Long id) throws AppointmentEntityException {
