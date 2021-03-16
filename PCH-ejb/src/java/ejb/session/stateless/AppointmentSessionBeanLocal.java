@@ -30,5 +30,6 @@ public interface AppointmentSessionBeanLocal {
     public void updateStatus(Long appointmentId, StatusEnum status) throws AppointmentEntityException;
     public void assignAppointment(Long appointmentId, Long doctorId) throws AppointmentEntityException;
     public Appointment retrieveById(Long id) throws AppointmentEntityException;
+    public List<Appointment> retrieveAll();
 
 }
