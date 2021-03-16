@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./template/main.xhtml">
+
+    <ui:define name="head">
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/servePatient.css" />
+    </ui:define>
+    
+    <ui:define name="main">
+        
+        <h:form>
+            
+            <p:dataTable id="appointments" value="#{manageAppointmentsManagedBean.appointments}" var="a" rowHover="true" emptyMessage="No records available"
+                         rows="10" rowsPerPageTemplate="10,20,50" paginator="true" paginatorPosition="bottom"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                
+                <p:column headerText="Appt Number" sortBy="#{a.queue_no}" filterBy="#{a.queue_no}" filterMatchMode="contains">
+                    <h:outputText value="#{a.queue_no}" />
+                </p:column>
+
+                <p:column headerText="Appt Time" sortBy="#{a.date_time}" filterBy="#{a.date_time}" filterMatchMode="contains">
+                    <h:outputText value="#{a.date_time}">
+                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Type" sortBy="#{a.schedule_type}" filterBy="#{a.schedule_type}" filterMatchMode="contains">
+                    <h:outputText value="#{a.schedule_type.toString()}" />
+                </p:column>
+
+                <p:column headerText="Appt Type" sortBy="#{a.appointment_type}" filterBy="#{a.appointment_type}" filterMatchMode="contains">
+                    <h:outputText value="#{a.appointment_type.toString()}" />
+                </p:column>
+
+                <p:column headerText="Patient" sortBy="#{a.medical_record.name}" filterBy="#{a.medical_record.name}" filterMatchMode="contains">
+                    <h:outputText value="#{a.medical_record.name}" />
+                </p:column>
+
+                <p:column headerText="Assigned" sortBy="#{a.employee.name}" filterBy="#{a.employee.name}" filterMatchMode="contains">
+                    <h:outputText value="#{a.employee.name}" />
+                </p:column>
+
+                <p:column headerText="Status" sortBy="#{a.status}" filterBy="#{a.status}" filterMatchMode="contains">
+                    <h:outputText value="#{a.status.toString()}" />
+                </p:column>
+
+                <p:column headerText="MC" sortBy="#{a.medical_certificate == null ? 'No' : 'Yes'}" filterBy="#{a.medical_certificate == null ? 'No' : 'Yes'}" filterMatchMode="contains">
+                    <h:outputText value="#{a.medical_certificate == null ? 'No' : 'Yes'}" />
+                </p:column>
+
+                <p:column headerText="Action" style="width:80px;">
+                    <p:commandButton action="#{manageAppointmentsManagedBean.redirect(a.id)}" icon="ui-icon-document" title="View" />
+                </p:column>
+
+            </p:dataTable>
+            
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
