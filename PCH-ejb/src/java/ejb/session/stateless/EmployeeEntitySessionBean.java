@@ -31,8 +31,6 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanLocal
         Employee employee = retrieveByUsername(username);
         
         if (employee.getPassword().equals(password)) {
-            //em.detach(employee);
-            //employee.setPassword("");
             return employee;
         } else {
             throw new EmployeeEntityException("Invalid password!");
@@ -77,7 +75,6 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanLocal
                 
                 employeeToUpdate.setName(employee.getName());
                 employeeToUpdate.setEmail(employee.getEmail());
-                employeeToUpdate.setUsername(employee.getUsername());
             }
         } else {
             throw new EmployeeEntityException("Employee ID not provided");

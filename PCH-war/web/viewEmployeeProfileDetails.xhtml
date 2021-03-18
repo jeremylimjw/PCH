@@ -74,10 +74,9 @@
         </p:panel>
         
         <h:form id="formUpdateEmployee">
+            <p:messages id="messagesUpdateEmployee" closable="true"/>
 
-            <p:dialog id="dialogUpdateEmployee" widgetVar="dialogUpdateEmployee" header="Update Employee Details" closable="true">
-
-                <p:messages id="messagesUpdateEmployee" redisplay="false" />
+            <p:dialog id="dialogUpdateEmployee" widgetVar="dialogUpdateEmployee" header="Update Employee Details" closable="true" >
 
                 <p:panelGrid>
 
@@ -86,7 +85,16 @@
                             <h:outputLabel value="Employee ID" />
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{viewEmployeeProfileDetailsManagedBean.user.id}" />
+                            <p:outputLabel value="#{viewEmployeeProfileDetailsManagedBean.user.id}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Username" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{viewEmployeeProfileDetailsManagedBean.user.username}" />
                         </p:column>
                     </p:row>
 
@@ -110,15 +118,6 @@
 
                     <p:row>
                         <p:column>
-                            <p:outputLabel for="username" value="Username" />
-                        </p:column>
-                        <p:column>
-                            <p:spinner id="username" value="#{viewEmployeeProfileDetailsManagedBean.user.username}" placeholder="#{viewEmployeeProfileDetailsManagedBean.user.username}" required="true" requiredMessage="Username is required" />
-                        </p:column>
-                    </p:row>
-
-                    <p:row>
-                        <p:column>
                             <h:outputLabel value="Role" />
                         </p:column>
                         <p:column>
@@ -128,7 +127,7 @@
 
                     <p:row>
                         <p:column colspan="3">
-                            <p:commandButton value="Update Details" update="@form formMain" actionListener="#{viewEmployeeProfileDetailsManagedBean.updateUserDetails}" oncomplete="PF('dialogUpdateEmployee').show();" />
+                            <p:commandButton value="Update Details" update="@form formMain" actionListener="#{viewEmployeeProfileDetailsManagedBean.updateUserDetails}" oncomplete="PF('dialogUpdateEmployee').hide()" />
                         </p:column>
                     </p:row>
  
@@ -139,6 +138,8 @@
         </h:form>
         
         <h:form id="formUpdatePassword">
+            <p:messages id="messages" closable="true"/>
+            
             <p:dialog id="dialogUpdatePassword" widgetVar="dialogUpdatePassword" header="Update Employee Password" closable="true">
                 <p:messages id="messagesUpdatePassword" redisplay="false" />
                 
@@ -190,7 +191,7 @@
                     
                     <p:row>
                         <p:column colspan="3">
-                            <p:commandButton value="Update Password" update="@form formMain" actionListener="#{viewEmployeeProfileDetailsManagedBean.updateUserPassword}" oncomplete="PF('dialogUpdatePassword').show();" />
+                            <p:commandButton value="Update Password" update="@form formMain" actionListener="#{viewEmployeeProfileDetailsManagedBean.updateUserPassword}" oncomplete="PF('dialogUpdatePassword').hide()" />
                         </p:column>
                     </p:row>
                     

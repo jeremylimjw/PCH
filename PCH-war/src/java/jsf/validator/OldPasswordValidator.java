@@ -25,9 +25,7 @@ public class OldPasswordValidator implements Validator {
         if (value != null) {
             if (value instanceof String) {
                 String oldPassword = (String)value;
-                //System.out.println(oldPassword);
                 Employee user = (Employee) context.getCurrentInstance().getExternalContext().getSessionMap().get("user");
-                //System.out.println(user.getPassword());
                 if (!oldPassword.equals(user.getPassword())) {
                     FacesMessage msg = new FacesMessage("Password does not match!", null);
                     msg.setSeverity(FacesMessage.SEVERITY_ERROR);
