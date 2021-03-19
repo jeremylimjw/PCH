@@ -156,6 +156,13 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     }
     
     @Override
+    public List<Appointment> retrieveAllAppointments() {
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 ORDER BY a.date_time ASC");
+        query.setParameter(1, ScheduleTypeEnum.APPOINTMENT);
+        return query.getResultList();
+    }
+    
+    @Override
     public void updateStatus(Long appointmentId, StatusEnum status) throws AppointmentEntityException {
         Appointment appointment = retrieveById(appointmentId);
         appointment.setStatus(status);
