@@ -205,6 +205,14 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     }
     
     @Override
+    public void cancelAppointment(Long appointmentId) throws AppointmentEntityException {
+        Appointment appointment = retrieveById(appointmentId);
+        if (!appointment.getStatus().equals(StatusEnum.BOOKED)) throw new AppointmentEntityException("Error: Appointment can only be cancelled if it's in the BOOKED status!");
+        
+        appointment.setStatus(StatusEnum.CANCELLED);
+    }
+    
+    @Override
     public List<Appointment> retrieveAll() {
         Query query = em.createQuery("SELECT a FROM Appointment a ORDER BY a.date_created DESC");
         return query.getResultList();
