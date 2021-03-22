@@ -26,10 +26,13 @@ public interface AppointmentSessionBeanLocal {
     public List<Appointment> retrieveAppointmentsByDoctorIdByDay(Long doctorId, Date date);
     public List<Appointment> retrieveAppointmentsByDay(ScheduleTypeEnum scheduleType, Date date);
     public List<Appointment> retrieveWalkInByDoctorIdByDay(Long doctorId, Date date);
+    public List<Appointment> retrieveAllAppointments();
     public void update(Appointment appointment) throws AppointmentEntityException;
     public void updateStatus(Long appointmentId, StatusEnum status) throws AppointmentEntityException;
     public void assignAppointment(Long appointmentId, Long doctorId) throws AppointmentEntityException;
+    public void cancelAppointment(Long appointmentId) throws AppointmentEntityException;
     public Appointment retrieveById(Long id) throws AppointmentEntityException;
     public List<Appointment> retrieveAll();
+    public List<Appointment> retrieveByMedicalRecordId(Long medicalRecordId);
 
 }
