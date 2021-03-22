@@ -122,6 +122,13 @@ public class ServePatientManagedBean implements Serializable {
                         }
                     }
                 }
+                
+                // Check if conflicting medications exists
+                for (Medication cm : p.getMedication().getConflicting_medications()) {
+                    for (Prescription m : set) {
+                        if (m.getMedication().equals(cm)) throw new AppointmentEntityException("Medication " + p.getMedication().getName() + " is conflicted with " + m.getMedication().getName()+ ".");
+                    }
+                }
             }
             
             if (appointment.getMedical_certificate() == null && (mc_start_date != null || mc_end_date != null)) { // Check if MC date fields are filled up by the user
