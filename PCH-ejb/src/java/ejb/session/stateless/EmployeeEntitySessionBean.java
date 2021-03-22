@@ -31,8 +31,6 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanLocal
         Employee employee = retrieveByUsername(username);
         
         if (employee.getPassword().equals(password)) {
-            em.detach(employee);
-            employee.setPassword("");
             return employee;
         } else {
             throw new EmployeeEntityException("Invalid password!");
@@ -55,6 +53,7 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanLocal
         return query.getResultList();
     }
 
+    @Override
     public Employee retrieveByUsername(String username) throws EmployeeEntityException {
         Query query = em.createQuery("SELECT e FROM Employee e WHERE e.username = ?1");
         query.setParameter(1, username);
@@ -63,6 +62,36 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanLocal
             return (Employee)query.getSingleResult();
         } catch(NoResultException | NonUniqueResultException e) {
             throw new EmployeeEntityException("Username " + username + " does not exist!");
+        }
+    }
+    
+    @Override
+    public void updateEmployeeDetails(Employee employee) throws EmployeeEntityException {
+        if (employee != null && employee.getId() != null) {
+            
+            Employee employeeToUpdate = retrieveById(employee.getId());
+            
+            if (employeeToUpdate.getUsername().equals(employee.getUsername())) {
+                
+                employeeToUpdate.setName(employee.getName());
+                employeeToUpdate.setEmail(employee.getEmail());
+            }
+        } else {
+            throw new EmployeeEntityException("Employee ID not provided");
+        }
+    }
+    
+    @Override
+    public void updateEmployeePassword(Employee employee) throws EmployeeEntityException {
+        if (employee != null && employee.getId() != null) {
+            
+            Employee employeeToUpdate = retrieveById(employee.getId());
+            
+            if (employeeToUpdate.getUsername().equals(employee.getUsername())) {
+                employeeToUpdate.setPassword(employee.getPassword());
+            }
+        } else {
+            throw new EmployeeEntityException("Employee ID not provided");
         }
     }
 }

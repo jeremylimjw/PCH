@@ -54,7 +54,7 @@ public class MedicalRecord implements Serializable {
     private Date dob;
     
     @Column(nullable = false, length = 32)
-    @Size(min = 1, max = 32)
+    @Size(min = 8, max = 8)
     @NotNull
     private String contact_number;
     

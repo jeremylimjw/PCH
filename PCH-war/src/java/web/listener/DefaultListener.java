@@ -21,21 +21,21 @@ public class DefaultListener implements ServletContextListener, HttpSessionListe
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        System.out.println("---- DefaultListener.contextInitialized() ----");
+//        System.out.println("---- DefaultListener.contextInitialized() ----");
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("---- DefaultListener.contextDestroyed() ----");
+//        System.out.println("---- DefaultListener.contextDestroyed() ----");
     }
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        System.out.println("--- DefaultListener.sessionCreated() ----");
+//        System.out.println("--- DefaultListener.sessionCreated() ----");
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
-        System.out.println("--- DefaultListener.sessionDestroyed() ----");
+//        System.out.println("--- DefaultListener.sessionDestroyed() ----");
     }
 }

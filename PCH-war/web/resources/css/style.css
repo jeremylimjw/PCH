@@ -53,6 +53,7 @@ p, span {
 .red-button:hover:enabled   { background-color: #ab3c3c; }
 .blue-button                { background-color: #4169E1; color: white; }
 .blue-button:hover:enabled  { background-color: #6254b8; }
+.blue-button:disabled, input:disabled.blue-button      { background-color: #1E90FF; }
 .green-button               { background-color: #59886b; color: white; }
 .green-button:hover:enabled { background-color: #506d5b; }
 
@@ -96,14 +97,17 @@ input::-webkit-inner-spin-button {
     z-index: 100;
 }
 
-.ui-state-highlight {
-    background-color: #404040;
+.ui-growl .ui-state-highlight {
     color:white;
     padding: 5px 10px 5px 10px;
     width: 50vw;
     opacity: 1;
     background-image: none;
     transition: color 0.3s;
+}
+
+.ui-growl-info {
+    background-color: #404040;
 }
 
 .ui-growl-error {
@@ -147,7 +151,7 @@ input::-webkit-inner-spin-button {
     width: 40vw;
 }
 
-.ui-state-highlight .ui-icon {
+.ui-growl .ui-state-highlight .ui-icon {
     background-image: url(/PCH-war/resources/img/close.png);
 }
 
@@ -169,6 +173,6 @@ input::-webkit-inner-spin-button {
     opacity: 0.5 !important;
 }
 
-.ui-icon-closethick, .ui-growl-image-info, .ui-growl-image-error {
+.ui-growl .ui-icon-closethick, .ui-growl .ui-growl-image-info, .ui-growl .ui-growl-image-error {
     background-position: initial;
 }

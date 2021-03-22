@@ -36,21 +36,25 @@
                             <span>MEDICATIONS</span>
                         </h:link>
                     </li>
+                    <li class="#{templateManagedBean.isUrl('/manageAppointments.xhtml')}">
+                        <h:link outcome="manageAppointments.xhtml">
+                            <i class="fas fa-calendar"></i>
+                            <span>APPOINTMENTS</span>
+                        </h:link>
+                    </li>
                     <li>
                         <a href="#">
                             <h:link outcome="viewAllMedicalRecords.xhtml">
 
                             <i class="fas fa-user-injured"></i>
                             <span>PATIENTS</span>
-                            </h:link>
-                            
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
+                    <li class="#{templateManagedBean.isUrl('/viewEmployeeProfileDetails.xhtml')}">
+                        <h:link outcome="viewEmployeeProfileDetails.xhtml">
                             <i class="far fa-user"></i>
                             <span>ACCOUNT</span>
-                        </a>
+                        </h:link>
                     </li>
                     
                     <li class="header-right">
@@ -82,13 +86,14 @@
             </div>
             <h:panelGroup class="sub-header-item" rendered="#{sessionScope.user.role == 'DOCTOR'}">
                 <div class="label">CALLING</div>
-                <div class="value"><h:outputText id="callingQueueNo" value="#{appointmentManagedBean.calling}" /></div>
+                <div class="value"><h:outputText id="callingQueueNo" value="#{sessionManagedBean.calling}" /></div>
             </h:panelGroup>
             <h:panelGroup class="sub-header-item" rendered="#{sessionScope.user.role == 'DOCTOR'}">
                 <div class="label">PREV</div>
-                <div class="value"><h:outputText id="previousQueueNo" value="#{appointmentManagedBean.previous}" /></div>
+                <div class="value"><h:outputText id="previousQueueNo" value="#{sessionManagedBean.previous}" /></div>
             </h:panelGroup>
             <div class="sub-header-right">
+
                         
                 <h:commandButton class="button orange-button" value="ADD RANDOM APPOINTMENT" actionListener="#{appointmentManagedBean.addRandomAppointment()}">
                     <f:ajax execute="@this" render="appointments appointmentCount" />
@@ -97,8 +102,12 @@
                 <h:commandButton class="button orange-button" value="ADD RANDOM WALK-IN" actionListener="#{appointmentManagedBean.addRandomWalkIn()}">
                     <f:ajax execute="@this" render="queue queueCount" />
                 </h:commandButton>
-                <button class="button orange-button">BUTTON</button>
-                <button class="button orange-button"><i class="fas fa-cog fa-lg" style="padding-top: 1px;"></i></button>
+                
+                <h:commandButton class="button orange-button" value="CALL NEXT PATIENT" actionListener="#{appointmentManagedBean.callNextPatient()}" rendered="#{sessionScope.user.role == 'DOCTOR'}">
+                    <f:ajax execute="@this" render="appointments queue callingQueueNo previousQueueNo" />
+                </h:commandButton>
+                
+                <button class="button orange-button" onclick="window.open('chat.xhtml', 'newwindow', 'width=800,height=500'); return false;">CHAT</button>
             </div>
         </div>
 
@@ -111,6 +120,11 @@
                 <p:autoUpdate />
             </p:growl>
         </ui:insert>
+        
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" />
+        </p:confirmDialog>
 
     </h:body>
 

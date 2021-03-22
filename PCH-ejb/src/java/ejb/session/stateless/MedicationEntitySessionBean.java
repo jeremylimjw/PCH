@@ -6,10 +6,14 @@
 package ejb.session.stateless;
 
 import entity.Medication;
+import entity.Prescription;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Resource;
+import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -28,6 +32,9 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
 
     @PersistenceContext(unitName = "PCH-ejbPU")
     private EntityManager em;
+    
+    @Resource
+    private EJBContext eJBContext;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -65,7 +72,7 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
     
    
     @Override
-    public Medication createNewMedication(Medication newMedication, List<Long> medId , List<String> cFood) throws MedicationEntityException
+    public Medication createNewMedication(Medication newMedication, List<Long> medId , List<String> cFood, List<String> cdrugs) throws MedicationEntityException
     {
         
       Medication newmed = new Medication();
@@ -85,6 +92,7 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
                }
            }
            newMedication.setConflicting_foods(cFood);
+           newMedication.setContaining_drugs(cdrugs);
          
           
            em.flush();
@@ -121,7 +129,7 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
     }
     
     @Override
-    public void updateMedication(Medication medication , List<Long> medId ,List<String> cfood) throws MedicationEntityException
+    public void updateMedication(Medication medication , List<Long> medId ,List<String> cfood, List<String>cDrug) throws MedicationEntityException
     {
          if(medication != null && medication.getId() != null)
         {
@@ -151,7 +159,7 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
                     medicationToUpdate.setQuantity_on_hand(medication.getQuantity_on_hand());
                     medicationToUpdate.setDescription(medication.getDescription());
                     medicationToUpdate.setConflicting_foods(medication.getConflicting_foods());
-                   
+                   medicationToUpdate.setContaining_drugs(medication.getContaining_drugs());
                 for(Long medicationid :medId )
                 {
                     
@@ -237,9 +245,21 @@ public class MedicationEntitySessionBean implements MedicationEntitySessionBeanL
                     
          return medication_to_delete.getId();
      }
-     
-     
-     
+    
+    @TransactionAttribute
+    @Override
+    public void processPrescriptions(List<Prescription> prescriptions) throws MedicationEntityException {
+        try {
+            for (Prescription p : prescriptions) {
+                Medication medication = retrieveByMedicineId(p.getMedication().getId());
+                if (medication.getQuantity_on_hand() < p.getQuantity()) throw new MedicationEntityException(medication.getName() + " does not have sufficient stock in hand!");
+                medication.setQuantity_on_hand(medication.getQuantity_on_hand() - p.getQuantity());
+            }
+        } catch (MedicationEntityException ex) {
+            eJBContext.setRollbackOnly();
+            throw ex;
+        }
+    }
      
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Medication>>constraintViolations)
     {

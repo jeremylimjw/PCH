@@ -17,9 +17,10 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import util.enumeration.AppointmentTypeEnum;
 import util.enumeration.RoleEnum;
@@ -33,7 +34,7 @@ import util.exception.EmployeeEntityException;
  * @author USER
  */
 @Named(value = "appointmentManagedBean")
-@SessionScoped
+@RequestScoped
 public class AppointmentManagedBean implements Serializable {
 
     @EJB
@@ -42,17 +43,16 @@ public class AppointmentManagedBean implements Serializable {
     @EJB
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
     
+    @Inject
+    private SessionManagedBean sessionManagedBean;
+    
     private Employee user;
     private List<Appointment> appointments;
     private List<Appointment> queue;
-    private String calling;
-    private String previous;
     
     public AppointmentManagedBean() {
         appointments = new ArrayList<>();
         queue = new LinkedList<>();
-        calling = "-";
-        previous = "-";
     }
     
     @PostConstruct
@@ -75,22 +75,8 @@ public class AppointmentManagedBean implements Serializable {
     public void updateStatus(Appointment appointment, StatusEnum e) {
         try {
             if (e.equals(StatusEnum.IN_PROGRESS)) {     // When user clicks the 'CALL' button
-                
-                if (isCallingSomeone()) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are already seeing someone.", null));
-                    return;
-                }
-                
-                // Associate it with the doctor that called the appointment, if its from the walk-in queue.
-                if (appointment.getSchedule_type().equals(ScheduleTypeEnum.WALK_IN)) 
-                    appointmentSessionBeanLocal.assignAppointment(appointment.getId(), user.getId());
-                
-                // Broadcast to QueueBoard
-                queueBoardSessionBeanLocal.add(user.getId(), appointment.getId());
-
-                previous = calling;
-                calling = appointment.getQueue_no();
-                
+                callAppointment(appointment);
+                return;
             } else if (e.equals(StatusEnum.MISSED)) {   // When user clicks the 'SKIP' button
                 if (!appointment.getEmployee().equals(user)) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are not the original caller.", null));
@@ -101,9 +87,29 @@ public class AppointmentManagedBean implements Serializable {
             appointmentSessionBeanLocal.updateStatus(appointment.getId(), e);
             getAllAppointmentsForToday();
             
+            
         } catch(EmployeeEntityException | AppointmentEntityException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
+    }
+    
+    public void callAppointment(Appointment appointment) throws EmployeeEntityException, AppointmentEntityException {
+        if (isCallingSomeone()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You are already calling someone.", null));
+            return;
+        }
+        
+        // Associate it with the doctor that called the appointment, if its from the walk-in queue.
+        if (appointment.getSchedule_type().equals(ScheduleTypeEnum.WALK_IN)) 
+            appointmentSessionBeanLocal.assignAppointment(appointment.getId(), user.getId());
+
+        // Broadcast to QueueBoard
+        queueBoardSessionBeanLocal.add(user.getId(), appointment.getId());
+
+        sessionManagedBean.updateCalling(appointment.getQueue_no());
+        
+        appointmentSessionBeanLocal.updateStatus(appointment.getId(), StatusEnum.IN_PROGRESS);
+        getAllAppointmentsForToday();
     }
     
     public boolean isCallingSomeone() {
@@ -114,6 +120,33 @@ public class AppointmentManagedBean implements Serializable {
             if (a.getStatus().equals(StatusEnum.IN_PROGRESS) && a.getEmployee().equals(user)) return true;
         }
         return false;
+    }
+    
+    public void callNextPatient() {
+        try {
+            
+            Appointment earliestAppointment = appointments.stream().filter(x -> x.getStatus().equals(StatusEnum.ARRIVED)).findFirst().orElse(null);
+            if (earliestAppointment == null && queue.isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No patients to call", null));
+            } else {
+                if (earliestAppointment == null) {
+                    callAppointment(queue.get(0));
+                } else if (queue.isEmpty()) {
+                    callAppointment(earliestAppointment);
+                } else {
+                    Long threshold = (earliestAppointment.getDate_time().getTime()) - (15 * 60 * 1000);
+                    if (new Date().getTime() > threshold) {
+                        callAppointment(earliestAppointment);
+                        return;
+                    } else { // not yet time
+                        callAppointment(queue.get(0));
+                    }
+                }
+            }
+        
+        } catch (EmployeeEntityException | AppointmentEntityException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
+        }
     }
     
     // ---- FOR TESTING ONLY ----
@@ -159,21 +192,5 @@ public class AppointmentManagedBean implements Serializable {
 
     public void setQueue(List<Appointment> queue) {
         this.queue = queue;
-    }
-
-    public String getCalling() {
-        return calling;
-    }
-
-    public void setCalling(String calling) {
-        this.calling = calling;
-    }
-
-    public String getPrevious() {
-        return previous;
-    }
-
-    public void setPrevious(String previous) {
-        this.previous = previous;
     }
 }

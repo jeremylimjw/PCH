@@ -10,6 +10,7 @@ import entity.Appointment;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -145,6 +146,7 @@ public class MedicalRecordSessionBean implements MedicalRecordSessionBeanLocal {
                 
             } else {
                 throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+                throw new MedicalRecordEntityException(getValidatorErrors(constraintViolations));
             }
         } else {
             throw new MedicalRecordNotFoundException("MedicalRecord Id not provided for medical record to be updated");
@@ -152,4 +154,13 @@ public class MedicalRecordSessionBean implements MedicalRecordSessionBeanLocal {
     }
     
     
+    private String getValidatorErrors(Set<ConstraintViolation<MedicalRecord>> constraints) {
+        String str = "Error: The following input value(s) are invalid!";
+            
+        for(ConstraintViolation constraintViolation : constraints) {
+            str += "\nThe field '" + constraintViolation.getPropertyPath() + "' with input value '" + constraintViolation.getInvalidValue() + "' " + constraintViolation.getMessage();
+        }
+        
+        return str;
+    }
 }

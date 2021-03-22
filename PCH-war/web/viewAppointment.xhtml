@@ -1,0 +1,284 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./template/main.xhtml">
+
+    <ui:define name="head">
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/servePatient.css" />
+    </ui:define>
+    
+    <ui:define name="main">
+            
+        <h:panelGroup rendered="#{viewAppointmentManagedBean.appointment == null}" class="error-message">NO APPOINTMENT SELECTED</h:panelGroup>
+        
+        <h:panelGroup rendered="#{viewAppointmentManagedBean.appointment != null}">
+
+                <p:tabView>
+                    <p:tab title="Details">
+
+                        <div style="display:flex;flex-direction: row;">
+
+                            <div class="details-container" style="margin-right: 20px;">
+
+                                <div class="details-item">
+                                    <label for="queue_no" class="label-text">Queue No</label>
+                                    <h:outputText id="queue_no" value="#{viewAppointmentManagedBean.appointment.queue_no}" />
+                                </div>
+
+                                <div class="details-item">
+                                    <label for="name" class="label-text">Name</label>
+                                    <h:outputText id="name" value="#{viewAppointmentManagedBean.appointment.medical_record.name}" />
+                                </div>
+                                
+                                <div class="details-item">
+                                    <label for="nric" class="label-text">NRIC</label>
+                                    <h:outputText id="nric" value="#{viewAppointmentManagedBean.appointment.medical_record.nric}" />
+                                </div>
+                                
+                                <div class="details-item">
+                                    <label for="address" class="label-text">Address</label>
+                                    <h:outputText id="address" value="#{viewAppointmentManagedBean.appointment.medical_record.address}" />
+                                </div>
+                                
+                                <div class="details-item">
+                                    <label for="contact_number" class="label-text">Contact Number</label>
+                                    <h:outputText id="contact_number" value="#{viewAppointmentManagedBean.appointment.medical_record.contact_number}" />
+                                </div>
+                                
+                                <div class="details-item">
+                                    <label for="dob" class="label-text">Date of Birth</label>
+                                    <h:outputText id="dob" value="#{viewAppointmentManagedBean.appointment.medical_record.dob}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </div>
+                                
+                                <div class="details-item">
+                                    <label for="age" class="label-text">Age</label>
+                                    <h:outputText id="age" value="#{viewAppointmentManagedBean.appointment.medical_record.dob}">
+                                        <f:converter converterId="ageConverter" />
+                                    </h:outputText>
+                                </div>
+                                
+                                <div class="details-item">
+                                    <label for="blood_type" class="label-text">Blood Type</label>
+                                    <h:outputText id="blood_type" value="#{viewAppointmentManagedBean.appointment.medical_record.blood_type}" />
+                                </div>
+                                
+                                <div class="details-item">
+                                    <label for="date_created" class="label-text">Date Joined</label>
+                                    <h:outputText id="date_created" value="#{viewAppointmentManagedBean.appointment.medical_record.date_created}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </div>
+
+                            </div>
+                            
+
+
+                            <div class="side-panel" style="margin-right: 20px;">
+                                
+                                <label class="label-text">Drug Allergys</label>
+                                
+                                <h:panelGroup rendered="#{viewAppointmentManagedBean.appointment.medical_record.drug_allergys.isEmpty()}">
+                                    <p style="margin: 0;color: #696969;">No records</p>
+                                </h:panelGroup>
+                                
+                                <ui:repeat value="#{viewAppointmentManagedBean.appointment.medical_record.drug_allergys}" var="da" varStatus="myVarStatus" >
+                                    <div class="dynamic-item">
+                                        
+                                        <h:outputText class="editable-input" style="width:80%;"
+                                                     value="#{viewAppointmentManagedBean.appointment.medical_record.drug_allergys[myVarStatus.index]}">
+                                        </h:outputText>
+                                    </div>
+                                </ui:repeat>
+                                
+                            </div>
+                            
+                            
+
+                            <div class="side-panel" style="margin-right: 20px;">
+                                
+                                <label class="label-text">Prescriptions</label>
+                                
+                                <h:panelGroup rendered="#{viewAppointmentManagedBean.appointment.prescriptions.isEmpty()}">
+                                    <p style="margin: 0;color: #696969;">No prescriptions</p>
+                                </h:panelGroup>
+                                
+                                <ui:repeat value="#{viewAppointmentManagedBean.appointment.prescriptions}" var="p" varStatus="myVarStatus" >
+                                    <div class="dynamic-item" style="margin-bottom: 5px;">
+
+                                        <h:outputText style="width: 60%;" value="#{viewAppointmentManagedBean.appointment.prescriptions[myVarStatus.index].medication}" />
+                                        
+                                        <h:outputText style="width: 15%;" value="#{viewAppointmentManagedBean.appointment.prescriptions[myVarStatus.index].quantity}" />
+                                        
+                                    </div>
+                                </ui:repeat>
+                                
+                            </div>
+                            
+                            <div class="side-panel">
+                                
+                                <label class="label-text">Medical Certificate</label><br/>
+                                
+                                <h:panelGroup rendered="#{viewAppointmentManagedBean.appointment.medical_certificate == null}">
+                                    None issued
+                                </h:panelGroup>
+                                
+                                <h:panelGroup rendered="#{viewAppointmentManagedBean.appointment.medical_certificate != null}">
+                                    
+                                    <label class="label-text" for="mc_start_date" style="font-size: 14px;">Start Date</label><br/>
+                                    <h:outputText id="mc_start_date" value="#{viewAppointmentManagedBean.appointment.medical_certificate.start_date}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText><br/>
+
+                                    <label class="label-text" for="mc_end_date" style="font-size: 14px;">End Date</label><br/>
+                                    <h:outputText id="mc_end_date" value="#{viewAppointmentManagedBean.appointment.medical_certificate.end_date}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+
+                                    <h:commandButton class="button green-button" style="width: 100%; margin-top: 20px;" value="View MC" 
+                                                     actionListener="#{viewAppointmentManagedBean.viewMc}" />
+                                
+                                </h:panelGroup>
+                                
+                            </div>
+
+                        </div>
+
+                    </p:tab>
+
+                    <p:tab title="Medical History">
+                        
+                        <div style="display:flex; flex-direction:row;">
+                            
+                            <div>
+                                <p:dataTable id="medical_historys" var="ph" rows="10" paginator="true" paginatorPosition="bottom" rowIndexVar="index"
+                                             value="#{viewAppointmentManagedBean.appointment.medical_record.past_medical_historys}"
+                                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                             rowsPerPageTemplate="5,10, 20">
+                                    
+                                    <p:column headerText="Past Medical History">
+                                        <h:outputText value="#{viewAppointmentManagedBean.appointment.medical_record.past_medical_historys[index]}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </div>
+                            
+                            <div>
+                                <p:dataTable id="family_historys" var="fh" rows="10" paginator="true" paginatorPosition="bottom" rowIndexVar="index"
+                                             value="#{viewAppointmentManagedBean.appointment.medical_record.family_historys}"
+                                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                             rowsPerPageTemplate="5,10,20">
+                                    
+                                    <p:column headerText="Family Medical History">
+                                        <h:outputText value="#{viewAppointmentManagedBean.appointment.medical_record.family_historys[index]}" />
+                                    </p:column>
+                                    
+                                </p:dataTable>
+                            </div>
+                            
+                            <div>
+                                <p:dataTable id="vaccinations" var="v" rows="10" paginator="true" paginatorPosition="bottom" rowIndexVar="index"
+                                             value="#{viewAppointmentManagedBean.appointment.medical_record.vaccinations}"
+                                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                             rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+                                    
+                                    <p:column headerText="Vaccination History">
+                                        <h:outputText value="#{viewAppointmentManagedBean.appointment.medical_record.vaccinations[index]}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </div>
+                            
+                        </div>
+                        
+                    </p:tab>
+                    
+                    <p:tab title="Bill">
+                        <p:dataTable var="c" value="#{viewAppointmentManagedBean.basicRate}" emptyMessage="No items.">
+                            
+                            <p:column headerText="Basic Rate" colspan="7">
+                                <h:outputText value="#{viewAppointmentManagedBean.appointment.appointment_type.toString()}" />
+                            </p:column>
+                            
+                            <p:column headerText="Subtotal ">
+                                <h:outputText value="#{c}">
+                                    <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2"/>
+                                </h:outputText>
+                            </p:column>
+                            
+                        </p:dataTable>
+                        
+                        <p:dataTable var="p" value="#{viewAppointmentManagedBean.appointment.prescriptions}" emptyMessage="No prescriptions.">
+                            
+                            <p:column headerText="Medication ID">
+                                <h:outputText value="#{p.medication.id}" />
+                            </p:column>
+                            
+                            <p:column headerText="Name">
+                                <h:outputText value="#{p.medication.name}" />
+                            </p:column>
+                            
+                            <p:column headerText="Brand">
+                                <h:outputText value="#{p.medication.brand}" />
+                            </p:column>
+                            
+                            <p:column headerText="Description">
+                                <h:outputText value="#{p.medication.description}" />
+                            </p:column>
+                            
+                            <p:column headerText="Conflicting Foods">
+                                <h:outputText value="#{p.medication.conflicting_foods}" />
+                            </p:column>
+                            
+                            <p:column headerText="Unit Price  ">
+                                <h:outputText value="#{p.medication.price_per_quantity}">
+                                    <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2"/>
+                                </h:outputText>
+                            </p:column>
+                            
+                            <p:column headerText="Quantity ">
+                                <h:outputText value="#{p.quantity}" />
+                            </p:column>
+                            
+                            <p:column headerText="Subtotal ">
+                                <h:outputText value="#{p.medication.price_per_quantity * p.quantity}">
+                                    <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2"/>
+                                </h:outputText>
+                            </p:column>
+                            
+                        </p:dataTable>
+
+                        <div>
+                            <p:outputLabel id="total" value="Total: $#{viewAppointmentManagedBean.appointment.total_price}" style="margin: 8px 10px 0;float:right;" />
+                        </div>
+                        
+                    </p:tab>
+
+                </p:tabView>
+
+                <div class="patient-notes">
+                    <p:outputLabel for="patient_notes" value="Patient Notes" class="label-text"/>
+                    <h:outputText id="patient_notes" value="#{viewAppointmentManagedBean.appointment.patient_notes == '' ? 'No patient notes written' : viewAppointmentManagedBean.appointment.patient_notes}" />
+                </div>
+
+                <div class="button-group">
+                    
+                    <h:button class="button red-button" value="BACK" outcome="manageAppointments.xhtml"/>
+                    
+                </div>
+        
+        </h:panelGroup>
+            
+    </ui:define>
+    
+    <ui:define name="growl">
+        <p:growl>
+            <p:autoUpdate />
+        </p:growl>
+    </ui:define>
+
+</ui:composition>
