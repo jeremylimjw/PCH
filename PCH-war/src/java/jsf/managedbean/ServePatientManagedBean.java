@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -126,6 +127,12 @@ public class ServePatientManagedBean implements Serializable {
             if (appointment.getMedical_certificate() == null && (mc_start_date != null || mc_end_date != null)) { // Check if MC date fields are filled up by the user
                 if (mc_start_date == null || mc_end_date == null) throw new AppointmentEntityException("MC start/end date cannot be empty.");
                 if (mc_end_date.getTime() < mc_start_date.getTime()) throw new AppointmentEntityException("MC end date cannot be before start date.");
+                Calendar today = Calendar.getInstance();
+                today.set(Calendar.HOUR_OF_DAY, 0);
+                today.set(Calendar.MINUTE, 0);
+                today.set(Calendar.SECOND, 0);
+                today.set(Calendar.MILLISECOND, 0);
+                if (mc_start_date.getTime() < today.getTime().getTime()) throw new AppointmentEntityException("MC cannot start before today.");
 
                 MedicalCertificate mc = new MedicalCertificate(mc_start_date, mc_end_date, null);
                 appointment.setMedical_certificate(mc);
