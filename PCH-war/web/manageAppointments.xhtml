@@ -16,8 +16,11 @@
             
             <p:dataTable id="appointments" value="#{manageAppointmentsManagedBean.appointments}" var="a" rowHover="true" emptyMessage="No records available"
                          rows="10" rowsPerPageTemplate="10,20,50" paginator="true" paginatorPosition="bottom"
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         selection="#{manageAppointmentsManagedBean.selected}" selectionMode="single" rowKey="#{a.id}">
                 
+                <p:ajax event="rowSelect" listener="#{manageAppointmentsManagedBean.onRowSelect}" update="@form"/>
+            
                 <p:column headerText="Appt Number" sortBy="#{a.queue_no}" filterBy="#{a.queue_no}" filterMatchMode="contains">
                     <h:outputText value="#{a.queue_no}" />
                 </p:column>
@@ -50,10 +53,6 @@
 
                 <p:column headerText="MC" sortBy="#{a.medical_certificate == null ? 'No' : 'Yes'}" filterBy="#{a.medical_certificate == null ? 'No' : 'Yes'}" filterMatchMode="contains">
                     <h:outputText value="#{a.medical_certificate == null ? 'No' : 'Yes'}" />
-                </p:column>
-
-                <p:column headerText="Action" style="width:80px;">
-                    <p:commandButton action="#{manageAppointmentsManagedBean.redirect(a.id)}" icon="ui-icon-document" title="View" />
                 </p:column>
 
             </p:dataTable>
