@@ -15,7 +15,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@500" rel="stylesheet" />
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" crossorigin="anonymous"/>
-        
+
         <ui:insert name="head"></ui:insert>   
     </h:head>
 
@@ -57,7 +57,7 @@
                             <span>ACCOUNT</span>
                         </h:link>
                     </li>
-                    
+
                     <li class="header-right">
                         <h:form>
                             <h:commandButton class="button gray-button" type="submit" value="LOGOUT" actionListener="#{loginManagedBean.logout}" />
@@ -66,7 +66,7 @@
                 </ul>
             </nav>
         </header>
-        
+
         <div class="sub-header">
             <div class="sub-header-item">
                 <div class="label">TODAY</div>
@@ -76,7 +76,7 @@
                     </h:outputText>
                 </div>
             </div>
-            
+
             <div class="sub-header-item">
                 <div class="label">APPTS TODAY</div>
                 <div class="value"><h:outputText id="appointmentCount" value="#{appointmentManagedBean.appointments.size()}" /></div>
@@ -95,7 +95,7 @@
             </h:panelGroup>
             <div class="sub-header-right">
 
-                        
+
                 <h:commandButton class="button orange-button" value="ADD RANDOM APPOINTMENT" actionListener="#{appointmentManagedBean.addRandomAppointment()}">
                     <f:ajax execute="@this" render="appointments appointmentCount" />
                 </h:commandButton>
@@ -103,11 +103,15 @@
                 <h:commandButton class="button orange-button" value="ADD RANDOM WALK-IN" actionListener="#{appointmentManagedBean.addRandomWalkIn()}">
                     <f:ajax execute="@this" render="queue queueCount" />
                 </h:commandButton>
-                
+
                 <h:commandButton class="button orange-button" value="CALL NEXT PATIENT" actionListener="#{appointmentManagedBean.callNextPatient()}" rendered="#{sessionScope.user.role == 'DOCTOR'}">
                     <f:ajax execute="@this" render="appointments queue callingQueueNo previousQueueNo" />
                 </h:commandButton>
-                
+
+                <p:commandButton class="button orange-button" value="ADD WALK-IN APPT" update="formAddWalkIn" oncomplete="PF('dialogAddWalkIn').show()" rendered="#{sessionScope.user.role == 'NURSE'}">
+                    <f:ajax execute="@this" render="queue queueCount" />
+                </p:commandButton>
+
                 <button class="button orange-button" onclick="window.open('chat.xhtml', 'newwindow', 'width=800,height=500'); return false;">CHAT</button>
             </div>
         </div>
@@ -115,17 +119,46 @@
         <div id="main"  class="container">
             <ui:insert name="main">Main</ui:insert>            
         </div>
-        
+
         <ui:insert name="growl">
             <p:growl globalOnly="true">
                 <p:autoUpdate />
             </p:growl>
         </ui:insert>
-        
+
         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
             <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
             <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" />
         </p:confirmDialog>
+
+        <h:form id="formAddWalkIn">
+            <p:dialog id="dialogAddWalkIn" widgetVar="dialogAddWalkIn" header="Add New Walk-In Appointment" closable="true">
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="medRecordNric" value="Enter patient NRIC"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="medRecordNric" value="#{appointmentManagedBean.patientNric}" placeholder="S9123456A"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="selApptType" value="Select Appointment Type"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="selApptType" value="#{appointmentManagedBean.appointmentType}">
+                                <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true" />
+                                <f:selectItems value="#{appointmentManagedBean.appointmentTypeEnum}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+
+                <p:commandButton value="Add Walk-In" update="@form queue queueCount" actionListener="#{appointmentManagedBean.addWalkInAppointment}" oncomplete="PF('dialogAddWalkIn').show();"/>
+            </p:dialog>
+        </h:form>
 
     </h:body>
 
