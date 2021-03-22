@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb.session.stateful;
+package ejb.session.singleton;
 
+import entity.QueueBoardItem;
+import java.util.List;
 import javax.ejb.Local;
 import util.exception.AppointmentEntityException;
 import util.exception.EmployeeEntityException;
@@ -16,4 +18,5 @@ import util.exception.EmployeeEntityException;
 @Local
 public interface QueueBoardSessionBeanLocal {
     public void add(Long employeeId, Long appointmentId) throws EmployeeEntityException, AppointmentEntityException;
+    public List<QueueBoardItem> retrieveQueueBoard();
 }

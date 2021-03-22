@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -53,9 +54,8 @@ public class Appointment implements Serializable {
     @NotNull
     private Date date_time;
     
-    @Column(length = 128)
-    @Size(max = 128)
-    private String description;
+    @Column
+    private String patient_notes;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -83,8 +83,8 @@ public class Appointment implements Serializable {
     @NotNull
     private Date date_created;
     
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Medication> medications;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private List<Prescription> prescriptions;
     
     @ManyToOne
     private Employee employee;
@@ -93,7 +93,7 @@ public class Appointment implements Serializable {
     @JoinColumn(nullable = false)
     private MedicalRecord medical_record;
     
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private MedicalCertificate medical_certificate;
 
     public Appointment() {
@@ -102,12 +102,12 @@ public class Appointment implements Serializable {
     public Appointment(Employee employee, MedicalRecord medical_record, Date date_time, ScheduleTypeEnum schedule_type, AppointmentTypeEnum appointment_type, StatusEnum status) {
         this.queue_no = "None";
         this.date_time = date_time;
-        this.description = "";
+        this.patient_notes = "";
         this.status = status;
         this.schedule_type = schedule_type;
         this.appointment_type = appointment_type;
         this.total_price = new BigDecimal(0);
-        this.medications = new ArrayList<>();
+        this.prescriptions = new ArrayList<>();
         this.employee = employee;
         this.medical_record = medical_record;
         this.date_created = new Date();
@@ -138,12 +138,12 @@ public class Appointment implements Serializable {
         this.date_time = date_time;
     }
 
-    public String getDescription() {
-        return description;
+    public String getPatient_notes() {
+        return patient_notes;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPatient_notes(String patient_notes) {
+        this.patient_notes = patient_notes;
     }
 
     public StatusEnum getStatus() {
@@ -186,12 +186,12 @@ public class Appointment implements Serializable {
         this.date_created = date_created;
     }
 
-    public List<Medication> getMedications() {
-        return medications;
+    public List<Prescription> getPrescriptions() {
+        return prescriptions;
     }
 
-    public void setMedications(List<Medication> medications) {
-        this.medications = medications;
+    public void setPrescriptions(List<Prescription> prescriptions) {
+        this.prescriptions = prescriptions;
     }
 
     public Employee getEmployee() {

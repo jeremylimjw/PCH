@@ -3,6 +3,9 @@
 html, body {
     height: 100%;
     margin: 0;
+}
+
+p, span {
     font-family: 'Roboto', sans-serif;
 }
 
@@ -50,6 +53,7 @@ html, body {
 .red-button:hover:enabled   { background-color: #ab3c3c; }
 .blue-button                { background-color: #4169E1; color: white; }
 .blue-button:hover:enabled  { background-color: #6254b8; }
+.blue-button:disabled, input:disabled.blue-button      { background-color: #1E90FF; }
 .green-button               { background-color: #59886b; color: white; }
 .green-button:hover:enabled { background-color: #506d5b; }
 
@@ -83,4 +87,92 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+/*--- Growl Messages ---*/
+.ui-growl {
+    top: auto;
+    bottom: 0px;
+    left: 10px;
+    z-index: 100;
+}
+
+.ui-growl .ui-state-highlight {
+    color:white;
+    padding: 5px 10px 5px 10px;
+    width: 50vw;
+    opacity: 1;
+    background-image: none;
+    transition: color 0.3s;
+}
+
+.ui-growl-info {
+    background-color: #404040;
+}
+
+.ui-growl-error {
+    background-color: #CD5C5C;
+}
+
+.ui-growl-item-container:hover {
+    color: #C0C0C0 !important;
+}
+
+.ui-growl-item-container:hover .ui-growl-image {
+    opacity: 0.5;
+}
+
+.ui-growl-message {
+    margin-top: 10px;
+    padding-left: 5px;
+    padding-top: 5px;
+    float: none;
+    overflow: hidden;
+    width: 40vw;
+}
+
+.ui-growl-image {
+    background-image: url(/PCH-war/resources/img/exclaimation.png);
+    width: 50px;
+    height: 50px;
+    background-size: 50px 50px;
+    float: left;
+    transition: opacity 0.3s;
+}
+
+.ui-growl-title {
+    display: block;
+    font-weight: normal;
+    margin-left: 10px;
+    float: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 40vw;
+}
+
+.ui-growl .ui-state-highlight .ui-icon {
+    background-image: url(/PCH-war/resources/img/close.png);
+}
+
+.ui-growl-icon-close {
+    display: block !important;
+    opacity: 0;
+    transition: opacity 0.3s;
+    margin: 15px 15px 0 0;
+    background-size: 40px 40px;
+    width: 40px;
+    height: 40px;
+}
+
+.ui-growl-item-container:hover .ui-growl-icon-close {
+    opacity: 1;
+}
+
+.ui-growl-icon-close:hover {
+    opacity: 0.5 !important;
+}
+
+.ui-growl .ui-icon-closethick, .ui-growl .ui-growl-image-info, .ui-growl .ui-growl-image-error {
+    background-position: initial;
 }

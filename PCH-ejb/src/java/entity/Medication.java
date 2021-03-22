@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.DecimalMin;
@@ -29,6 +30,10 @@ import javax.validation.constraints.Size;
  */
 @Entity
 public class Medication implements Serializable {
+
+ 
+
+
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -62,6 +67,9 @@ public class Medication implements Serializable {
     @Column
     private List<String> conflicting_foods;
     
+    @Column
+    private List<String> containing_drugs;
+    
     @Column(length = 128)
     @Size(min = 1, max = 128)
     private String description;
@@ -74,27 +82,40 @@ public class Medication implements Serializable {
     @NotNull
     private boolean deleted;
     
-    @OneToMany(mappedBy = "parent_medication", fetch = FetchType.EAGER)
+    
+    @ManyToMany
+    private List<Medication> parent_medications;
+    
+    @ManyToMany(mappedBy = "parent_medications", fetch = FetchType.EAGER)
     private List<Medication> conflicting_medications;
-    @ManyToOne
-    private Medication parent_medication;
+  
     
     public Medication() {
+         this.conflicting_medications = new ArrayList<>();
+         this.parent_medications = new ArrayList<>();
+         this.conflicting_foods = new ArrayList<>();
+         this.containing_drugs = new ArrayList<>();
     }
 
-    public Medication(String name, String brand, String prescription_quantity, BigDecimal price_per_quantity, int quantity_on_hand, List<String> conflicting_foods, String description, String url) {
+    public Medication(String name, String brand, String prescription_quantity, BigDecimal price_per_quantity, int quantity_on_hand, List<String> conflicting_foods, List<String> containing_drugs, String description, String url) {
+        
+        super();
         this.name = name;
         this.brand = brand;
         this.prescription_quantity = prescription_quantity;
         this.price_per_quantity = price_per_quantity;
         this.quantity_on_hand = quantity_on_hand;
         this.conflicting_foods = conflicting_foods;
+        this.containing_drugs = containing_drugs;
         this.description = description;
         this.url = url;
         this.deleted = false;
-        this.conflicting_medications = new ArrayList<>();
-        this.parent_medication = null;
+
+        
     }
+
+    
+    
 
     public Long getId() {
         return id;
@@ -152,6 +173,14 @@ public class Medication implements Serializable {
         this.conflicting_foods = conflicting_foods;
     }
 
+    public List<String> getContaining_drugs() {
+        return containing_drugs;
+    }
+
+    public void setContaining_drugs(List<String> containing_drugs) {
+        this.containing_drugs = containing_drugs;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -184,14 +213,23 @@ public class Medication implements Serializable {
         this.conflicting_medications = conflicting_medications;
     }
 
-    public Medication getParent_medication() {
-        return parent_medication;
+     /**
+     * @return the parent_medications
+     */
+    public List<Medication> getParent_medications() {
+        return parent_medications;
     }
 
-    public void setParent_medication(Medication parent_medication) {
-        this.parent_medication = parent_medication;
+    /**
+     * @param parent_medications the parent_medications to set
+     */
+    public void setParent_medications(List<Medication> parent_medications) {
+        this.parent_medications = parent_medications;
     }
     
+    public boolean hasConflictingMedicationAssociated(){
+        return(!this.conflicting_medications.isEmpty());
+    }
     
 
     @Override

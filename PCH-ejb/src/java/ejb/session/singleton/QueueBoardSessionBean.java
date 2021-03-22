@@ -3,16 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ejb.session.stateful;
+package ejb.session.singleton;
 
 import ejb.session.stateless.AppointmentSessionBeanLocal;
 import ejb.session.stateless.EmployeeEntitySessionBeanLocal;
 import entity.Appointment;
 import entity.Employee;
+import entity.QueueBoardItem;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.ejb.Singleton;
 import util.exception.AppointmentEntityException;
 import util.exception.EmployeeEntityException;
 
@@ -20,7 +24,7 @@ import util.exception.EmployeeEntityException;
  *
  * @author USER
  */
-@Stateful
+@Singleton
 public class QueueBoardSessionBean implements QueueBoardSessionBeanLocal {
 
     @EJB
@@ -28,10 +32,13 @@ public class QueueBoardSessionBean implements QueueBoardSessionBeanLocal {
     @EJB
     private EmployeeEntitySessionBeanLocal employeeEntitySessionBeanLocal;
 
-    HashMap<Employee,Appointment> queue;
+    List<QueueBoardItem> queueBoard;
     
-    public QueueBoardSessionBean() {
-        queue = new HashMap<>();
+    public QueueBoardSessionBean() { }
+    
+    @PostConstruct
+    public void postConstruct() {
+        queueBoard = new ArrayList<>();
     }
     
     @Override
@@ -39,9 +46,14 @@ public class QueueBoardSessionBean implements QueueBoardSessionBeanLocal {
         Employee employee = employeeEntitySessionBeanLocal.retrieveById(employeeId);
         Appointment appointment = appointmentSessionBeanLocal.retrieveById(appointmentId);
         
-        queue.put(employee, appointment);
+        queueBoard.add(new QueueBoardItem(employee, appointment));
         
-        for (Map.Entry<Employee, Appointment> e : queue.entrySet()) 
-            System.out.println("ADDED TO QUEUEBOARD - Key: " + e.getKey() + " Value: " + e.getValue()); 
+        System.out.println("---- QUEUEBOARD SINGLETON BEAN ----");
+        for (QueueBoardItem q : queueBoard) System.out.println(q);
+    }
+    
+    @Override
+    public List<QueueBoardItem> retrieveQueueBoard() {
+        return queueBoard;
     }
 }

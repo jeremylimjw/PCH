@@ -55,7 +55,7 @@ public class DefaultFilter implements Filter {
         Boolean isLogin = (Boolean) session.getAttribute("isLogin");
         
         // Login page and other resources like images and CSS should be excluded from filters
-        if (!path.equals("/login.xhtml") && !path.startsWith("/resources") && !path.startsWith("/javax.faces.resource")) {
+        if (!path.equals("/login.xhtml") && !path.startsWith("/resources") && !path.startsWith("/javax.faces.resource") && !path.startsWith("/api")) {
             
             if (!isLogin) {
                 response.sendRedirect(CONTEXT_ROOT + "/login.xhtml");

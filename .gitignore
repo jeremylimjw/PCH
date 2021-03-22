@@ -81,6 +81,7 @@ local.properties
 
 # Package Files #
 *.jar
+!PCH-war/bootstrap-1.0.10.jar
 *.war
 *.nar
 *.ear

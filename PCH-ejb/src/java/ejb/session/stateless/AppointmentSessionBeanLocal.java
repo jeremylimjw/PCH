@@ -6,10 +6,12 @@
 package ejb.session.stateless;
 
 import entity.Appointment;
+import entity.Employee;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import util.enumeration.AppointmentTypeEnum;
+import util.enumeration.ScheduleTypeEnum;
 import util.enumeration.StatusEnum;
 import util.exception.AppointmentEntityException;
 
@@ -21,11 +23,13 @@ import util.exception.AppointmentEntityException;
 public interface AppointmentSessionBeanLocal {
     public Long createAppointment(Long doctorId, Long patientRecordId, Date dateTime, AppointmentTypeEnum appointment_type) throws AppointmentEntityException;
     public Long createWalkIn(Long patientRecordId, AppointmentTypeEnum appointment_type) throws AppointmentEntityException;
-    public List<Appointment> retrieveAppointmentsByDoctorIdByDay(Long doctor_id, Date date);
-    public List<Appointment> retrieveAppointmentsByDay(Date date);
-    public List<Appointment> retrieveOngoingQueue();
+    public List<Appointment> retrieveAppointmentsByDoctorIdByDay(Long doctorId, Date date);
+    public List<Appointment> retrieveAppointmentsByDay(ScheduleTypeEnum scheduleType, Date date);
+    public List<Appointment> retrieveWalkInByDoctorIdByDay(Long doctorId, Date date);
+    public void update(Appointment appointment) throws AppointmentEntityException;
     public void updateStatus(Long appointmentId, StatusEnum status) throws AppointmentEntityException;
     public void assignAppointment(Long appointmentId, Long doctorId) throws AppointmentEntityException;
     public Appointment retrieveById(Long id) throws AppointmentEntityException;
+    public List<Appointment> retrieveAll();
 
 }
