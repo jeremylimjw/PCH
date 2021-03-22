@@ -117,7 +117,7 @@ public class MedicalRecordSessionBean implements MedicalRecordSessionBeanLocal {
     }
     
     @Override
-    public void updateMedicalRecord(MedicalRecord medicalRecord, Long patientId, List<Appointment> appointments) throws InputDataValidationException, MedicalRecordNotFoundException, MedicalRecordEntityException {
+    public void updateMedicalRecord(MedicalRecord medicalRecord) throws MedicalRecordNotFoundException, MedicalRecordEntityException{
         if (medicalRecord != null && medicalRecord.getId() != null) {
             Set<ConstraintViolation<MedicalRecord>>constraintViolations = validator.validate(medicalRecord);
             if (constraintViolations.isEmpty()) {
@@ -135,7 +135,7 @@ public class MedicalRecordSessionBean implements MedicalRecordSessionBeanLocal {
                 medicalRecordToUpdate.setName(medicalRecord.getName());
                 medicalRecordToUpdate.setAddress(medicalRecord.getAddress());
                 medicalRecordToUpdate.setNric(medicalRecord.getNric());
-                medicalRecordToUpdate.setAppointments(appointments);
+                medicalRecordToUpdate.setAppointments(medicalRecord.getAppointments());
                 medicalRecordToUpdate.setDob(medicalRecord.getDob());
                 medicalRecordToUpdate.setContact_number(medicalRecord.getContact_number());
                 medicalRecordToUpdate.setBlood_type(medicalRecord.getBlood_type());
@@ -145,7 +145,6 @@ public class MedicalRecordSessionBean implements MedicalRecordSessionBeanLocal {
                 medicalRecordToUpdate.setVaccinations(medicalRecord.getVaccinations());
                 
             } else {
-                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
                 throw new MedicalRecordEntityException(getValidatorErrors(constraintViolations));
             }
         } else {
@@ -163,4 +162,5 @@ public class MedicalRecordSessionBean implements MedicalRecordSessionBeanLocal {
         
         return str;
     }
+    
 }

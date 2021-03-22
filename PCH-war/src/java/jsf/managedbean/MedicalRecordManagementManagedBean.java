@@ -35,6 +35,9 @@ public class MedicalRecordManagementManagedBean implements Serializable {
     
     private MedicalRecord newRecord;
     private List<MedicalRecord> records;
+    private List<MedicalRecord> filteredRecords;
+    
+    private String searchString;
     
     /**
      * Creates a new instance of patientRecordManagementManagedBean
@@ -84,6 +87,28 @@ public class MedicalRecordManagementManagedBean implements Serializable {
      */
     public void setRecords(List<MedicalRecord> records) {
         this.records = records;
+    }
+
+    /**
+     * @return the filteredRecords
+     */
+    public List<MedicalRecord> getFilteredRecords() {
+        return filteredRecords;
+    }
+
+    /**
+     * @param filteredRecords the filteredRecords to set
+     */
+    public void setFilteredRecords(List<MedicalRecord> filteredRecords) {
+        this.filteredRecords = filteredRecords;
+    }
+    
+    public void searchMedicalRecord() {
+        if(searchString == null || searchString.trim().length() == 0) {
+            filteredRecords = records;
+        } else {
+            filteredRecords = medicalRecordSessionBeanLocal.searchMedicalRecordsByName(searchString);
+        }
     }
     
 }

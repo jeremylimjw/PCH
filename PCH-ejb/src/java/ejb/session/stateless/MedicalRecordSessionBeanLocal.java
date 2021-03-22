@@ -28,8 +28,7 @@ public interface MedicalRecordSessionBeanLocal {
 
     public List<MedicalRecord> searchMedicalRecordsByNRIC(String searchString);
 
-    public void updateMedicalRecord(MedicalRecord medicalRecord, Long patientId, List<Appointment> appointments) throws InputDataValidationException, MedicalRecordNotFoundException, MedicalRecordEntityException;
+    public void updateMedicalRecord(MedicalRecord medicalRecord) throws MedicalRecordNotFoundException, MedicalRecordEntityException;
 
     public MedicalRecord retrieveById(Long id) throws MedicalRecordEntityException;
-    public void update(MedicalRecord medicalRecord) throws MedicalRecordEntityException;
 }
