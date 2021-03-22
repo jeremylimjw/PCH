@@ -8,15 +8,12 @@ package jsf.managedbean;
 import ejb.session.stateless.AppointmentSessionBeanLocal;
 import entity.Appointment;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import org.primefaces.event.SelectEvent;
 
 /**

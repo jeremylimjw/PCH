@@ -19,7 +19,7 @@
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          selection="#{manageAppointmentsManagedBean.selected}" selectionMode="single" rowKey="#{a.id}">
                 
-                <p:ajax event="rowSelect" listener="#{manageAppointmentsManagedBean.onRowSelect}" update="@form"/>
+                <p:ajax event="rowSelect" listener="#{manageAppointmentsManagedBean.onRowSelect}" />
             
                 <p:column headerText="Appt Number" sortBy="#{a.queue_no}" filterBy="#{a.queue_no}" filterMatchMode="contains">
                     <h:outputText value="#{a.queue_no}" />
