@@ -5,11 +5,13 @@
  */
 package ws.restful;
 
+import ejb.session.singleton.QueueBoardSessionBeanLocal;
 import ejb.session.stateless.AppointmentSessionBeanLocal;
 import ejb.session.stateless.EmployeeEntitySessionBeanLocal;
 import entity.Appointment;
 import entity.Employee;
 import entity.Prescription;
+import entity.QueueBoardItem;
 import entity.RequestBodyCreateAppointment;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -44,9 +46,36 @@ public class Api {
     
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
     private EmployeeEntitySessionBeanLocal employeeEntitySessionBeanLocal;
+    private QueueBoardSessionBeanLocal queueBoardSessionBeanLocal;
     
     public Api() {
         hookUpJNDI();
+    }
+    
+    
+    @Path("queueBoard")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getQueueBoard() {
+        try {
+            List<QueueBoardItem> queueBoard = queueBoardSessionBeanLocal.retrieveQueueBoard();
+            
+            for(QueueBoardItem q : queueBoard) {
+                for(Prescription p : q.getAppointment().getPrescriptions()) p.getMedication().getParent_medications().clear();
+                if (q.getAppointment().getEmployee() != null) q.getAppointment().getEmployee().getAppointments().clear();
+                q.getAppointment().getMedical_record().getAppointments().clear();
+                
+                
+                q.getEmployee().setAppointments(null);
+                q.getEmployee().setPassword(null);
+            }
+            
+            GenericEntity<List<QueueBoardItem>> genericEntity = new GenericEntity<List<QueueBoardItem>>(queueBoard) { };    
+            
+            return Response.status(Response.Status.OK).entity(genericEntity).build();
+        } catch(Exception ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
     }
     
     @Path("appointments/medicalRecord/{id}")
@@ -165,6 +194,7 @@ public class Api {
             javax.naming.Context c = new InitialContext();
             appointmentSessionBeanLocal = (AppointmentSessionBeanLocal) c.lookup("java:global/PCH/PCH-ejb/AppointmentSessionBean!ejb.session.stateless.AppointmentSessionBeanLocal");
             employeeEntitySessionBeanLocal = (EmployeeEntitySessionBeanLocal) c.lookup("java:global/PCH/PCH-ejb/EmployeeEntitySessionBean!ejb.session.stateless.EmployeeEntitySessionBeanLocal");
+            queueBoardSessionBeanLocal = (QueueBoardSessionBeanLocal) c.lookup("java:global/PCH/PCH-ejb/QueueBoardSessionBean!ejb.session.singleton.QueueBoardSessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
