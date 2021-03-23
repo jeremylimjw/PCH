@@ -59,7 +59,9 @@ public class DataInitSessionBean {
                 MedicalRecord desmondRecord = new MedicalRecord("Desmond", "S94626123A", "address1", 
                         new SimpleDateFormat("dd/MM/yyyy").parse("20/6/1996"), "82746726", "B+", 
 
+
                         new ArrayList<>(Arrays.asList("Ibuprofen", "Drug 1", "Drug 2", "Drug 3")), 
+
 
                         new ArrayList<>(Arrays.asList("Family History 1", "Family History 2", "Family History 3")), 
                         new ArrayList<>(Arrays.asList("Past History 1", "Past History 2", "Past History 3")), 

@@ -397,11 +397,17 @@
                 <div class="button-group">
                     
                     <h:button class="button red-button" value="BACK" outcome="index.xhtml"/>
+<<<<<<< HEAD
 
                     <h:commandButton class="button blue-button" value="SAVE AND COMPLETE TRANSACTION" style="width: auto;"
                                      actionListener="#{servePatientManagedBean.doUpdateRedirect}" 
                                      rendered="#{servePatientManagedBean.appointment.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}">
 
+=======
+                    <h:commandButton class="button blue-button" value="SAVE AND COMPLETE TRANSACTION" style="width: auto;"
+                                     actionListener="#{servePatientManagedBean.doUpdateRedirect}" 
+                                     rendered="#{servePatientManagedBean.appointment.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}">
+>>>>>>> 3cdf000... Added conflicting drugs validation on prescribing meds
                         <f:ajax execute="@form" render="@form" />
                     </h:commandButton>
                     

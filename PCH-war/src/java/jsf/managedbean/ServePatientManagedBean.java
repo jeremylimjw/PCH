@@ -141,6 +141,7 @@ public class ServePatientManagedBean implements Serializable {
                         }
                     }
                 }
+
                 
                 // Check if conflicting medications exists
                 for (Medication cm : p.getMedication().getConflicting_medications()) {
@@ -148,11 +149,13 @@ public class ServePatientManagedBean implements Serializable {
                         if (m.getMedication().equals(cm)) throw new AppointmentEntityException("Medication " + p.getMedication().getName() + " is conflicted with " + m.getMedication().getName()+ ".");
                     }
                 }
+
             }
             
             if (appointment.getMedical_certificate() == null && (mc_start_date != null || mc_end_date != null)) { // Check if MC date fields are filled up by the user
                 if (mc_start_date == null || mc_end_date == null) throw new AppointmentEntityException("MC start/end date cannot be empty.");
                 if (mc_end_date.getTime() < mc_start_date.getTime()) throw new AppointmentEntityException("MC end date cannot be before start date.");
+
                 Calendar today = Calendar.getInstance();
                 today.set(Calendar.HOUR_OF_DAY, 0);
                 today.set(Calendar.MINUTE, 0);
@@ -164,6 +167,7 @@ public class ServePatientManagedBean implements Serializable {
                 appointment.setMedical_certificate(mc);
             }
             
+
 
         }
         
@@ -184,8 +188,10 @@ public class ServePatientManagedBean implements Serializable {
             if (!appointment.getStatus().equals(StatusEnum.IN_PROGRESS)) throw new AppointmentEntityException("Patient is not called in or the appointment has past.");
             
 
+
             validateAndUpdate();
             appointmentSessionBeanLocal.updateStatus(appointment.getId(), StatusEnum.COMPLETED);
+
 
             medicationEntitySessionBeanLocal.processPrescriptions(appointment.getPrescriptions()); //  This will throw error if somehow any quantity exceeds stock in hand
             
