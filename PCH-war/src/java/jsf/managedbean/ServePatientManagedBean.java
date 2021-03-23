@@ -20,7 +20,9 @@ import java.sql.SQLException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
+
 import java.util.Calendar;
+
 
 import java.util.Date;
 import java.util.HashMap;
@@ -35,13 +37,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
 
-
 import javax.sql.DataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperRunManager;
-
 import util.enumeration.AppointmentTypeEnum;
-
 
 import util.enumeration.StatusEnum;
 import util.exception.AppointmentEntityException;
@@ -88,6 +87,7 @@ public class ServePatientManagedBean implements Serializable {
             medications = medicationEntitySessionBeanLocal.retrieveAll();
 
 
+
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("medications", medications);
 
 
@@ -102,7 +102,9 @@ public class ServePatientManagedBean implements Serializable {
             }
 
 
+
             appointment.setTotal_price(basicRate);
+
 
 
 
@@ -126,7 +128,6 @@ public class ServePatientManagedBean implements Serializable {
         for (Prescription p : appointment.getPrescriptions()) {
             total = total.add(p.getMedication().getPrice_per_quantity().multiply(new BigDecimal(p.getQuantity())));
         }
-
 
         appointment.setTotal_price(total.add(basicRate));
     }
@@ -165,6 +166,7 @@ public class ServePatientManagedBean implements Serializable {
                     }
                 }
 
+
                 
                 // Check if conflicting medications exists
                 for (Medication cm : p.getMedication().getConflicting_medications()) {
@@ -172,6 +174,7 @@ public class ServePatientManagedBean implements Serializable {
                         if (m.getMedication().equals(cm)) throw new AppointmentEntityException("Medication " + p.getMedication().getName() + " is conflicted with " + m.getMedication().getName()+ ".");
                     }
                 }
+
 
             }
 
@@ -183,12 +186,14 @@ public class ServePatientManagedBean implements Serializable {
                     throw new AppointmentEntityException("MC end date cannot be before start date.");
                 }
 
+
                 Calendar today = Calendar.getInstance();
                 today.set(Calendar.HOUR_OF_DAY, 0);
                 today.set(Calendar.MINUTE, 0);
                 today.set(Calendar.SECOND, 0);
                 today.set(Calendar.MILLISECOND, 0);
                 if (mc_start_date.getTime() < today.getTime().getTime()) throw new AppointmentEntityException("MC cannot start before today.");
+
 
                 MedicalCertificate mc = new MedicalCertificate(mc_start_date, mc_end_date, null);
                 appointment.setMedical_certificate(mc);
@@ -215,6 +220,7 @@ public class ServePatientManagedBean implements Serializable {
             if (!appointment.getStatus().equals(StatusEnum.IN_PROGRESS)) {
                 throw new AppointmentEntityException("Patient is not called in or the appointment has past.");
             }
+
 
 
             validateAndUpdate();
@@ -278,7 +284,6 @@ public class ServePatientManagedBean implements Serializable {
 
     public void setBasicRate(BigDecimal basicRate) {
         this.basicRate = basicRate;
-
 
     }
 

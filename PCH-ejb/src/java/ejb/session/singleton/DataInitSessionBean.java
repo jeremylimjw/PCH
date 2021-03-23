@@ -60,7 +60,9 @@ public class DataInitSessionBean {
                         new SimpleDateFormat("dd/MM/yyyy").parse("20/6/1996"), "82746726", "B+", 
 
 
+
                         new ArrayList<>(Arrays.asList("Ibuprofen", "Drug 1", "Drug 2", "Drug 3")), 
+
 
 
                         new ArrayList<>(Arrays.asList("Family History 1", "Family History 2", "Family History 3")), 

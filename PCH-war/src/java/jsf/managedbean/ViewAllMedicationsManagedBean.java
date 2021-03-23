@@ -104,6 +104,7 @@ public class ViewAllMedicationsManagedBean implements Serializable{
         try{
          
 
+
              Medication med = getMedicationEntitySessionBeanLocal().createNewMedication(getNewMedication(), getConflict_med_ids(), cfoodArray, cdrugArray);
 
               

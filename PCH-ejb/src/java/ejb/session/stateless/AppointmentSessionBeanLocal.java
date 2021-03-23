@@ -27,6 +27,7 @@ public interface AppointmentSessionBeanLocal {
     public List<Appointment> retrieveAppointmentsByDay(ScheduleTypeEnum scheduleType, Date date);
     public List<Appointment> retrieveWalkInByDoctorIdByDay(Long doctorId, Date date);
 
+
     public List<Appointment> retrieveAllAppointments();
 
     public void update(Appointment appointment) throws AppointmentEntityException;
