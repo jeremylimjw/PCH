@@ -22,8 +22,10 @@ public interface MedicationEntitySessionBeanLocal {
     public Medication retrieveByMedicineId(Long mId) throws MedicationEntityException;
     public List<Medication> searchMedicinesByName(String searchString);
     public List<String> conflictMedicationByName(Long mId) throws MedicationEntityException;
+
     public void updateMedication(Medication medication , List<Long> medId ,List<String> cfood, List<String>cDrug) throws MedicationEntityException;
     public Medication createNewMedication(Medication newMedication, List<Long> medId , List<String> cFood, List<String> cdrugs) throws MedicationEntityException;
+
     public Long delete(Long medication_id) throws MedicationEntityException;
     public Long deleteMedication(Long medication_id, List<Medication> medication) throws MedicationEntityException;
     public void processPrescriptions(List<Prescription> prescriptions) throws MedicationEntityException;

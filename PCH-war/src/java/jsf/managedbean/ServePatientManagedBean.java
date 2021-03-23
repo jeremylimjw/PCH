@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+
 import java.util.Calendar;
+
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -24,7 +26,9 @@ import javax.inject.Named;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+
 import util.enumeration.AppointmentTypeEnum;
+
 import util.enumeration.StatusEnum;
 import util.exception.AppointmentEntityException;
 import util.exception.MedicationEntityException;
@@ -49,8 +53,9 @@ public class ServePatientManagedBean implements Serializable {
     private Date mc_start_date;
     private Date mc_end_date;
     
+
     private BigDecimal basicRate = new BigDecimal(40);
-    
+
     public ServePatientManagedBean() {
         mc_start_date = null;
         mc_end_date = null;
@@ -63,6 +68,7 @@ public class ServePatientManagedBean implements Serializable {
             appointment = appointmentSessionBeanLocal.retrieveById(id);
             
             medications = medicationEntitySessionBeanLocal.retrieveAll();
+
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("medications", medications);
             
             if (appointment.getSchedule_type().equals(AppointmentTypeEnum.CONSULTATION)) basicRate = new BigDecimal(40);
@@ -71,6 +77,7 @@ public class ServePatientManagedBean implements Serializable {
             else  basicRate = new BigDecimal(40);
             
             appointment.setTotal_price(basicRate);
+
         } catch (NumberFormatException | AppointmentEntityException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error retrieving selected appointment.", null));
         }
@@ -91,6 +98,7 @@ public class ServePatientManagedBean implements Serializable {
         for (Prescription p : appointment.getPrescriptions()) {
             total = total.add(p.getMedication().getPrice_per_quantity().multiply(new BigDecimal(p.getQuantity())));
         }
+
         appointment.setTotal_price(total.add(basicRate));
     }
     
@@ -98,6 +106,7 @@ public class ServePatientManagedBean implements Serializable {
         if (appointment.getStatus().equals(StatusEnum.IN_PROGRESS)) { // Validate these fields only if appointment is ongoing
             // Create new list to combine duplicated prescriptions
             List<Prescription> set = new ArrayList<>(); 
+
             for (Prescription p : appointment.getPrescriptions()) {
                 for (Prescription s : set) {
                     if (s.getMedication().equals(p.getMedication())) {
@@ -107,6 +116,7 @@ public class ServePatientManagedBean implements Serializable {
                 }
                 set.add(new Prescription(p.getQuantity(), p.getMedication()));
             }
+
             
             // Check if medication stock satisfies
             for (Prescription p : set) {
@@ -145,6 +155,7 @@ public class ServePatientManagedBean implements Serializable {
                 appointment.setMedical_certificate(mc);
             }
             
+
         }
         
         appointmentSessionBeanLocal.update(appointment);
@@ -163,8 +174,10 @@ public class ServePatientManagedBean implements Serializable {
         try {
             if (!appointment.getStatus().equals(StatusEnum.IN_PROGRESS)) throw new AppointmentEntityException("Patient is not called in or the appointment has past.");
             
+
             validateAndUpdate();
             appointmentSessionBeanLocal.updateStatus(appointment.getId(), StatusEnum.COMPLETED);
+
             medicationEntitySessionBeanLocal.processPrescriptions(appointment.getPrescriptions()); //  This will throw error if somehow any quantity exceeds stock in hand
             
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
@@ -183,6 +196,7 @@ public class ServePatientManagedBean implements Serializable {
 
     public void setBasicRate(BigDecimal basicRate) {
         this.basicRate = basicRate;
+
     }
 
     public Appointment getAppointment() {
