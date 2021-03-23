@@ -85,6 +85,7 @@ public class ServePatientManagedBean implements Serializable {
             appointment.setTotal_price(basicRate);
 
 
+
         } catch (NumberFormatException | AppointmentEntityException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error retrieving selected appointment.", null));
         }
