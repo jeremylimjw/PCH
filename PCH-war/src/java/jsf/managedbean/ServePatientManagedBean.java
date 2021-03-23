@@ -27,7 +27,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 
+
 import util.enumeration.AppointmentTypeEnum;
+
 
 import util.enumeration.StatusEnum;
 import util.exception.AppointmentEntityException;
@@ -54,7 +56,9 @@ public class ServePatientManagedBean implements Serializable {
     private Date mc_end_date;
     
 
+
     private BigDecimal basicRate = new BigDecimal(40);
+
 
     public ServePatientManagedBean() {
         mc_start_date = null;
@@ -69,14 +73,17 @@ public class ServePatientManagedBean implements Serializable {
             
             medications = medicationEntitySessionBeanLocal.retrieveAll();
 
+
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("medications", medications);
             
             if (appointment.getSchedule_type().equals(AppointmentTypeEnum.CONSULTATION)) basicRate = new BigDecimal(40);
             else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.HEALTH_CHECKUP)) basicRate = new BigDecimal(20);
             else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.VACCINATION)) basicRate = new BigDecimal(10);
             else  basicRate = new BigDecimal(40);
+
             
             appointment.setTotal_price(basicRate);
+
 
         } catch (NumberFormatException | AppointmentEntityException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error retrieving selected appointment.", null));
@@ -98,6 +105,7 @@ public class ServePatientManagedBean implements Serializable {
         for (Prescription p : appointment.getPrescriptions()) {
             total = total.add(p.getMedication().getPrice_per_quantity().multiply(new BigDecimal(p.getQuantity())));
         }
+
 
         appointment.setTotal_price(total.add(basicRate));
     }
@@ -196,6 +204,7 @@ public class ServePatientManagedBean implements Serializable {
 
     public void setBasicRate(BigDecimal basicRate) {
         this.basicRate = basicRate;
+
 
     }
 

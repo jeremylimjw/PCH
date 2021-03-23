@@ -301,6 +301,7 @@
                     
                     <p:tab title="Bill">
 <<<<<<< HEAD
+<<<<<<< HEAD
                         <p:dataTable var="c" value="#{servePatientManagedBean.basicRate}" emptyMessage="No items.">
                             
                             <p:column headerText="Basic Rate" colspan="7">
@@ -311,6 +312,12 @@
                             <p:column headerText="Consultation" colspan="7">
                                 <h:outputText value="Basic Rate" />
 >>>>>>> 0ca7f91... Fully functional patient serving
+=======
+                        <p:dataTable var="c" value="#{servePatientManagedBean.basicRate}" emptyMessage="No items.">
+                            
+                            <p:column headerText="Basic Rate" colspan="7">
+                                <h:outputText value="#{servePatientManagedBean.appointment.appointment_type.toString()}" />
+>>>>>>> 9678ac5... Added different rates for Consultation, Medical Checkup and Vaccination; Added SessionManagedBean
                             </p:column>
                             
                             <p:column headerText="Subtotal ">
@@ -322,10 +329,14 @@
                         </p:dataTable>
                         
 <<<<<<< HEAD
+<<<<<<< HEAD
                         <p:dataTable var="p" value="#{servePatientManagedBean.appointment.prescriptions}" emptyMessage="No prescriptions.">
 =======
                         <p:dataTable var="p" value="#{servePatientManagedBean.appointment.prescriptions}" emptyMessage="No items.">
 >>>>>>> 0ca7f91... Fully functional patient serving
+=======
+                        <p:dataTable var="p" value="#{servePatientManagedBean.appointment.prescriptions}" emptyMessage="No prescriptions.">
+>>>>>>> 9678ac5... Added different rates for Consultation, Medical Checkup and Vaccination; Added SessionManagedBean
                             
                             <p:column headerText="Medication ID">
                                 <h:outputText value="#{p.medication.id}" />
@@ -376,24 +387,20 @@
                 <div class="patient-notes">
                     <p:outputLabel for="patient_notes" value="Patient Notes" class="label-text"/>
                     <p:inputTextarea id="patient_notes" rows="8" placeholder="Write patient notes here." 
-<<<<<<< HEAD
+
                                      value="#{servePatientManagedBean.appointment.patient_notes}" 
-=======
-                                     value="#{servePatientManagedBean.appointment.description}" 
->>>>>>> 0ca7f91... Fully functional patient serving
+
                                      disabled="#{sessionScope.user.role != 'DOCTOR'}"/>
                 </div>
 
                 <div class="button-group">
                     
                     <h:button class="button red-button" value="BACK" outcome="index.xhtml"/>
-<<<<<<< HEAD
+
                     <h:commandButton class="button blue-button" value="SAVE AND COMPLETE TRANSACTION" style="width: auto;"
                                      actionListener="#{servePatientManagedBean.doUpdateRedirect}" 
                                      rendered="#{servePatientManagedBean.appointment.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}">
-=======
-                    <h:commandButton class="button blue-button" value="SAVE AND COMPLETE TRANSACTION" actionListener="#{servePatientManagedBean.doUpdateRedirect}" rendered="#{servePatientManagedBean.appointment.status == 'IN_PROGRESS' and sessionScope.user.role == 'DOCTOR'}" style="width: auto;">
->>>>>>> 0ca7f91... Fully functional patient serving
+
                         <f:ajax execute="@form" render="@form" />
                     </h:commandButton>
                     
