@@ -68,7 +68,7 @@ public class Api {
                 a.setQueue_no(q.getAppointment().getQueue_no());
                 
                 qb.add(0, new QueueBoardItem(e, a));
-            }//
+            }
             
             GenericEntity<List<QueueBoardItem>> genericEntity = new GenericEntity<List<QueueBoardItem>>(qb) { };    
             
