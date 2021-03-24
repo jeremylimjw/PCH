@@ -14,6 +14,7 @@ import entity.Prescription;
 import entity.QueueBoardItem;
 import entity.RequestBodyCreateAppointment;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +35,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import util.enumeration.AppointmentTypeEnum;
-import util.enumeration.StatusEnum;
 import util.exception.AppointmentEntityException;
 
 /**
@@ -59,18 +59,18 @@ public class Api {
     public Response getQueueBoard() {
         try {
             List<QueueBoardItem> queueBoard = queueBoardSessionBeanLocal.retrieveQueueBoard();
+            List<QueueBoardItem> qb = new ArrayList<>();
             
             for(QueueBoardItem q : queueBoard) {
-                for(Prescription p : q.getAppointment().getPrescriptions()) p.getMedication().getParent_medications().clear();
-                if (q.getAppointment().getEmployee() != null) q.getAppointment().getEmployee().getAppointments().clear();
-                q.getAppointment().getMedical_record().getAppointments().clear();
+                Employee e = new Employee();
+                e.setName(q.getEmployee().getName());
+                Appointment a = new Appointment();
+                a.setQueue_no(q.getAppointment().getQueue_no());
                 
-                
-                q.getEmployee().setAppointments(null);
-                q.getEmployee().setPassword(null);
+                qb.add(0, new QueueBoardItem(e, a));
             }
             
-            GenericEntity<List<QueueBoardItem>> genericEntity = new GenericEntity<List<QueueBoardItem>>(queueBoard) { };    
+            GenericEntity<List<QueueBoardItem>> genericEntity = new GenericEntity<List<QueueBoardItem>>(qb) { };    
             
             return Response.status(Response.Status.OK).entity(genericEntity).build();
         } catch(Exception ex) {
