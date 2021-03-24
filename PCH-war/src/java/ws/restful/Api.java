@@ -74,7 +74,6 @@ public class Api {
             
             return Response.status(Response.Status.OK).entity(genericEntity).build();
         } catch(Exception ex) {
-            System.out.println(ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
