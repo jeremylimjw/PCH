@@ -39,6 +39,9 @@ public class PrintReceiptManagedBean implements Serializable {
     @Inject
     private ServePatientManagedBean servePatientManagedBean;
 
+    @Inject
+    private ViewAppointmentManagedBean viewAppointmentManagedBean;
+
     public PrintReceiptManagedBean() {
     }
 
@@ -78,7 +81,7 @@ public class PrintReceiptManagedBean implements Serializable {
                 parameters.put("Consultation_type", "Consultation Type");
                 parameters.put("BasicRate", "Basic Rate : ");
                 parameters.put("basic_Rate", servePatientManagedBean.getBasicRate());
-              
+
                 InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/basic_invoice.jasper");
                 OutputStream outputStream = FacesContext.getCurrentInstance().getExternalContext().getResponseOutputStream();
 
@@ -94,14 +97,78 @@ public class PrintReceiptManagedBean implements Serializable {
 
     }
 
-   
+    public void printReceiptForDoc() {
+        if (!viewAppointmentManagedBean.getAppointment().getPrescriptions().isEmpty()) {
+
+            try {
+
+                HashMap parameters = new HashMap();
+                parameters.put("Invoice", "Invoice");
+                parameters.put("INPUT_ID", viewAppointmentManagedBean.getAppointment().getId());
+                parameters.put("TotalPrice", "Total Price: ");
+                parameters.put("Consultation_type", "Consultation Type");
+                parameters.put("BasicRate", "Basic Rate : ");
+                parameters.put("basic_Rate", viewAppointmentManagedBean.getBasicRate());
+                parameters.put("SubTotal", "Subtotal");
+                InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/invoice2.jasper");
+                OutputStream outputStream = FacesContext.getCurrentInstance().getExternalContext().getResponseOutputStream();
+
+                JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, pchDataSource.getConnection());
+
+            } catch (JRException ex) {
+                ex.printStackTrace();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            } catch (IOException ex) {
+            }
+
+        } else {
+
+            try {
+
+                HashMap parameters = new HashMap();
+                parameters.put("Invoice", "Invoice");
+                parameters.put("INPUT_ID", viewAppointmentManagedBean.getAppointment().getId());
+                parameters.put("TotalPrice", "Total Price: ");
+                parameters.put("Consultation_type", "Consultation Type");
+                parameters.put("BasicRate", "Basic Rate : ");
+                parameters.put("basic_Rate", viewAppointmentManagedBean.getBasicRate());
+
+                InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/basic_invoice.jasper");
+                OutputStream outputStream = FacesContext.getCurrentInstance().getExternalContext().getResponseOutputStream();
+
+                JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, pchDataSource.getConnection());
+
+            } catch (JRException ex) {
+                ex.printStackTrace();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            } catch (IOException ex) {
+            }
+        }
+
+    }
+
     public ServePatientManagedBean getServePatientManagedBean() {
         return servePatientManagedBean;
     }
 
-  
     public void setServePatientManagedBean(ServePatientManagedBean servePatientManagedBean) {
         this.servePatientManagedBean = servePatientManagedBean;
+    }
+
+    /**
+     * @return the viewAppointmentManagedBean
+     */
+    public ViewAppointmentManagedBean getViewAppointmentManagedBean() {
+        return viewAppointmentManagedBean;
+    }
+
+    /**
+     * @param viewAppointmentManagedBean the viewAppointmentManagedBean to set
+     */
+    public void setViewAppointmentManagedBean(ViewAppointmentManagedBean viewAppointmentManagedBean) {
+        this.viewAppointmentManagedBean = viewAppointmentManagedBean;
     }
 
 }
