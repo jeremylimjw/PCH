@@ -84,10 +84,11 @@ public class ViewAppointmentManagedBean implements Serializable {
         appointment.setTotal_price(total.add(basicRate));
     }
 
-    public void viewMc(ActionEvent event) {
+    public void viewMc(ActionEvent event) throws IOException {
 //        --- View MC Logic here ---
-
+        System.out.println("DONE");
         try {
+
             duration = appointment.getMedical_certificate().getEnd_date().getTime() - appointment.getMedical_certificate().getStart_date().getTime();
             long diff = TimeUnit.MILLISECONDS.toDays(duration) + 1;
             HashMap parameters = new HashMap();
@@ -110,21 +111,22 @@ public class ViewAppointmentManagedBean implements Serializable {
             parameters.put("line2", "________________________");
             parameters.put("line3", "_________________________");
             parameters.put("line4", "_________________________");
+           
 
             parameters.put("Dr_name", appointment.getEmployee().getName());
             InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/medicalcert.jasper");
             OutputStream outputStream = FacesContext.getCurrentInstance().getExternalContext().getResponseOutputStream();
 
             JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, pchDataSource.getConnection());
-
+            
         } catch (JRException ex) {
             ex.printStackTrace();
         } catch (SQLException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
         }
-
     }
+    
 
     public Appointment getAppointment() {
         return appointment;

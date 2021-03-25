@@ -14,10 +14,10 @@
 
         <h:panelGroup rendered="#{viewAppointmentManagedBean.appointment == null}" class="error-message">NO APPOINTMENT SELECTED</h:panelGroup>
 
-
         <h:panelGroup rendered="#{viewAppointmentManagedBean.appointment != null}">
-            <form>
-
+            
+            <h:form>
+                
                 <p:tabView>
                     <p:tab title="Details">
 
@@ -142,7 +142,7 @@
                                     </h:outputText>
 
                                     <h:commandButton class="button green-button" style="width: 100%; margin-top: 20px;" value="View MC" 
-                                                     actionListener="#{viewAppointmentManagedBean.viewMc}"  onclick ="this.form.target = '_blank'"/>
+                                                     actionListener="#{viewAppointmentManagedBean.viewMc}" onclick ="this.form.target = '_blank'"  />
 
                                 </h:panelGroup>
 
@@ -274,7 +274,9 @@
                     <h:button class="button red-button" value="BACK" outcome="manageAppointments.xhtml"/>
 
                 </div>
-            </form>
+            
+            </h:form>
+            
         </h:panelGroup>
 
     </ui:define>
