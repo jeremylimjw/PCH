@@ -56,7 +56,9 @@ public class ServePatientManagedBean implements Serializable {
 
     @EJB(name = "AppointmentSessionBeanLocal")
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
+    
     private List<Medication> medications;
+    
     private Appointment appointment;
     private Date mc_start_date;
     private Date mc_end_date;
@@ -102,7 +104,6 @@ public class ServePatientManagedBean implements Serializable {
         for (Prescription p : appointment.getPrescriptions()) {
             total = total.add(p.getMedication().getPrice_per_quantity().multiply(new BigDecimal(p.getQuantity())));
         }
-
         appointment.setTotal_price(total.add(basicRate));
     }
     
@@ -122,16 +123,16 @@ public class ServePatientManagedBean implements Serializable {
             
             // Check if medication stock satisfies
             for (Prescription p : set) {
-                if (p.getMedication().getQuantity_on_hand() < p.getQuantity()) {
-                    throw new AppointmentEntityException(p.getMedication().getName() + " does not have enough stock (Stock: " + p.getMedication().getQuantity_on_hand() + ").");
-                }
+                if (p.getMedication().getQuantity_on_hand() < p.getQuantity()) throw new AppointmentEntityException(p.getMedication().getName() + " does not have enough stock (Stock: " + p.getMedication().getQuantity_on_hand() + ").");
             }
             
             // Check if drug allergy conflicts
             for (Prescription p : set) {
                 for (String containing_drug : p.getMedication().getContaining_drugs()) {
                     for (String drug_allergy : appointment.getMedical_record().getDrug_allergys()) {
-                        if (containing_drug.toLowerCase().equals(drug_allergy.toLowerCase())) throw new AppointmentEntityException("Patient has drug allergy " + drug_allergy + " that is conflicted with " + p.getMedication().getName() + ".");
+                        if (containing_drug.toLowerCase().equals(drug_allergy.toLowerCase())) {
+                            throw new AppointmentEntityException("Patient has drug allergy " + drug_allergy + " that is conflicted with " + p.getMedication().getName() + ".");
+                        }
                     }
                 }
                 
@@ -156,6 +157,7 @@ public class ServePatientManagedBean implements Serializable {
                 MedicalCertificate mc = new MedicalCertificate(mc_start_date, mc_end_date, null);
                 appointment.setMedical_certificate(mc);
             }
+            
         }
         
         appointmentSessionBeanLocal.update(appointment);
@@ -173,7 +175,7 @@ public class ServePatientManagedBean implements Serializable {
     public void doUpdateRedirect() throws IOException {
         try {
             if (!appointment.getStatus().equals(StatusEnum.IN_PROGRESS)) throw new AppointmentEntityException("Patient is not called in or the appointment has past.");
-
+            
             validateAndUpdate();
             appointmentSessionBeanLocal.updateStatus(appointment.getId(), StatusEnum.COMPLETED);
             medicationEntitySessionBeanLocal.processPrescriptions(appointment.getPrescriptions()); //  This will throw error if somehow any quantity exceeds stock in hand
@@ -265,5 +267,5 @@ public class ServePatientManagedBean implements Serializable {
     public void setMedications(List<Medication> medications) {
         this.medications = medications;
     }
-
+    
 }
