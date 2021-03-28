@@ -190,7 +190,7 @@ public class ServePatientManagedBean implements Serializable {
 
         try {
 
-            duration = appointment.getMedical_certificate().getEnd_date().getTime() - appointment.getMedical_certificate().getStart_date().getTime();
+            long duration = appointment.getMedical_certificate().getEnd_date().getTime() - appointment.getMedical_certificate().getStart_date().getTime();
             long diff = TimeUnit.MILLISECONDS.toDays(duration) + 1;
             HashMap parameters = new HashMap();
             parameters.put("Title", "Medical Certificate");
