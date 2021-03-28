@@ -41,33 +41,26 @@ public class ViewAppointmentManagedBean implements Serializable {
 
     @Resource(name = "pchDataSource")
     private DataSource pchDataSource;
-
+    
     @EJB(name = "AppointmentSessionBeanLocal")
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
-
+    
     private BigDecimal basicRate = new BigDecimal(40);
     private Appointment appointment;
-    private Long duration;
-
+    
     public ViewAppointmentManagedBean() {
     }
-
+    
     @PostConstruct
     public void postConstruct() {
         try {
-
             Long id = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
             appointment = appointmentSessionBeanLocal.retrieveById(id);
 
-            if (appointment.getSchedule_type().equals(AppointmentTypeEnum.CONSULTATION)) {
-                basicRate = new BigDecimal(40);
-            } else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.HEALTH_CHECKUP)) {
-                basicRate = new BigDecimal(20);
-            } else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.VACCINATION)) {
-                basicRate = new BigDecimal(10);
-            } else {
-                basicRate = new BigDecimal(40);
-            }
+            if (appointment.getSchedule_type().equals(AppointmentTypeEnum.CONSULTATION)) basicRate = new BigDecimal(40);
+            else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.HEALTH_CHECKUP)) basicRate = new BigDecimal(20);
+            else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.VACCINATION)) basicRate = new BigDecimal(10);
+            else  basicRate = new BigDecimal(40);
 
             calculateTotal();
 
@@ -75,7 +68,7 @@ public class ViewAppointmentManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
     }
-
+    
     public void calculateTotal() {
         BigDecimal total = new BigDecimal(0);
         for (Prescription p : appointment.getPrescriptions()) {
@@ -83,13 +76,13 @@ public class ViewAppointmentManagedBean implements Serializable {
         }
         appointment.setTotal_price(total.add(basicRate));
     }
-
+    
     public void viewMc(ActionEvent event) throws IOException {
 //        --- View MC Logic here ---
         System.out.println("DONE");
         try {
 
-            duration = appointment.getMedical_certificate().getEnd_date().getTime() - appointment.getMedical_certificate().getStart_date().getTime();
+            long duration = appointment.getMedical_certificate().getEnd_date().getTime() - appointment.getMedical_certificate().getStart_date().getTime();
             long diff = TimeUnit.MILLISECONDS.toDays(duration) + 1;
             HashMap parameters = new HashMap();
             parameters.put("Title", "Medical Certificate");
@@ -127,7 +120,6 @@ public class ViewAppointmentManagedBean implements Serializable {
         }
     }
     
-
     public Appointment getAppointment() {
         return appointment;
     }
@@ -143,19 +135,5 @@ public class ViewAppointmentManagedBean implements Serializable {
     public void setBasicRate(BigDecimal basicRate) {
         this.basicRate = basicRate;
     }
-
-    /**
-     * @return the duration
-     */
-    public Long getDuration() {
-        return duration;
-    }
-
-    /**
-     * @param duration the duration to set
-     */
-    public void setDuration(Long duration) {
-        this.duration = duration;
-    }
-
+    
 }
