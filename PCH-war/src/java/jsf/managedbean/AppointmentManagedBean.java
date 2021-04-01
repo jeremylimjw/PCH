@@ -191,8 +191,6 @@ public class AppointmentManagedBean implements Serializable {
         } catch (AppointmentEntityException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
-        
-        getAllAppointmentsForToday();
     }
     
     // ---- FOR TESTING ONLY ----

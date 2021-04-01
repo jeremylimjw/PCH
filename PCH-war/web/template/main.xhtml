@@ -107,11 +107,9 @@
                 <h:commandButton class="button orange-button" value="CALL NEXT PATIENT" actionListener="#{appointmentManagedBean.callNextPatient()}" rendered="#{sessionScope.user.role == 'DOCTOR'}">
                     <f:ajax execute="@this" render="appointments queue callingQueueNo previousQueueNo" />
                 </h:commandButton>
-
-                <p:commandButton class="button orange-button" value="ADD WALK-IN APPT" update="formAddWalkIn" oncomplete="PF('dialogAddWalkIn').show()" rendered="#{sessionScope.user.role == 'NURSE'}">
-                    <f:ajax execute="@this" render="queue queueCount" />
-                </p:commandButton>
-
+                
+                <ui:insert name="subheader"></ui:insert>
+                
                 <button class="button orange-button" onclick="window.open('chat.xhtml', 'newwindow', 'width=800,height=500'); return false;">CHAT</button>
             </div>
         </div>
@@ -130,35 +128,7 @@
             <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
             <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" />
         </p:confirmDialog>
-
-        <h:form id="formAddWalkIn">
-            <p:dialog id="dialogAddWalkIn" widgetVar="dialogAddWalkIn" header="Add New Walk-In Appointment" closable="true">
-                <p:panelGrid>
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="medRecordNric" value="Enter patient NRIC"/>
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="medRecordNric" value="#{appointmentManagedBean.patientNric}" placeholder="S9123456A"/>
-                        </p:column>
-                    </p:row>
-
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="selApptType" value="Select Appointment Type"/>
-                        </p:column>
-                        <p:column>
-                            <p:selectOneMenu id="selApptType" value="#{appointmentManagedBean.appointmentType}">
-                                <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true" />
-                                <f:selectItems value="#{appointmentManagedBean.appointmentTypeEnum}"/>
-                            </p:selectOneMenu>
-                        </p:column>
-                    </p:row>
-                </p:panelGrid>
-
-                <p:commandButton value="Add Walk-In" update="@form queueCount" actionListener="#{appointmentManagedBean.addWalkInAppointment}" oncomplete="PF('dialogAddWalkIn').show();"/>
-            </p:dialog>
-        </h:form>
+        
 
     </h:body>
 
