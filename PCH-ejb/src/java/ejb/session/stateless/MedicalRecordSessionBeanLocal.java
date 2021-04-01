@@ -31,4 +31,6 @@ public interface MedicalRecordSessionBeanLocal {
     public void updateMedicalRecord(MedicalRecord medicalRecord) throws MedicalRecordNotFoundException, MedicalRecordEntityException;
 
     public MedicalRecord retrieveById(Long id) throws MedicalRecordEntityException;
+
+    public MedicalRecord retrieveMedicalRecordByNRIC(String patientNric) throws MedicalRecordNotFoundException;
 }

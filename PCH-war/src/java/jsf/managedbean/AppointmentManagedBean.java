@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -32,6 +33,7 @@ import util.enumeration.ScheduleTypeEnum;
 import util.enumeration.StatusEnum;
 import util.exception.AppointmentEntityException;
 import util.exception.EmployeeEntityException;
+import util.exception.MedicalRecordNotFoundException;
 
 /**
  *
@@ -167,28 +169,12 @@ public class AppointmentManagedBean implements Serializable {
         }
     }
     
-//    public void addAppointment(ActionEvent event) {
-//        Employee doctorSelected = (Employee)event.getComponent().getAttributes().get("doctorSelected");
-//        MedicalRecord selectedMedicalRecord = (MedicalRecord)event.getComponent().getAttributes().get("selectedMedicalRecord");
-//        
-//        
-//        try {
-//            appointmentSessionBeanLocal.createAppointment(doctorSelected.getId(), selectedMedicalRecord.getId(), dateOfAppointment, appointmentType);
-//        } catch (AppointmentEntityException ex) {
-//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
-//        }
-//        
-//        getAllAppointmentsForToday();
-//    }
-    
     public void addWalkInAppointment(ActionEvent event) {
-        
-        MedicalRecord selectedMedicalRecord = medicalRecordSessionBean.searchMedicalRecordsByNRIC(patientNric).get(0);
-        
         try {
+            MedicalRecord selectedMedicalRecord = medicalRecordSessionBean.retrieveMedicalRecordByNRIC(patientNric);
             appointmentSessionBeanLocal.createWalkIn(selectedMedicalRecord.getId(), appointmentType);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Walk-in Appointment has been created for patient record " + selectedMedicalRecord.getNric(), null));
-        } catch (AppointmentEntityException ex) {
+        } catch (AppointmentEntityException | MedicalRecordNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
     }

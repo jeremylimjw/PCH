@@ -72,7 +72,7 @@
                             <p:outputLabel for="medRecordNric" value="Enter patient NRIC"/>
                         </p:column>
                         <p:column>
-                            <p:inputText id="medRecordNric" value="#{appointmentManagedBean.patientNric}" placeholder="S9123456A"/>
+                            <p:inputText id="medRecordNric" value="#{appointmentManagedBean.patientNric}" placeholder="S1234567A" required="true" requiredMessage="NRIC is required!"/>
                         </p:column>
                     </p:row>
 
@@ -81,7 +81,7 @@
                             <p:outputLabel for="selApptType" value="Select Appointment Type"/>
                         </p:column>
                         <p:column>
-                            <p:selectOneMenu id="selApptType" value="#{appointmentManagedBean.appointmentType}">
+                            <p:selectOneMenu id="selApptType" value="#{appointmentManagedBean.appointmentType}" required="true" requiredMessage="Please select appointment type!">
                                 <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true" />
                                 <f:selectItems value="#{appointmentManagedBean.appointmentTypeEnum}"/>
                             </p:selectOneMenu>
