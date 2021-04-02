@@ -18,7 +18,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -62,16 +61,16 @@ public class AppointmentManagedBean implements Serializable {
     private List<Appointment> appointments;
     private List<Appointment> queue;
     private List<Employee> doctors;
-    private Date dateOfAppointment;
     private AppointmentTypeEnum appointmentType;
     private String patientNric;
+    private MedicalRecord retrievedMedicalRecord;
     
     public AppointmentManagedBean() {
         appointments = new ArrayList<>();
         queue = new LinkedList<>();
         doctors = new ArrayList<>();
-        dateOfAppointment = new Date();
         patientNric = "";
+        retrievedMedicalRecord = new MedicalRecord();
     }
     
     @PostConstruct
@@ -171,9 +170,9 @@ public class AppointmentManagedBean implements Serializable {
     
     public void addWalkInAppointment(ActionEvent event) {
         try {
-            MedicalRecord selectedMedicalRecord = medicalRecordSessionBean.retrieveMedicalRecordByNRIC(patientNric);
-            appointmentSessionBeanLocal.createWalkIn(selectedMedicalRecord.getId(), appointmentType);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Walk-in Appointment has been created for patient record " + selectedMedicalRecord.getNric(), null));
+            retrievedMedicalRecord = medicalRecordSessionBean.retrieveMedicalRecordByNRIC(patientNric);
+            appointmentSessionBeanLocal.createWalkIn(retrievedMedicalRecord.getId(), appointmentType);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Walk-in Appointment has been created for patient record " + retrievedMedicalRecord.getNric(), null));
         } catch (AppointmentEntityException | MedicalRecordNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
@@ -236,14 +235,6 @@ public class AppointmentManagedBean implements Serializable {
         this.doctors = doctors;
     }
 
-    public Date getDateOfAppointment() {
-        return dateOfAppointment;
-    }
-
-    public void setDateOfAppointment(Date dateOfAppointment) {
-        this.dateOfAppointment = dateOfAppointment;
-    }
-
     public AppointmentTypeEnum getAppointmentType() {
         return appointmentType;
     }
@@ -258,5 +249,13 @@ public class AppointmentManagedBean implements Serializable {
 
     public void setPatientNric(String patientNric) {
         this.patientNric = patientNric;
+    }
+
+    public MedicalRecord getRetrievedMedicalRecord() {
+        return retrievedMedicalRecord;
+    }
+
+    public void setRetrievedMedicalRecord(MedicalRecord retrievedMedicalRecord) {
+        this.retrievedMedicalRecord = retrievedMedicalRecord;
     }
 }
