@@ -128,9 +128,7 @@
                                                 <h:outputText value="#{viewMedicalRecordDetailsManagedBean.record.past_medical_historys[index] != '' ? viewMedicalRecordDetailsManagedBean.record.past_medical_historys[index] : 'Click to edit'}" />
                                             </f:facet>
                                             <f:facet name="input">
-                                                <p:inputText value="#{viewMedicalRecordDetailsManagedBean.record.past_medical_historys[index]}" style="width:100%;" >
-                                                    <p:ajax event="blur" update="@form"/>
-                                                </p:inputText> 
+                                                <p:inputText value="#{viewMedicalRecordDetailsManagedBean.record.past_medical_historys[index]}" style="width:100%;" />
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>
@@ -157,12 +155,10 @@
 
                                         <p:cellEditor>
                                             <f:facet name="output">
-                                                <h:outputText value="#{viewMedicalRecordDetailsManagedBean.record.family_historys[index] != '' ? viewMedicalRecordDetailManagedBean.record.family_historys[index] : 'Click to edit'}" />
+                                                <h:outputText value="#{viewMedicalRecordDetailsManagedBean.record.family_historys[index] != '' ? viewMedicalRecordDetailsManagedBean.record.family_historys[index] : 'Click to edit'}" />
                                             </f:facet>
                                             <f:facet name="input">
-                                                <p:inputText value="#{viewMedicalRecordDetailsManagedBean.record.family_historys[index]}" style="width:100%;">
-                                                    <p:ajax event="blur" update="@form"/>
-                                                </p:inputText>
+                                                <p:inputText value="#{viewMedicalRecordDetailsManagedBean.record.family_historys[index]}" style="width:100%;" />
                                             </f:facet>
                                         </p:cellEditor>
 
@@ -193,12 +189,10 @@
 
                                         <p:cellEditor>
                                             <f:facet name="output">
-                                                <h:outputText value="#{viewMedicalRecordDetailsManagedBean.record.vaccinations[index] != '' ? viewMedicalRecordDetailManagedBean.record.vaccinations[index] : 'Click to edit'}" />
+                                                <h:outputText value="#{viewMedicalRecordDetailsManagedBean.record.vaccinations[index] != '' ? viewMedicalRecordDetailsManagedBean.record.vaccinations[index] : 'Click to edit'}" />
                                             </f:facet>
                                             <f:facet name="input">
-                                                <p:inputText value="#{viewMedicalRecordDetailsManagedBean.record.vaccinations[index]}" style="width:100%;" >
-                                                    <p:ajax event="blur" update="@form"/>
-                                                </p:inputText>
+                                                <p:inputText value="#{viewMedicalRecordDetailsManagedBean.record.vaccinations[index]}" style="width:100%;" />
                                             </f:facet>
                                         </p:cellEditor>
 
