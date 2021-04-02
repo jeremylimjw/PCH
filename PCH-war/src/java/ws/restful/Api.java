@@ -17,7 +17,7 @@ import entity.Prescription;
 import entity.QueueBoardItem;
 import entity.RequestBodyCreateAppointment;
 import entity.RequestBodyPatientLogin;
-import entity.RequestBodyPatientUpdate;
+import entity.RequestBodyPatientPassword;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -250,30 +250,11 @@ public class Api {
         }
     }
     
-    @Path("patient/update")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response patientUpdateEmail(RequestBodyPatientUpdate p) {
-        try {
-            Patient patient = patientSessionBeanLocal.retrieveById(p.getId());
-            
-            patient.setEmail(p.getEmail());
-            patientSessionBeanLocal.updatePatientDetails(patient);
-            
-            return Response.status(Response.Status.OK).build();
-        } catch (PatientEntityException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
-        } catch(Exception ex) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-        }
-    }
-    
     @Path("patient/changePassword")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response patientUpdatePassword(RequestBodyPatientUpdate p) {
+    public Response patientUpdatePassword(RequestBodyPatientPassword p) {
         try {
             Patient patient = patientSessionBeanLocal.retrieveById(p.getId());
             
