@@ -110,9 +110,9 @@
                                 <ui:repeat value="#{viewAppointmentManagedBean.appointment.prescriptions}" var="p" varStatus="myVarStatus" >
                                     <div class="dynamic-item" style="margin-bottom: 5px;">
 
-                                        <h:outputText style="width: 60%;" value="#{viewAppointmentManagedBean.appointment.prescriptions[myVarStatus.index].medication}" />
+                                        <h:outputText style="width: 60%;" value="#{viewAppointmentManagedBean.appointment.prescriptions[myVarStatus.index].medication.name} - " />
                                         
-                                        <h:outputText style="width: 15%;" value="#{viewAppointmentManagedBean.appointment.prescriptions[myVarStatus.index].quantity}" />
+                                        <h:outputText style="width: 15%;" value="x#{viewAppointmentManagedBean.appointment.prescriptions[myVarStatus.index].quantity}" />
                                         
                                     </div>
                                 </ui:repeat>
