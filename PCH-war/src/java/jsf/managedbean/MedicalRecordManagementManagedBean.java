@@ -7,6 +7,8 @@ package jsf.managedbean;
 
 import ejb.session.stateless.MedicalRecordSessionBeanLocal;
 import entity.MedicalRecord;
+import java.io.Console;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -21,6 +23,7 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import util.exception.InputDataValidationException;
+import util.exception.MedicalRecordEntityException;
 
 /**
  *
@@ -36,7 +39,6 @@ public class MedicalRecordManagementManagedBean implements Serializable {
     private MedicalRecord newRecord;
     private List<MedicalRecord> records;
     private List<MedicalRecord> filteredRecords;
-    
     private String searchString;
     
     /**
@@ -45,6 +47,8 @@ public class MedicalRecordManagementManagedBean implements Serializable {
     public MedicalRecordManagementManagedBean() {
         newRecord = new MedicalRecord();
         records = new ArrayList<>();
+        filteredRecords = records;
+        searchString = "";
     }
     
     @PostConstruct
@@ -52,13 +56,23 @@ public class MedicalRecordManagementManagedBean implements Serializable {
         records = medicalRecordSessionBeanLocal.retrieveAllMedicalRecords();
     }
     
-    public void createNewMedicalRecord(ActionEvent event) throws InputDataValidationException {
+    public void createNewMedicalRecord(ActionEvent event) throws InputDataValidationException, MedicalRecordEntityException {
         newRecord.setDate_created(new Date());
+        List<String> help = new ArrayList<>();
+        help.add("");
+        newRecord.setDrug_allergys(new ArrayList<>());
+        newRecord.setFamily_historys(help);
+        newRecord.setPast_medical_historys(help);
+        newRecord.setVaccinations(help);
         Long newRecordId = medicalRecordSessionBeanLocal.createNewMedicalRecord(newRecord);
-        
+        //newRecord = medicalRecordSessionBeanLocal.retrieveById(newRecordId);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Medical Record created successfully!", "New Record ID: " + newRecordId));
         
-        System.out.println("********** CreateNewRecordManagedBean.createNewRecord: " + event.getComponent().getAttributes().get("test"));
+        System.out.println("********** MedicalRecordManagementManagedBean.createNewMedicalRecord: " + event.getComponent().getAttributes().get("test"));
+    }
+    
+    public void clearNewRecord() {
+        newRecord = new MedicalRecord();
     }
     
         /**
@@ -109,6 +123,16 @@ public class MedicalRecordManagementManagedBean implements Serializable {
         } else {
             filteredRecords = medicalRecordSessionBeanLocal.searchMedicalRecordsByName(searchString);
         }
+    }
+    
+    public void viewMedicalRecordDetails(ActionEvent event) throws IOException {
+        System.out.println("reached2");
+        Long recordIdToView = (Long)event.getComponent().getAttributes().get("recordId");
+//        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("recordIdToView", recordIdToView);
+//        FacesContext.getCurrentInstance().getExternalContext().redirect("viewMedicalRecordDetails.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/viewMedicalRecordDetails.xhtml?id=" + recordIdToView);
+
+        System.out.println("reached");
     }
     
 }

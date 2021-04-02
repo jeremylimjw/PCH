@@ -8,8 +8,10 @@ package ws.restful;
 import ejb.session.singleton.QueueBoardSessionBeanLocal;
 import ejb.session.stateless.AppointmentSessionBeanLocal;
 import ejb.session.stateless.EmployeeEntitySessionBeanLocal;
+import ejb.session.stateless.PatientEntitySessionBeanLocal;
 import entity.Appointment;
 import entity.Employee;
+import entity.Patient;
 import entity.Prescription;
 import entity.QueueBoardItem;
 import entity.RequestBodyCreateAppointment;
@@ -36,6 +38,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import util.enumeration.AppointmentTypeEnum;
 import util.exception.AppointmentEntityException;
+import util.exception.InputDataValidationException;
+import util.exception.MedicalRecordNotFoundException;
 
 /**
  *
@@ -43,10 +47,12 @@ import util.exception.AppointmentEntityException;
  */
 @Path("/")
 public class Api {
-    
+
+    private PatientEntitySessionBeanLocal patientEntitySessionBeanLocal = lookupPatientEntitySessionBeanLocal();
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
     private EmployeeEntitySessionBeanLocal employeeEntitySessionBeanLocal;
     private QueueBoardSessionBeanLocal queueBoardSessionBeanLocal;
+    
     
     public Api() {
         hookUpJNDI();
@@ -189,12 +195,37 @@ public class Api {
         }
     }
     
+//    @Path("register")
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response createPatientAccount(Patient a, String NRIC) {
+//        try {
+//            Long id = patientEntitySessionBeanLocal.createNewPatient(a, NRIC);
+//            return Response.status(Response.Status.OK).entity(id).build();
+//        } catch(MedicalRecordNotFoundException ex) {            
+//            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+//        } catch(InputDataValidationException ex) {
+//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+//        }
+//    }
+    
     private void hookUpJNDI() {
         try {
             javax.naming.Context c = new InitialContext();
             appointmentSessionBeanLocal = (AppointmentSessionBeanLocal) c.lookup("java:global/PCH/PCH-ejb/AppointmentSessionBean!ejb.session.stateless.AppointmentSessionBeanLocal");
             employeeEntitySessionBeanLocal = (EmployeeEntitySessionBeanLocal) c.lookup("java:global/PCH/PCH-ejb/EmployeeEntitySessionBean!ejb.session.stateless.EmployeeEntitySessionBeanLocal");
             queueBoardSessionBeanLocal = (QueueBoardSessionBeanLocal) c.lookup("java:global/PCH/PCH-ejb/QueueBoardSessionBean!ejb.session.singleton.QueueBoardSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private PatientEntitySessionBeanLocal lookupPatientEntitySessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (PatientEntitySessionBeanLocal) c.lookup("java:global/PCH/PCH-ejb/PatientEntitySessionBean!ejb.session.stateless.PatientEntitySessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

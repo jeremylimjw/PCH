@@ -8,6 +8,8 @@ package ejb.session.stateless;
 import entity.Patient;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.InputDataValidationException;
+import util.exception.MedicalRecordNotFoundException;
 
 /**
  *
@@ -17,5 +19,7 @@ import javax.ejb.Local;
 public interface PatientEntitySessionBeanLocal {
 
     public List<Patient> retrieveAllPatients();
+
+    public Long createNewPatient(Patient newPatient, String NRIC) throws MedicalRecordNotFoundException, InputDataValidationException;
     
 }

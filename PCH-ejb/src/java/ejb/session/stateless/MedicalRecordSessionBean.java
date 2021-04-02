@@ -7,10 +7,12 @@ package ejb.session.stateless;
 
 import entity.MedicalRecord;
 import entity.Appointment;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -162,5 +164,7 @@ public class MedicalRecordSessionBean implements MedicalRecordSessionBeanLocal {
         
         return str;
     }
+    
+    
     
 }
