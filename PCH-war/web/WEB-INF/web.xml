@@ -25,24 +25,20 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
-    
     <context-param>
         <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
         <param-value>true</param-value>
     </context-param>
-    
     <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>bootstrap</param-value>
     </context-param>
-    
-<!--    COMMENTED THIS OUT TO PREVENT INTERFERENCE WITH DEVELOPMENT
+    <!--    COMMENTED THIS OUT TO PREVENT INTERFERENCE WITH DEVELOPMENT
     <context-param>
         <param-name>javax.faces.ENABLE_WEBSOCKET_ENDPOINT</param-name>
         <param-value>true</param-value>
     </context-param>-->
-    
-<!--    NOT WORKING. DO NOT UNCOMMENT
+    <!--    NOT WORKING. DO NOT UNCOMMENT
         <security-constraint>
         <display-name>Secured Resources</display-name>
         <web-resource-collection>
@@ -55,4 +51,10 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>-->
+    <ejb-local-ref>
+        <ejb-ref-name>MedicalRecordSessionBean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.MedicalRecordSessionBeanLocal</local>
+        <ejb-link>PCH-ejb.jar#MedicalRecordSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>
