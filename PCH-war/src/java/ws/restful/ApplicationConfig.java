@@ -19,6 +19,8 @@ public class ApplicationConfig extends Application {
     }
     
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(ws.restful.Api.class);
+        resources.add(ws.restful.MedicalRecordResource.class);
     }    
 }
 

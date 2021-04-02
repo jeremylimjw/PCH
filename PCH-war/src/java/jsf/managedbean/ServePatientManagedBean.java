@@ -69,8 +69,6 @@ public class ServePatientManagedBean implements Serializable {
     private Date mc_start_date;
     private Date mc_end_date;
 
-    private Long duration;
-
     private BigDecimal basicRate = new BigDecimal(40);
 
     public ServePatientManagedBean() {
@@ -90,18 +88,12 @@ public class ServePatientManagedBean implements Serializable {
 
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("medications", medications);
 
-
-            if (appointment.getSchedule_type().equals(AppointmentTypeEnum.CONSULTATION)) {
-                basicRate = new BigDecimal(40);
-            } else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.HEALTH_CHECKUP)) {
-                basicRate = new BigDecimal(20);
-            } else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.VACCINATION)) {
-                basicRate = new BigDecimal(10);
-            } else {
-                basicRate = new BigDecimal(40);
-            }
-
-
+            
+            if (appointment.getSchedule_type().equals(AppointmentTypeEnum.CONSULTATION)) basicRate = new BigDecimal(40);
+            else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.HEALTH_CHECKUP)) basicRate = new BigDecimal(20);
+            else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.VACCINATION)) basicRate = new BigDecimal(10);
+            else basicRate = new BigDecimal(40);
+            
 
             appointment.setTotal_price(basicRate);
 
@@ -171,7 +163,7 @@ public class ServePatientManagedBean implements Serializable {
                 // Check if conflicting medications exists
                 for (Medication cm : p.getMedication().getConflicting_medications()) {
                     for (Prescription m : set) {
-                        if (m.getMedication().equals(cm)) throw new AppointmentEntityException("Medication " + p.getMedication().getName() + " is conflicted with " + m.getMedication().getName()+ ".");
+                        if (m.getMedication().equals(cm)) throw new AppointmentEntityException("Medication " + p.getMedication().getName() + " is conflicted with " + m.getMedication().getName() + ".");
                     }
                 }
 
@@ -235,12 +227,16 @@ public class ServePatientManagedBean implements Serializable {
         }
     }
 
+    
+
     public void viewMc(ActionEvent event) throws IOException {
 //        --- View MC Logic here ---
 
         try {
 
-            duration = appointment.getMedical_certificate().getEnd_date().getTime() - appointment.getMedical_certificate().getStart_date().getTime();
+
+            long duration = appointment.getMedical_certificate().getEnd_date().getTime() - appointment.getMedical_certificate().getStart_date().getTime();
+
             long diff = TimeUnit.MILLISECONDS.toDays(duration) + 1;
             HashMap parameters = new HashMap();
             parameters.put("Title", "Medical Certificate");
@@ -319,18 +315,5 @@ public class ServePatientManagedBean implements Serializable {
         this.medications = medications;
     }
 
-    /**
-     * @return the duration
-     */
-    public Long getDuration() {
-        return duration;
-    }
-
-    /**
-     * @param duration the duration to set
-     */
-    public void setDuration(Long duration) {
-        this.duration = duration;
-    }
 
 }

@@ -39,9 +39,10 @@ import util.exception.AppointmentEntityException;
 @ViewScoped
 public class ViewAppointmentManagedBean implements Serializable {
 
+
     @Resource(name = "pchDataSource")
     private DataSource pchDataSource;
-
+    
     @EJB(name = "AppointmentSessionBeanLocal")
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
 
@@ -59,15 +60,12 @@ public class ViewAppointmentManagedBean implements Serializable {
             Long id = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
             appointment = appointmentSessionBeanLocal.retrieveById(id);
 
-            if (appointment.getSchedule_type().equals(AppointmentTypeEnum.CONSULTATION)) {
-                basicRate = new BigDecimal(40);
-            } else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.HEALTH_CHECKUP)) {
-                basicRate = new BigDecimal(20);
-            } else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.VACCINATION)) {
-                basicRate = new BigDecimal(10);
-            } else {
-                basicRate = new BigDecimal(40);
-            }
+
+            if (appointment.getSchedule_type().equals(AppointmentTypeEnum.CONSULTATION)) basicRate = new BigDecimal(40);
+            else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.HEALTH_CHECKUP)) basicRate = new BigDecimal(20);
+            else if (appointment.getSchedule_type().equals(AppointmentTypeEnum.VACCINATION)) basicRate = new BigDecimal(10);
+            else  basicRate = new BigDecimal(40);
+
 
             calculateTotal();
 
@@ -84,12 +82,16 @@ public class ViewAppointmentManagedBean implements Serializable {
         appointment.setTotal_price(total.add(basicRate));
     }
 
+    
+
     public void viewMc(ActionEvent event) throws IOException {
 //        --- View MC Logic here ---
         System.out.println("DONE");
         try {
 
-            duration = appointment.getMedical_certificate().getEnd_date().getTime() - appointment.getMedical_certificate().getStart_date().getTime();
+
+            long duration = appointment.getMedical_certificate().getEnd_date().getTime() - appointment.getMedical_certificate().getStart_date().getTime();
+
             long diff = TimeUnit.MILLISECONDS.toDays(duration) + 1;
             HashMap parameters = new HashMap();
             parameters.put("Title", "Medical Certificate");
@@ -113,6 +115,7 @@ public class ViewAppointmentManagedBean implements Serializable {
             parameters.put("line4", "_________________________");
            
 
+
             parameters.put("Dr_name", appointment.getEmployee().getName());
             InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/medicalcert.jasper");
             OutputStream outputStream = FacesContext.getCurrentInstance().getExternalContext().getResponseOutputStream();
@@ -126,8 +129,8 @@ public class ViewAppointmentManagedBean implements Serializable {
         } catch (IOException ex) {
         }
     }
-    
 
+    
     public Appointment getAppointment() {
         return appointment;
     }
