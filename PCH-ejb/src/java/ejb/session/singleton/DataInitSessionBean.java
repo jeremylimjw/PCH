@@ -61,8 +61,13 @@ public class DataInitSessionBean {
                         new ArrayList<>(Arrays.asList("Ibuprofen", "Drug 1", "Drug 2", "Drug 3")), 
                         new ArrayList<>(Arrays.asList("Family History 1", "Family History 2", "Family History 3")), 
                         new ArrayList<>(Arrays.asList("Past History 1", "Past History 2", "Past History 3")), 
-                        new ArrayList<>(Arrays.asList("Vaccination 1", "Vaccination 2", "Vaccination 3"))); em.persist(desmondRecord);
+                        new ArrayList<>(Arrays.asList("Vaccination 1", "Vaccination 2", "Vaccination 3")));
                 Patient desmond = new Patient("desmond", "password", "desmond@gmail.com", desmondRecord); em.persist(desmond);
+                
+                MedicalRecord ericRecord = new MedicalRecord("Eric", "S92726521F", "address1", 
+                        new SimpleDateFormat("dd/MM/yyyy").parse("20/6/1996"), "83873682", "O", 
+                        new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()); 
+                Patient eric = new Patient("eric", "password", "eric@gmail.com", ericRecord); em.persist(eric);
 
             } catch (ParseException ex) {
                 System.out.println(ex.getMessage());

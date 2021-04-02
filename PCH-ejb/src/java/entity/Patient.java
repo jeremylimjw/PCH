@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -55,7 +56,7 @@ public class Patient implements Serializable {
     @NotNull
     private Date date_created;
     
-    @OneToOne(mappedBy = "patient")
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(nullable = false)
     @NotNull
     private MedicalRecord medical_record;

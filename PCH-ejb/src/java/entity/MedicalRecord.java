@@ -82,7 +82,7 @@ public class MedicalRecord implements Serializable {
     @OneToMany(mappedBy = "medical_record", fetch = FetchType.EAGER)
     private List<Appointment> appointments;
     
-    @OneToOne
+    @OneToOne(mappedBy = "medical_record")
     private Patient patient;
 
     public MedicalRecord() {
@@ -205,6 +205,14 @@ public class MedicalRecord implements Serializable {
 
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     @Override
