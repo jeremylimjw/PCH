@@ -203,8 +203,10 @@ public class Api {
         try {
             Patient patient = patientSessionBeanLocal.login(p.getUsername(), p.getPassword());
             
-            if (patient.getMedical_record() != null && patient.getMedical_record().getAppointments() != null)
+            if (patient.getMedical_record() != null && patient.getMedical_record().getAppointments() != null) {
+                patient.getMedical_record().setPatient(null);
                 patient.getMedical_record().getAppointments().clear();
+            }
             
             return Response.status(Response.Status.OK).entity(patient).build();
         } catch(PatientEntityException ex) {
