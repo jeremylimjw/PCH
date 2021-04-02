@@ -56,4 +56,15 @@ public class QueueBoardSessionBean implements QueueBoardSessionBeanLocal {
     public List<QueueBoardItem> retrieveQueueBoard() {
         return queueBoard;
     }
+
+    @Override
+    public List<QueueBoardItem> getQueueBoard() {
+        return queueBoard;
+    }
+    
+    @Override
+    public void setQueueBoard(List<QueueBoardItem> queueBoard) {
+        this.queueBoard = queueBoard;
+    }
+    
 }

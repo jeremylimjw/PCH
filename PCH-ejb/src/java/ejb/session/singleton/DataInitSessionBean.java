@@ -11,6 +11,7 @@ import entity.Employee;
 import entity.MedicalRecord;
 import entity.Medication;
 import entity.Patient;
+import entity.QueueBoardItem;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,7 +46,11 @@ import util.exception.AppointmentEntityException;
 public class DataInitSessionBean {
 
     @EJB
+    private QueueBoardSessionBeanLocal queueBoardSessionBeanLocal;
+
+    @EJB
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
+    
     
     @PersistenceContext(unitName = "PCH-ejbPU")
     private EntityManager em;
@@ -81,20 +86,45 @@ public class DataInitSessionBean {
                 Patient eric = new Patient("eric", "password", "eric@gmail.com", ericRecord); em.persist(eric);
                 
 
+                generateAppointments();
             } catch (ParseException ex) {
                 System.out.println(ex.getMessage());
             }
 
         }
         
-        generateAppointments();
+        generateQueueBoard();
+    }
+    
+    private void generateQueueBoard() {
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.status IN (?1,?2) ORDER BY a.date_time DESC");
+        query.setParameter(1, StatusEnum.COMPLETED);
+        query.setParameter(2, StatusEnum.MISSED);
+        query.setMaxResults(100);
+        List<Appointment> appointments = query.getResultList();
+        
+        List<QueueBoardItem> qb = new ArrayList<>();
+        for (Appointment a : appointments) qb.add(new QueueBoardItem(a.getEmployee(), a));
+        
+        queueBoardSessionBeanLocal.setQueueBoard(qb);
     }
     
     private void generateAppointments() {
         
-        double p = 0.8; // probability for a time slot to be booked
+        double p = 0.9; // probability for a time slot to be booked
         int monthsBefore = -1; // how far before to add appointments since
-        int monthsAfter = 1; // how far after to add apopintments til
+        int monthsAfter = 1; // how far after to add appointments til
+        
+        double p_consultation = 0.7; // probability of an appointment being a consultation
+        double p_checkup = 0.2; // probability of an appointment being a health checkup
+        double p_vaccination = 1 - p_consultation - p_checkup; // probability of an appointment being a vaccination
+        
+        double p_appointment = 0.8;
+        double p_walkin = 1 - p_appointment;
+        
+        double p_completed = 0.8; // probability of past appointments being completed
+        double p_cancelled = 0.1; // probability of past appointments being cancelled
+        double p_missed = 1 - p_completed - p_cancelled; // probability of past appointments being missed
         
         Query query1 = em.createQuery("SELECT e FROM Employee e WHERE e.role = ?1");
         query1.setParameter(1, RoleEnum.DOCTOR);
@@ -113,24 +143,84 @@ public class DataInitSessionBean {
         c.add(Calendar.MONTH, monthsBefore);
         c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), 1, 0, 0, 0);
 
-        Calendar today = Calendar.getInstance();
-        today.set(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DATE), 0, 0, 0);
+        Calendar upperBound = Calendar.getInstance();
+        upperBound.set(upperBound.get(Calendar.YEAR), upperBound.get(Calendar.MONTH), upperBound.get(Calendar.DATE), 0, 0, 0);
+        
+        // --- Start of randomizing past appointments ---
+        while (c.getTime().getTime() < upperBound.getTime().getTime()) {
+            
+            if (c.get(Calendar.DAY_OF_WEEK) != 1 && c.get(Calendar.DAY_OF_WEEK) != 7) {
+                
+                for (int i = 0; i < times.length; i++) {
+                    c.set(Calendar.HOUR_OF_DAY, times[i][0]);
+                    c.set(Calendar.MINUTE, times[i][1]);
 
-        while (c.getTime().getTime() < today.getTime().getTime() && c.get(Calendar.DAY_OF_WEEK) != 1 && c.get(Calendar.DAY_OF_WEEK) != 7) {
-
-            for (int i = 0; i < times.length; i++) {
-                c.set(Calendar.HOUR_OF_DAY, times[i][0]);
-                c.set(Calendar.MINUTE, times[i][1]);
-
-                if(random.nextDouble() < p) {
-                    Appointment a = new Appointment(doctors.get(i%doctorsSize), medical_records.get((i%mrsSize)), c.getTime(), ScheduleTypeEnum.APPOINTMENT, AppointmentTypeEnum.CONSULTATION, StatusEnum.BOOKED);
-                    em.persist(a);
-                    a.setQueue_no(String.format("A%03d", a.getId()));
+                    if(random.nextDouble() < p) {
+                        
+                        double p_type = random.nextDouble();
+                        AppointmentTypeEnum type;
+                        if (p_type < p_vaccination) type = AppointmentTypeEnum.VACCINATION;
+                        else if (p_type < p_vaccination + p_checkup) type = AppointmentTypeEnum.HEALTH_CHECKUP;
+                        else type = AppointmentTypeEnum.CONSULTATION;
+                        
+                        double p_appointmentType = random.nextDouble();
+                        ScheduleTypeEnum appointmentType;
+                        if (p_appointmentType < p_walkin) appointmentType = ScheduleTypeEnum.WALK_IN;
+                        else appointmentType = ScheduleTypeEnum.APPOINTMENT;
+                        
+                        double p_status = random.nextDouble();
+                        StatusEnum status;
+                        if (p_status < p_missed) status = StatusEnum.MISSED;
+                        else if (p_status < p_missed + p_cancelled) status = StatusEnum.CANCELLED;
+                        else status = StatusEnum.COMPLETED;
+                        
+                        Appointment a = new Appointment(doctors.get(i%doctorsSize), medical_records.get((i%mrsSize)), c.getTime(), appointmentType, type, status);
+                        em.persist(a);em.flush();
+                        a.setQueue_no(String.format("A%03d", a.getId()));
+                    }
                 }
+                
             }
 
             c.add(Calendar.DATE, 1);
         }
+        // --- End of randomizing past appointments ---
+        
+        upperBound.add(Calendar.MONTH, monthsAfter);
+        
+        // --- Start of randomizing future appointments ---
+        while (c.getTime().getTime() < upperBound.getTime().getTime()) {
+            
+            if (c.get(Calendar.DAY_OF_WEEK) != 1 && c.get(Calendar.DAY_OF_WEEK) != 7) {
+            
+                for (int i = 0; i < times.length; i++) {
+                    c.set(Calendar.HOUR_OF_DAY, times[i][0]);
+                    c.set(Calendar.MINUTE, times[i][1]);
+
+                    if(random.nextDouble() < p) {
+                        
+                        double p_type = random.nextDouble();
+                        AppointmentTypeEnum type;
+                        if (p_type < p_vaccination) type = AppointmentTypeEnum.VACCINATION;
+                        else if (p_type < p_vaccination + p_checkup) type = AppointmentTypeEnum.HEALTH_CHECKUP;
+                        else type = AppointmentTypeEnum.CONSULTATION;
+                        
+                        double p_appointmentType = random.nextDouble();
+                        ScheduleTypeEnum appointmentType;
+                        if (p_appointmentType < p_walkin) appointmentType = ScheduleTypeEnum.WALK_IN;
+                        else appointmentType = ScheduleTypeEnum.APPOINTMENT;
+                        
+                        Appointment a = new Appointment(doctors.get(i%doctorsSize), medical_records.get((i%mrsSize)), c.getTime(), appointmentType, type, StatusEnum.BOOKED);
+                        em.persist(a);em.flush();
+                        a.setQueue_no(String.format("A%03d", a.getId()));
+                    }
+                }
+                
+            }
+            
+            c.add(Calendar.DATE, 1);
+        }
+        // --- End of randomizing future appointments ---
     }
     
 }
