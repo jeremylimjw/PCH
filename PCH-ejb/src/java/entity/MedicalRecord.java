@@ -44,8 +44,8 @@ public class MedicalRecord implements Serializable {
     @NotNull
     private String nric;
     
-    @Column(nullable = false, length = 128)
-    @Size(min = 1, max = 128)
+    @Column(length = 128)
+    @Size(min = 0, max = 128)
     private String address;
     
     @Temporal(TemporalType.TIMESTAMP)
@@ -58,8 +58,8 @@ public class MedicalRecord implements Serializable {
     @NotNull
     private String contact_number;
     
-    @Column(nullable = false, length = 32)
-    @Size(min = 1, max = 32)
+    @Column(length = 32)
+    @Size(min = 0, max = 32)
     private String blood_type;
     
     @Column
