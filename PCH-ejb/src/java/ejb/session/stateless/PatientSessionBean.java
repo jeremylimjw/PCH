@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.Patient;
 import java.util.Set;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -17,6 +18,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.exception.MedicalRecordEntityException;
 import util.exception.PatientEntityException;
 
 /**
@@ -25,6 +27,9 @@ import util.exception.PatientEntityException;
  */
 @Stateless
 public class PatientSessionBean implements PatientSessionBeanLocal {
+
+    @EJB
+    private MedicalRecordSessionBeanLocal medicalRecordSessionBeanLocal;
 
     @PersistenceContext(unitName = "PCH-ejbPU")
     private EntityManager em;
@@ -37,17 +42,30 @@ public class PatientSessionBean implements PatientSessionBeanLocal {
         validator = validatorFactory.getValidator();
     }
     
-    
+    @Override
     public Long create(Patient patient) throws PatientEntityException{
-        Set<ConstraintViolation<Patient>>constraintViolations = validator.validate(patient);
+        try {
+            Set<ConstraintViolation<Patient>>constraintViolations = validator.validate(patient);
+            
+            Query query = em.createQuery("SELECT p FROM Patient p WHERE p.username = ?1");
+            query.setParameter(1, patient.getUsername());
+            if (query.getResultList().size() > 0) throw new PatientEntityException("Error: Username already exists!");
 
-        if(constraintViolations.isEmpty()){
-            em.persist(patient);
-            em.flush();
+            if(constraintViolations.isEmpty()){
 
-            return patient.getId();
-        } else {
-            throw new PatientEntityException(getValidatorErrors(constraintViolations));
+                if (patient.getMedical_record() != null) {
+                    medicalRecordSessionBeanLocal.create(patient.getMedical_record());
+                }
+                
+                em.persist(patient);
+                em.flush();
+
+                return patient.getId();
+            } else {
+                throw new PatientEntityException(getValidatorErrors(constraintViolations));
+            }
+        } catch (MedicalRecordEntityException ex) {
+            throw new PatientEntityException(ex.getMessage());
         }
     }
     

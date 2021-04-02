@@ -9,16 +9,18 @@ package entity;
  *
  * @author USER
  */
-public class RequestBodyPatientUpdate {
+public class RequestBodyPatientPassword {
     private Long id;
-    private String email;
+    private String old_password;
     private String password;
 
-    public RequestBodyPatientUpdate() {
+    public RequestBodyPatientPassword() {
     }
 
-    public RequestBodyPatientUpdate(Long id) {
+    public RequestBodyPatientPassword(Long id, String old_password, String password) {
         this.id = id;
+        this.old_password = old_password;
+        this.password = password;
     }
 
     public Long getId() {
@@ -29,12 +31,12 @@ public class RequestBodyPatientUpdate {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getOld_password() {
+        return old_password;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setOld_password(String old_password) {
+        this.old_password = old_password;
     }
 
     public String getPassword() {

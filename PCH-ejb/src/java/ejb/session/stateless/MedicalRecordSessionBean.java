@@ -13,6 +13,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -37,6 +38,26 @@ public class MedicalRecordSessionBean implements MedicalRecordSessionBeanLocal {
         validator = validatorFactory.getValidator();
     }
 
+    
+    
+    @Override
+    public Long create(MedicalRecord medicalRecord) throws MedicalRecordEntityException{
+        Set<ConstraintViolation<MedicalRecord>>constraintViolations = validator.validate(medicalRecord);
+        
+        Query query = em.createQuery("SELECT m FROM MedicalRecord m WHERE m.nric = ?1");
+        query.setParameter(1, medicalRecord.getNric());
+        if (query.getResultList().size() > 0) throw new MedicalRecordEntityException("Error: NRIC already exists!");
+
+        if(constraintViolations.isEmpty()){
+            em.persist(medicalRecord);
+            em.flush();
+
+            return medicalRecord.getId();
+        } else {
+            throw new MedicalRecordEntityException(getValidatorErrors(constraintViolations));
+        }
+    }
+    
     @Override
     public MedicalRecord retrieveById(Long id) throws MedicalRecordEntityException {
         if (id == null) {

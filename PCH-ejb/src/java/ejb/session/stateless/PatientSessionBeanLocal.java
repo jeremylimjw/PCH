@@ -15,6 +15,7 @@ import util.exception.PatientEntityException;
  */
 @Local
 public interface PatientSessionBeanLocal {
+    public Long create(Patient patient) throws PatientEntityException;
     public Patient login(String username, String password) throws PatientEntityException;
     public Patient retrieveById(Long id) throws PatientEntityException;
     public Patient retrieveByUsername(String username) throws PatientEntityException;
