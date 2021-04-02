@@ -277,8 +277,10 @@ public class Api {
         try {
             Patient patient = patientSessionBeanLocal.retrieveById(p.getId());
             
-            patient.setEmail(p.getPassword());
-            patientSessionBeanLocal.updatePatientDetails(patient);
+            if (!patient.getPassword().equals(p.getOld_password())) return Response.status(Response.Status.BAD_REQUEST).entity("Passwords does not match!").build();
+            
+            patient.setPassword(p.getPassword());
+            patientSessionBeanLocal.updatePatientPassword(patient);
             
             return Response.status(Response.Status.OK).build();
         } catch (PatientEntityException ex) {
