@@ -82,6 +82,11 @@ local.properties
 # Package Files #
 *.jar
 !PCH-war/bootstrap-1.0.10.jar
+!PCH-war/commons-digester-2.1.jar
+!PCH-war/itext-2.1.7.jar
+!PCH-war/jasperreports-6.16.0.jar
+!PCH-war/org.apache.commons.commons-collections4_4.4.0.jar
+!PCH-war/org.apache.commons.logging_1.2.0.v20180409-1502.jar
 *.war
 *.nar
 *.ear

@@ -44,8 +44,8 @@ public class MedicalRecord implements Serializable {
     @NotNull
     private String nric;
     
-    @Column(nullable = false, length = 128)
-    @Size(min = 1, max = 128)
+    @Column(length = 128)
+    @Size(min = 0, max = 128)
     private String address;
     
     @Temporal(TemporalType.TIMESTAMP)
@@ -58,8 +58,8 @@ public class MedicalRecord implements Serializable {
     @NotNull
     private String contact_number;
     
-    @Column(nullable = false, length = 32)
-    @Size(min = 1, max = 32)
+    @Column(length = 32)
+    @Size(min = 0, max = 32)
     private String blood_type;
     
     @Column
@@ -82,7 +82,7 @@ public class MedicalRecord implements Serializable {
     @OneToMany(mappedBy = "medical_record", fetch = FetchType.EAGER)
     private List<Appointment> appointments;
     
-    @OneToOne
+    @OneToOne(mappedBy = "medical_record")
     private Patient patient;
 
     public MedicalRecord() {
@@ -205,6 +205,14 @@ public class MedicalRecord implements Serializable {
 
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     @Override
