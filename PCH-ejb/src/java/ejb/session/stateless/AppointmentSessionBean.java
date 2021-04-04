@@ -159,6 +159,13 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     }
     
     @Override
+    public List<Appointment> retrieveAllAppointments() {
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.schedule_type = ?1 ORDER BY a.date_time ASC");
+        query.setParameter(1, ScheduleTypeEnum.APPOINTMENT);
+        return query.getResultList();
+    }
+    
+    @Override
     public void updateStatus(Long appointmentId, StatusEnum status) throws AppointmentEntityException {
         Appointment appointment = retrieveById(appointmentId);
         appointment.setStatus(status);
@@ -204,8 +211,23 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
     }
     
     @Override
+    public void cancelAppointment(Long appointmentId) throws AppointmentEntityException {
+        Appointment appointment = retrieveById(appointmentId);
+        if (!appointment.getStatus().equals(StatusEnum.BOOKED)) throw new AppointmentEntityException("Error: Appointment can only be cancelled if it's in the BOOKED status!");
+        
+        appointment.setStatus(StatusEnum.CANCELLED);
+    }
+    
+    @Override
     public List<Appointment> retrieveAll() {
         Query query = em.createQuery("SELECT a FROM Appointment a ORDER BY a.date_created DESC");
+        return query.getResultList();
+    }
+    
+    @Override
+    public List<Appointment> retrieveByMedicalRecordId(Long medicalRecordId) {
+        Query query = em.createQuery("SELECT a FROM Appointment a WHERE a.medical_record.id = ?1 ORDER BY a.date_created DESC");
+        query.setParameter(1, medicalRecordId);
         return query.getResultList();
     }
 

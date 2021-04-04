@@ -32,5 +32,7 @@ public interface MedicalRecordSessionBeanLocal {
 
     public MedicalRecord retrieveById(Long id) throws MedicalRecordEntityException;
 
+    public Long create(MedicalRecord medicalRecord) throws MedicalRecordEntityException;
+
     public MedicalRecord retrieveMedicalRecordByNRIC(String patientNric) throws MedicalRecordNotFoundException;
 }

@@ -11,9 +11,10 @@ import java.io.IOException;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 import javax.faces.context.FacesContext;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
@@ -27,6 +28,7 @@ public class ManageAppointmentsManagedBean {
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
     
     private List<Appointment> appointments;
+    private Appointment selected;
     
     public ManageAppointmentsManagedBean() {
     }
@@ -36,8 +38,8 @@ public class ManageAppointmentsManagedBean {
         appointments = appointmentSessionBeanLocal.retrieveAll();
     }
     
-    public void redirect(Long id) throws IOException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/viewAppointment.xhtml?id=" + id);
+    public void onRowSelect(SelectEvent<Appointment> event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/viewAppointment.xhtml?id=" + String.valueOf(event.getObject().getId()));
     }
 
     public List<Appointment> getAppointments() {
@@ -46,6 +48,14 @@ public class ManageAppointmentsManagedBean {
 
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
+    }
+
+    public Appointment getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Appointment selected) {
+        this.selected = selected;
     }
     
 }
