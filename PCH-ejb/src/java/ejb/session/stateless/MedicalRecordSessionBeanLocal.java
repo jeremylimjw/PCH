@@ -5,9 +5,13 @@
  */
 package ejb.session.stateless;
 
+import entity.Appointment;
 import entity.MedicalRecord;
+import java.util.List;
 import javax.ejb.Local;
+import util.exception.InputDataValidationException;
 import util.exception.MedicalRecordEntityException;
+import util.exception.MedicalRecordNotFoundException;
 
 /**
  *
@@ -15,7 +19,20 @@ import util.exception.MedicalRecordEntityException;
  */
 @Local
 public interface MedicalRecordSessionBeanLocal {
+
+    public Long createNewMedicalRecord(MedicalRecord newMedicalRecord) throws InputDataValidationException;
+
+    public List<MedicalRecord> retrieveAllMedicalRecords();
+
+    public List<MedicalRecord> searchMedicalRecordsByName(String searchString);
+
+    public List<MedicalRecord> searchMedicalRecordsByNRIC(String searchString);
+
+    public void updateMedicalRecord(MedicalRecord medicalRecord) throws MedicalRecordNotFoundException, MedicalRecordEntityException;
+
     public MedicalRecord retrieveById(Long id) throws MedicalRecordEntityException;
-    public void update(MedicalRecord medicalRecord) throws MedicalRecordEntityException;
+
     public Long create(MedicalRecord medicalRecord) throws MedicalRecordEntityException;
+
+    public MedicalRecord retrieveMedicalRecordByNRIC(String patientNric) throws MedicalRecordNotFoundException;
 }
