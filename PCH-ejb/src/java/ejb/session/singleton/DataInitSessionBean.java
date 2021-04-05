@@ -163,20 +163,26 @@ public class DataInitSessionBean {
                         else if (p_type < p_vaccination + p_checkup) type = AppointmentTypeEnum.HEALTH_CHECKUP;
                         else type = AppointmentTypeEnum.CONSULTATION;
                         
-                        double p_appointmentType = random.nextDouble();
-                        ScheduleTypeEnum appointmentType;
-                        if (p_appointmentType < p_walkin) appointmentType = ScheduleTypeEnum.WALK_IN;
-                        else appointmentType = ScheduleTypeEnum.APPOINTMENT;
-                        
                         double p_status = random.nextDouble();
                         StatusEnum status;
                         if (p_status < p_missed) status = StatusEnum.MISSED;
                         else if (p_status < p_missed + p_cancelled) status = StatusEnum.CANCELLED;
                         else status = StatusEnum.COMPLETED;
                         
-                        Appointment a = new Appointment(doctors.get(i%doctorsSize), medical_records.get((i%mrsSize)), c.getTime(), appointmentType, type, status);
-                        em.persist(a);em.flush();
-                        a.setQueue_no(String.format("A%03d", a.getId()));
+                        double p_appointmentType = random.nextDouble();
+                        ScheduleTypeEnum appointmentType;
+                        if (p_appointmentType < p_walkin) {
+                            appointmentType = ScheduleTypeEnum.WALK_IN;
+                            Appointment a = new Appointment(null, medical_records.get((i%mrsSize)), c.getTime(), appointmentType, type, status);
+                            em.persist(a);em.flush();
+                            a.setQueue_no(String.format("W%03d", a.getId()));
+                        } else {
+                            appointmentType = ScheduleTypeEnum.APPOINTMENT;
+                            Appointment a = new Appointment(doctors.get(i%doctorsSize), medical_records.get((i%mrsSize)), c.getTime(), appointmentType, type, status);
+                            em.persist(a);em.flush();
+                            a.setQueue_no(String.format("A%03d", a.getId()));
+                        }
+                        
                     }
                 }
                 
@@ -205,14 +211,10 @@ public class DataInitSessionBean {
                         else if (p_type < p_vaccination + p_checkup) type = AppointmentTypeEnum.HEALTH_CHECKUP;
                         else type = AppointmentTypeEnum.CONSULTATION;
                         
-                        double p_appointmentType = random.nextDouble();
-                        ScheduleTypeEnum appointmentType;
-                        if (p_appointmentType < p_walkin) appointmentType = ScheduleTypeEnum.WALK_IN;
-                        else appointmentType = ScheduleTypeEnum.APPOINTMENT;
-                        
-                        Appointment a = new Appointment(doctors.get(i%doctorsSize), medical_records.get((i%mrsSize)), c.getTime(), appointmentType, type, StatusEnum.BOOKED);
+                        Appointment a = new Appointment(doctors.get(i%doctorsSize), medical_records.get((i%mrsSize)), c.getTime(), ScheduleTypeEnum.APPOINTMENT, type, StatusEnum.BOOKED);
                         em.persist(a);em.flush();
                         a.setQueue_no(String.format("A%03d", a.getId()));
+                        
                     }
                 }
                 
