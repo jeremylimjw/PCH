@@ -6,8 +6,8 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -98,7 +98,7 @@ public class MedicalRecord implements Serializable {
         this.drug_allergys = drug_allergys;
         this.family_historys = family_historys;
         this.past_medical_historys = past_medical_historys;
-        this.vaccinations = vaccinations;
+        this.vaccinations = vaccinations;    
         this.date_created = new Date();
         this.appointments = new ArrayList<>();
     }

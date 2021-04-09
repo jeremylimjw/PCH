@@ -111,7 +111,7 @@ public class Api {
             for(Prescription p : a.getPrescriptions()) p.getMedication().getParent_medications().clear();
             if (a.getEmployee() != null) a.getEmployee().getAppointments().clear();
             a.getMedical_record().getAppointments().clear();
-            
+       
             return Response.status(Response.Status.OK).entity(a).build();
         } catch(AppointmentEntityException ex) {            
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
