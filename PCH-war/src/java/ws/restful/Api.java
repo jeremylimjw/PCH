@@ -91,6 +91,7 @@ public class Api {
                 for(Prescription p : a.getPrescriptions()) p.getMedication().getParent_medications().clear();
                 if (a.getEmployee() != null) a.getEmployee().getAppointments().clear();
                 a.getMedical_record().getAppointments().clear();
+                a.getMedical_record().setPatient(null);
             }
             
             GenericEntity<List<Appointment>> genericEntity = new GenericEntity<List<Appointment>>(appointments) { };      
@@ -111,7 +112,9 @@ public class Api {
             for(Prescription p : a.getPrescriptions()) p.getMedication().getParent_medications().clear();
             if (a.getEmployee() != null) a.getEmployee().getAppointments().clear();
             a.getMedical_record().getAppointments().clear();
-       
+
+            a.getMedical_record().setPatient(null);
+           
             return Response.status(Response.Status.OK).entity(a).build();
         } catch(AppointmentEntityException ex) {            
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
@@ -148,6 +151,7 @@ public class Api {
                 for(Prescription p : a.getPrescriptions()) p.getMedication().getParent_medications().clear();
                 if (a.getEmployee() != null) a.getEmployee().getAppointments().clear();
                 a.getMedical_record().getAppointments().clear();
+                a.getMedical_record().setPatient(null);
             }
             
             GenericEntity<List<Appointment>> genericEntity = new GenericEntity<List<Appointment>>(appointments) { };    

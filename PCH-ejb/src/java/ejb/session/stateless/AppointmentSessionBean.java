@@ -13,6 +13,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.EJBContext;
@@ -31,6 +33,7 @@ import util.enumeration.StatusEnum;
 import util.exception.AppointmentEntityException;
 import util.exception.EmployeeEntityException;
 import util.exception.MedicalRecordEntityException;
+import util.exception.MedicalRecordNotFoundException;
 
 /**
  *
@@ -184,8 +187,11 @@ public class AppointmentSessionBean implements AppointmentSessionBeanLocal {
 
             oldAppointment.setPatient_notes(appointment.getPatient_notes());
 
-            medicalRecordSessionBeanLocal.update(appointment.getMedical_record());
+            medicalRecordSessionBeanLocal.updateMedicalRecord(appointment.getMedical_record());
         } catch (MedicalRecordEntityException ex) {
+            eJBContext.setRollbackOnly();
+            throw new AppointmentEntityException(ex.getMessage());
+        } catch (MedicalRecordNotFoundException ex) {
             eJBContext.setRollbackOnly();
             throw new AppointmentEntityException(ex.getMessage());
         }
