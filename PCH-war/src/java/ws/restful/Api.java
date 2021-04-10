@@ -44,11 +44,12 @@ import util.exception.PatientEntityException;
  */
 @Path("/")
 public class Api {
-    
+
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
     private EmployeeEntitySessionBeanLocal employeeEntitySessionBeanLocal;
     private QueueBoardSessionBeanLocal queueBoardSessionBeanLocal;
     private PatientSessionBeanLocal patientSessionBeanLocal;
+    
     
     public Api() {
         hookUpJNDI();
@@ -287,4 +288,5 @@ public class Api {
             throw new RuntimeException(ne);
         }
     }
+
 }

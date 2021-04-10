@@ -88,8 +88,11 @@ public class ViewAppointmentManagedBean implements Serializable {
 //        --- View MC Logic here ---
         System.out.println("DONE");
         try {
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> master
             long duration = appointment.getMedical_certificate().getEnd_date().getTime() - appointment.getMedical_certificate().getStart_date().getTime();
 
             long diff = TimeUnit.MILLISECONDS.toDays(duration) + 1;
@@ -113,7 +116,6 @@ public class ViewAppointmentManagedBean implements Serializable {
             parameters.put("line2", "________________________");
             parameters.put("line3", "_________________________");
             parameters.put("line4", "_________________________");
-           
 
 
             parameters.put("Dr_name", appointment.getEmployee().getName());

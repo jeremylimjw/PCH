@@ -33,7 +33,7 @@ public class Patient implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long patientId;
     
     @Column(nullable = false, length = 32, unique = true)
     @Size(min = 1, max = 32)
@@ -72,12 +72,12 @@ public class Patient implements Serializable {
         this.medical_record = medical_record;
     }
 
-    public Long getId() {
-        return id;
+    public Long getPatientId() {
+        return patientId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
     }
 
     public String getUsername() {
@@ -124,18 +124,18 @@ public class Patient implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (patientId != null ? patientId.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the patientId fields are not set
         if (!(object instanceof Patient)) {
             return false;
         }
         Patient other = (Patient) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.patientId == null && other.patientId != null) || (this.patientId != null && !this.patientId.equals(other.patientId))) {
             return false;
         }
         return true;
@@ -143,6 +143,6 @@ public class Patient implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Patient[ id=" + id + " ]";
+        return "entity.Patient[ id=" + patientId + " ]";
     }   
 }
