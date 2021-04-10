@@ -38,9 +38,9 @@
                         <p:column>
                             <p:inputText id="Name" value="#{MedicalRecordManagementManagedBean.newRecord.name}" placeholder="John Doe" required="true" requiredMessage="Patient Name is required" />
                         </p:column>
-                        <!--                            <p:column>
-                                                        <p:message for="Name" />
-                                                    </p:column>-->
+                        <p:column>
+                            <p:message for="Name" />
+                        </p:column>
                     </p:row>
 
                     <p:row>
@@ -50,9 +50,9 @@
                         <p:column>
                             <p:inputText id="nric" value="#{MedicalRecordManagementManagedBean.newRecord.nric}" placeholder="SXXXX123A" required="true" requiredMessage="Patient NRIC is required" />
                         </p:column>
-                        <!--                            <p:column>
-                                                        <p:message for="nric" />
-                                                    </p:column>-->
+                        <p:column>
+                            <p:message for="nric" />
+                        </p:column>
                     </p:row>                        
                     <p:row>
                         <p:column>
@@ -62,8 +62,8 @@
                             <p:inputText id="address" value="#{MedicalRecordManagementManagedBean.newRecord.address}" placeholder="123 Riverdale" required="true" requiredMessage="Patient Address is required" />
                         </p:column>
                         <p:column>
-                                                        <p:message for="address" />
-                                                    </p:column>
+                            <p:message for="address" />
+                        </p:column>
                     </p:row>                        
                     <p:row>
                         <p:column>
@@ -73,9 +73,9 @@
                             <p:calendar id="dob" value="#{MedicalRecordManagementManagedBean.newRecord.dob}" required="true" requiredMessage="Patient Date of Birth is required" pattern="dd/mm/yyyy">
                             </p:calendar>
                         </p:column>
-                        <!--                            <p:column>
-                                                        <p:message for="dob" />
-                                                    </p:column>-->
+                        <p:column>
+                            <p:message for="dob" />
+                        </p:column>
                     </p:row>
                     <p:row>
                         <p:column>
@@ -85,15 +85,15 @@
                             <p:inputText id="contact_number" value="#{MedicalRecordManagementManagedBean.newRecord.contact_number}" placeholder="12345678" required="true" requiredMessage="Contact Number is required" />
                         </p:column>
                        <p:column>
-                                                        <p:message for="contact_number" />
-                                                    </p:column>
+                            <p:message for="contact_number" />
+                        </p:column>
                     </p:row>
 
 
                     <p:row>
                         <p:column colspan="3">
                             <p:commandButton type="reset" value="Clear" />&nbsp;
-                            <p:commandButton value="Create New Medical Record" process='@form' update="@form" actionListener="#{MedicalRecordManagementManagedBean.createNewMedicalRecord}" oncomplete="PF('dialogCreateNewMedicalRecord').hide();" resetValues="true">
+                            <p:commandButton value="Create New Medical Record" process='@form' update="@form" actionListener="#{MedicalRecordManagementManagedBean.createNewMedicalRecord}" oncomplete="PF('dialogCreateNewMedicalRecord').show();" >
 
                             </p:commandButton>
                         </p:column>
