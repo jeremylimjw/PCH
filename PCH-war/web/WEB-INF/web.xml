@@ -33,11 +33,10 @@
         <param-name>primefaces.THEME</param-name>
         <param-value>bootstrap</param-value>
     </context-param>
-    <!--    COMMENTED THIS OUT TO PREVENT INTERFERENCE WITH DEVELOPMENT
     <context-param>
         <param-name>javax.faces.ENABLE_WEBSOCKET_ENDPOINT</param-name>
         <param-value>true</param-value>
-    </context-param>-->
+    </context-param>
     <!--    NOT WORKING. DO NOT UNCOMMENT
         <security-constraint>
         <display-name>Secured Resources</display-name>
