@@ -262,12 +262,17 @@ public class DataInitSessionBean {
                         new ArrayList<>(Arrays.asList("Alcohol")),
                         new ArrayList<>(Arrays.asList("Onpattro")), "Treat polyneuropathy (damage of multiple nerves throughout the body)", null));
 
-                Employee alice = new Employee("Alice", "alice", "password", "alice@gmail.com", RoleEnum.DOCTOR);
-                em.persist(alice);
-                Employee bob = new Employee("Bob", "bob", "password", "bob@gmail.com", RoleEnum.DOCTOR);
-                em.persist(bob);
-                Employee charlie = new Employee("Charlie", "charlie", "password", "charlie@gmail.com", RoleEnum.NURSE);
-                em.persist(charlie);
+                em.persist(new Employee("Alice Tan Jing Xuan", "alicetan", "password", "alicetan@gmail.com", RoleEnum.DOCTOR));
+                em.persist(new Employee("Bob Goh Xiao Ming", "bobgohxm", "password", "bob_goh@gmail.com", RoleEnum.DOCTOR));
+                em.persist(new Employee("Wan Tew Chee", "wantc", "password", "doctor_wan_tc@hotmail.com", RoleEnum.DOCTOR));
+                em.persist(new Employee("Aishah Fatimah", "aishahf", "password", "aishahf@gmail.com", RoleEnum.DOCTOR));
+                em.persist(new Employee("Kenley Hogan", "kenleyh", "password", "hogankenley@yahoo.sg", RoleEnum.DOCTOR));
+                
+                em.persist(new Employee("Charlie Zhou Shen", "charliezhou", "password", "charliezhou@gmail.com", RoleEnum.NURSE));
+                em.persist(new Employee("Zhao Ming", "zhaomingnurse", "password", "zhaoming@gmail.com", RoleEnum.NURSE));
+                em.persist(new Employee("Marsden Ramanuja", "marsdennurse", "password", "marsdenramanuja@gmail.com", RoleEnum.NURSE));
+                em.persist(new Employee("Angela Lim Jia Ying", "angelalim", "password", "angelalimjy@gmail.com", RoleEnum.NURSE));
+                em.persist(new Employee("Iman Indah", "imanindah", "password", "imanindah@gmail.com", RoleEnum.NURSE));
 
                 MedicalRecord desmondRecord = new MedicalRecord("Desmond", "S94626123A", "address1",
                         new SimpleDateFormat("dd/MM/yyyy").parse("20/6/1996"), "82746726", "B+",
