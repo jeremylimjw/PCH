@@ -143,6 +143,6 @@ public class Patient implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Patient[ id=" + id + " ]";
+        return "entity.Patient[ id=" + patientId + " ]";
     }   
 }

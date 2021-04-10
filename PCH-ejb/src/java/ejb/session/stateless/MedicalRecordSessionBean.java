@@ -233,19 +233,6 @@ public class MedicalRecordSessionBean implements MedicalRecordSessionBeanLocal {
 
     }
 
-    @Override
-    public List<MedicalRecord> searchMedicalRecordsByName(String searchString) {
-        Query query = em.createQuery("SELECT m FROM MedicalRecord m WHERE m.name LIKE :inSearchString ORDER BY m.name ASC");
-        query.setParameter("inSearchString", "%" + searchString + "%");
-        List<MedicalRecord> medicalRecords = query.getResultList();
-        
-        for (MedicalRecord medicalRecord:medicalRecords){
-            medicalRecord.getAppointments();
-            medicalRecord.getPatient(); 
-        }
-        
-        return medicalRecords;
-    }
     private String getValidatorErrors(Set<ConstraintViolation<MedicalRecord>> constraints) {
         String str = "Error: The following input value(s) are invalid!";
 

@@ -184,26 +184,24 @@
 
                 <p:dataTable id="dataTableViewAllMedicalRecords" widgetVar="dataTableViewAllMedicalRecords" value="#{MedicalRecordManagementManagedBean.records}" var="record" rowKey="#{record.id}" rowIndexVar="row"
                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
-                    <f:facet name="header">
-                        <p:outputPanel style="text-align: right;">
-                            <h:outputText value="Search for Medical Record:"/>
-                            <p:inputText id="globalFilter" onkeyup="PF(dataTableViewAllMedicalRecords).filter()" style="width: 300px" placeholder="Enter Name or NRIC" >
-                                <p:ajax event="keyup" process="@this" update="formViewAllMedicalRecords:dataTableViewAllMedicalRecords" listener="#{MedicalRecordManagementManagedBean.searchMedicalRecord}" />
-                            </p:inputText>
-                        </p:outputPanel>
-                    </f:facet>
-                    <p:column headerText='Patient Name' sortBy='#{record.name}' filterMatchMode="contains">
+                <f:facet name="header">
+                    <p:outputPanel style="text-align: right;">
+                        <h:outputText value="Search for Medical Record:"/>
+                        <p:inputText id="globalFilter" onkeyup="PF('dataTableViewAllMedicalRecords').filter()" style="width: 300px" placeholder="Enter Name or NRIC" />
+                    </p:outputPanel>
+                </f:facet>
+                    <p:column headerText='Patient Name' sortBy='#{record.name}' filterBy="#{record.name}" filterMatchMode="contains">
                         #{record.name}
                     </p:column>
-                    <p:column headerText="NRIC" sortBy='#{record.nric}' filterMatchMode="contains">
+                    <p:column headerText="NRIC" sortBy='#{record.nric}' filterBy="#{record.nric}" filterMatchMode="contains">
                         <h:outputText value='#{record.nric}'/>
                     </p:column>
-                    <p:column headerText="Date Of Birth" sortBy='#{record.dob}' filterMatchMode="contains">
+                    <p:column headerText="Date Of Birth" sortBy='#{record.dob}' filterBy="#{record.dob}" filterMatchMode="contains">
                         <h:outputText value='#{record.dob}'>
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Contact Number" sortBy='#{record.contact_number}' filterMatchMode="contains">
+                    <p:column headerText="Contact Number" sortBy='#{record.contact_number}' filterBy="#{record.contact_number}"  filterMatchMode="contains">
                         <h:outputText value='#{record.contact_number}'/>
                     </p:column>
                     <p:column headerText="Action">
