@@ -6,6 +6,8 @@
 package ejb.session.stateless;
 
 import entity.MedicalRecord;
+
+import java.util.Date;
 import entity.Appointment;
 import java.io.IOException;
 import java.util.List;
@@ -80,7 +82,6 @@ public class MedicalRecordSessionBean implements MedicalRecordSessionBeanLocal {
     }
 
     @TransactionAttribute
-    
     @Override
     public void update(MedicalRecord medicalRecord) throws MedicalRecordEntityException {
         Set<ConstraintViolation<MedicalRecord>> constraints = validator.validate(medicalRecord);
