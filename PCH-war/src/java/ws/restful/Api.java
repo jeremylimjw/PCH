@@ -45,7 +45,6 @@ import util.exception.PatientEntityException;
 @Path("/")
 public class Api {
 
-    private PatientEntitySessionBeanLocal patientEntitySessionBeanLocal = lookupPatientEntitySessionBeanLocal();
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
     private EmployeeEntitySessionBeanLocal employeeEntitySessionBeanLocal;
     private QueueBoardSessionBeanLocal queueBoardSessionBeanLocal;
@@ -290,13 +289,4 @@ public class Api {
         }
     }
 
-    private PatientEntitySessionBeanLocal lookupPatientEntitySessionBeanLocal() {
-        try {
-            javax.naming.Context c = new InitialContext();
-            return (PatientEntitySessionBeanLocal) c.lookup("java:global/PCH/PCH-ejb/PatientEntitySessionBean!ejb.session.stateless.PatientEntitySessionBeanLocal");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
 }

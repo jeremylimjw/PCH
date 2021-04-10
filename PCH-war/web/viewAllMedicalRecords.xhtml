@@ -20,7 +20,7 @@
 
         <h:form>
             <p:menubar>
-                <p:submenu label="Create New Patient Medical Record" icon="ui-icon-document">
+                <p:submenu label="Create New Patient Medical Record" icon="ui-icon-plus">
                     <p:menuitem value="Add new record" actionListener="#{MedicalRecordManagementManagedBean.clearNewRecord}" onclick="PF('dialogCreateNewMedicalRecord').show()" icon="pi pi-user-plus" />
                 </p:submenu>                                        
             </p:menubar>
@@ -31,7 +31,7 @@
 
             <p:dialog id="dialogCreateNewMedicalRecord" widgetVar="dialogCreateNewMedicalRecord" header="Create New Patient Medical Record" closable="true">
 
-                <p:messages id="messagesCreateNewMedicalRecord" redisplay="false" />
+                <p:messages />
 
                 <p:panelGrid>
 
@@ -65,9 +65,9 @@
                         <p:column>
                             <p:inputText id="address" value="#{MedicalRecordManagementManagedBean.newRecord.address}" placeholder="123 Riverdale" required="true" requiredMessage="Patient Address is required" />
                         </p:column>
-                        <!--                            <p:column>
+                        <p:column>
                                                         <p:message for="address" />
-                                                    </p:column>-->
+                                                    </p:column>
                     </p:row>                        
                     <p:row>
                         <p:column>
@@ -88,16 +88,16 @@
                         <p:column>
                             <p:inputText id="contact_number" value="#{MedicalRecordManagementManagedBean.newRecord.contact_number}" placeholder="12345678" required="true" requiredMessage="Contact Number is required" />
                         </p:column>
-                        <!--                            <p:column>
+                       <p:column>
                                                         <p:message for="contact_number" />
-                                                    </p:column>-->
+                                                    </p:column>
                     </p:row>
 
 
                     <p:row>
                         <p:column colspan="3">
                             <p:commandButton type="reset" value="Clear" />&nbsp;
-                            <p:commandButton value="Create New Medical Record" process='@form' update="@form formViewAllMedicalRecords:dataTableViewAllMedicalRecords" actionListener="#{MedicalRecordManagementManagedBean.createNewMedicalRecord}" oncomplete="PF('dialogCreateNewMedicalRecord').show();">
+                            <p:commandButton value="Create New Medical Record" process='@form' update="@form" actionListener="#{MedicalRecordManagementManagedBean.createNewMedicalRecord}" oncomplete="PF('dialogCreateNewMedicalRecord').hide();" resetValues="true">
 
                             </p:commandButton>
                         </p:column>
@@ -111,66 +111,7 @@
 
             </p:dialog>
             
-            <p:confirmDialog id="cdConfirmation" header="Create new patient record?"  widgetVar="cdConfirmation" >
-                    <f:facet name="message">
-                        <h:outputText value="Please check details. Name and NRIC cannot be edited later."/>
-                    </f:facet>
-                    <p:panelGrid>
-                        <row>
-                            <p:column>
-                                <p:outputLabel for="Name" value="Name: " style="font-weight: bold;" />
-                            </p:column>
-                            <p:column>
-                                <h:outputText id="name" value="#{MedicalRecordManagementManagedBean.newRecord.name}"/>
-                            </p:column>
-                        </row>
-                        <row>
-                            <p:column>
-                                <p:outputLabel for="NRIC" value="NRIC: " style="font-weight: bold;" />
-                            </p:column>
-                            <p:column>
-                                <h:outputText id="NRIC" value="#{MedicalRecordManagementManagedBean.newRecord.nric}"/>
-                            </p:column>
-                        </row>
-                        <row>
-                            <p:column>
-                                <p:outputLabel for="Address" value="Address: " style="font-weight: bold;" />
-                            </p:column>
-                            <p:column>
-                                <h:outputText id="Address" value="#{MedicalRecordManagementManagedBean.newRecord.address}"/>
-                            </p:column>
-                        </row>
-                        <row>
-                            <p:column>
-                                <p:outputLabel for="Dob" value="Date of Birth: " style="font-weight: bold;" />
-                            </p:column>
-                            <p:column>
-                                <h:outputText id="Dob" value="#{MedicalRecordManagementManagedBean.newRecord.dob}"/>
-                            </p:column>
-                        </row>
-                        <row>
-                            <p:column>
-                                <p:outputLabel for="Contact_Number" value="Contact Number: " style="font-weight: bold;" />
-                            </p:column>
-                            <p:column>
-                                <h:outputText id="Contact_Number" value="#{MedicalRecordManagementManagedBean.newRecord.contact_number}"/>
-                            </p:column>
-                        </row>
-                    </p:panelGrid>
-                    
-                    <p:commandButton value="Yes Sure" process='@form' update="@form formViewAllMedicalRecords:dataTableViewAllMedicalRecords" actionListener="#{MedicalRecordManagementManagedBean.createNewMedicalRecord}" oncomplete="PF('nextStep').show();">
-
-                    </p:commandButton>
-                    <p:commandButton value="Not Yet" oncomplete="PF('cdConfirmation').hide();" type="button" />
-                </p:confirmDialog>
-
-                <p:confirmDialog id="nextStep" header="New Patient Record #{MedicalRecordManagementManagedBean.newRecord.name} Created!" message="Please choose next action." widgetVar="nextStep">
-                    <p:commandButton value="Edit patient record" action="#{MedicalRecordManagementManagedBean.viewMedicalRecordDetails()}" >
-                        <f:attribute value="#{MedicalRecordManagementManagedBean.newRecord.id}" name="recordId"/>
-                    </p:commandButton>
-                    <p:commandButton value="Add a walk in appointment" title="Add a walkin Appointment for the new patient" />
-                    <p:commandButton value="Go back to Patient Records" oncomplete="PF('dialogViewAllMedicalRecords').show();"/>
-                </p:confirmDialog>
+            
 
 
 
