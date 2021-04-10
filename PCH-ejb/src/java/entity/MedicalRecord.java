@@ -59,7 +59,7 @@ public class MedicalRecord implements Serializable {
     private String contact_number;
     
     @Column(length = 32)
-    @Size(min = 0, max = 32)
+    @Size(min = 1, max = 32)
     private String blood_type;
     
     @Column

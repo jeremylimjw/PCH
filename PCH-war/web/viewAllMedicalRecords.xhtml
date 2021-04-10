@@ -7,162 +7,158 @@
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
                 xmlns:p="http://primefaces.org/ui">
 
+    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+
     <ui:define name="main">
         <h2>
             Patient Medical Records
         </h2>
-        
+
         <ez:Breadcrumb pageName="ViewAllMedicalRecords" />
-        
+
         <p:messages globalOnly="true" />
-        
+
         <h:form>
             <p:menubar>
-                <p:submenu label="Create New Patient Medical Record" icon="ui-icon-document">
-                        <p:menuitem value="Add new record" onclick="PF('dialogCreateNewMedicalRecord').show()" icon="pi pi-user-plus" />
-                    </p:submenu>                                        
+                <p:submenu label="Create New Patient Medical Record" icon="ui-icon-plus">
+                    <p:menuitem value="Add new record" actionListener="#{MedicalRecordManagementManagedBean.clearNewRecord}" onclick="PF('dialogCreateNewMedicalRecord').show()" icon="pi pi-user-plus" />
+                </p:submenu>                                        
             </p:menubar>
             <br />
         </h:form>
-        
+
         <h:form id="formCreateMedicalRecord">
-            
+
             <p:dialog id="dialogCreateNewMedicalRecord" widgetVar="dialogCreateNewMedicalRecord" header="Create New Patient Medical Record" closable="true">
 
-                    <p:messages id="messagesCreateNewMedicalRecord" redisplay="false" />
+                <p:messages />
 
-                    <p:panelGrid>
+                <p:panelGrid>
 
-                        <p:row>
-                            <p:column>
-                                <p:outputLabel for="Name" value="Patient Name: " style="font-weight: bold;" />
-                            </p:column>
-                            <p:column>
-                                <p:inputText id="Name" value="#{MedicalRecordManagementManagedBean.newRecord.name}" placeholder="John Doe" required="true" requiredMessage="Patient Name is required" />
-                            </p:column>
-<!--                            <p:column>
-                                <p:message for="Name" />
-                            </p:column>-->
-                        </p:row>
-                        
-                        <p:row>
-                            <p:column>
-                                <p:outputLabel for="nric" value="NRIC: " style="font-weight: bold;" />
-                            </p:column>
-                            <p:column>
-                                <p:inputText id="nric" value="#{MedicalRecordManagementManagedBean.newRecord.nric}" placeholder="SXXXX123A" required="true" requiredMessage="Patient NRIC is required" />
-                            </p:column>
-<!--                            <p:column>
-                                <p:message for="nric" />
-                            </p:column>-->
-                        </p:row>                        
-                        <p:row>
-                            <p:column>
-                                <p:outputLabel for="address" value="Address: " style="font-weight: bold;" />
-                            </p:column>
-                            <p:column>
-                                <p:inputText id="address" value="#{MedicalRecordManagementManagedBean.newRecord.address}" placeholder="123 Riverdale" required="true" requiredMessage="Patient Address is required" />
-                            </p:column>
-<!--                            <p:column>
-                                <p:message for="address" />
-                            </p:column>-->
-                        </p:row>                        
-                        <p:row>
-                            <p:column>
-                                <p:outputLabel for="dob" value="Date of Birth: " style="font-weight: bold;" />
-                            </p:column>
-                            <p:column>
-                                <p:calendar id="dob" value="#{MedicalRecordManagementManagedBean.newRecord.dob}" required="true" requiredMessage="Patient Address is required" />
-                            </p:column>
-<!--                            <p:column>
-                                <p:message for="dob" />
-                            </p:column>-->
-                        </p:row>
-                        <p:row>
-                            <p:column>
-                                <p:outputLabel for="contact_number" value="Contact Number: " style="font-weight: bold;" />
-                            </p:column>
-                            <p:column>
-                                <p:inputText id="contact_number" value="#{MedicalRecordManagementManagedBean.newRecord.contact_number}" placeholder="12345678" required="true" requiredMessage="Contact Number is required" />
-                            </p:column>
-<!--                            <p:column>
-                                <p:message for="contact_number" />
-                            </p:column>-->
-                        </p:row>
-                        <p:row>
-                            <p:column>
-                                <p:outputLabel for="blood_type" value="Blood Type: " style="font-weight: bold;" />
-                            </p:column>
-                            <p:column>
-                                <p:inputText id="blood_type" value="#{MedicalRecordManagementManagedBean.newRecord.blood_type}" required="false" requiredMessage="Contact Number is required" />
-                            </p:column>
-<!--                            <p:column>
-                                <p:message for="blood_type" />
-                            </p:column>-->
-                        </p:row>
-<!--                        <p:row>
-                            <p:column>
-                                <p:outputLabel for="drug_allergys" value="Drug Allergy(s): " style="font-weight: bold;" />
-                            </p:column>
-                            <p:column>
-                            <p:selectManyMenu id="drug_allergys" value="#{MedicalRecordManagementManagedBean.newRecord.drug_allergys}" filter ="true" showCheckbox="true"  >
-                                <f:selectItems value="#{viewAllMedicationsManagedBean.medications}" var="Medication" itemValue="#{Medication.name}" itemLabel="#{Medication.name}"  />
-                             </p:selectManyMenu>
-                            </p:column>
-                             <p:column>
-                                <p:message for="adrug_allergys" />
-                            </p:column>
-                        </p:row>-->
-                        
-                            
-                        <p:row>
-                            <p:column colspan="3">
-                                <p:commandButton type="reset" value="Clear" />&nbsp;
-                                <p:commandButton  process='@form' value="Create New Medical Record" update="@form formViewAllMedicalRecords" actionListener="#{MedicalRecordManagementManagedBean.createNewMedicalRecord}" oncomplete="PF('dialogViewAllMedicalRecords').show();" />
-                            </p:column>
-                        </p:row>
-                        
-                        
-                        
-                            </p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="Name" value="Patient Name: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="Name" value="#{MedicalRecordManagementManagedBean.newRecord.name}" placeholder="John Doe" required="true" requiredMessage="Patient Name is required" />
+                        </p:column>
+                        <!--                            <p:column>
+                                                        <p:message for="Name" />
+                                                    </p:column>-->
+                    </p:row>
 
-                </p:dialog>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="nric" value="NRIC: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="nric" value="#{MedicalRecordManagementManagedBean.newRecord.nric}" placeholder="SXXXX123A" required="true" requiredMessage="Patient NRIC is required" />
+                        </p:column>
+                        <!--                            <p:column>
+                                                        <p:message for="nric" />
+                                                    </p:column>-->
+                    </p:row>                        
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="address" value="Address: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="address" value="#{MedicalRecordManagementManagedBean.newRecord.address}" placeholder="123 Riverdale" required="true" requiredMessage="Patient Address is required" />
+                        </p:column>
+                        <p:column>
+                                                        <p:message for="address" />
+                                                    </p:column>
+                    </p:row>                        
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="dob" value="Date of Birth: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:calendar id="dob" value="#{MedicalRecordManagementManagedBean.newRecord.dob}" required="true" requiredMessage="Patient Date of Birth is required" pattern="dd/mm/yyyy">
+                            </p:calendar>
+                        </p:column>
+                        <!--                            <p:column>
+                                                        <p:message for="dob" />
+                                                    </p:column>-->
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="contact_number" value="Contact Number: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="contact_number" value="#{MedicalRecordManagementManagedBean.newRecord.contact_number}" placeholder="12345678" required="true" requiredMessage="Contact Number is required" />
+                        </p:column>
+                       <p:column>
+                                                        <p:message for="contact_number" />
+                                                    </p:column>
+                    </p:row>
 
-            </h:form>
-        
+
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton type="reset" value="Clear" />&nbsp;
+                            <p:commandButton value="Create New Medical Record" process='@form' update="@form" actionListener="#{MedicalRecordManagementManagedBean.createNewMedicalRecord}" oncomplete="PF('dialogCreateNewMedicalRecord').hide();" resetValues="true">
+
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+
+
+
+                </p:panelGrid>
+
+                
+
+            </p:dialog>
+            
+            
+
+
+
+        </h:form>
+
         <h:form id="formViewAllMedicalRecords">
-            
+
             <p:messages id="messages" redisplay="false" closable="true" />
-            
+
             <p:panel header ="View All Patient Medical Records">
+
                 <p:dataTable id="dataTableViewAllMedicalRecords" widgetVar="dataTableViewAllMedicalRecords" value="#{MedicalRecordManagementManagedBean.records}" var="record" rowKey="#{record.id}" rowIndexVar="row"
-                            filteredValue="#{MedicalRecordManagementManagedBean.filteredMedicalRecords}" rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
-                    <f:facet name="header">
-                        <p:outputPanel style="text-align: right;">
-                            <h:outputText value="Search for Medical Record:"/>
-                            <p:inputText id="globalFilter" onkeyup="PF(dataTableViewAllMedicalRecords).filter()" style="width: 300px" placeholder="Enter Name or NRIC">
-                                <p:ajax event="keyup" process="@this" update="formMain:dataTableMain" listener="#{MedicalRecordManagementManagedBean.searchMedicalRecord}" />
-                            </p:inputText>
-                        </p:outputPanel>
-                    </f:facet>
-                    <p:column headerText='Patient Name' sortBy='#{record.name}'>
+                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+                <f:facet name="header">
+                    <p:outputPanel style="text-align: right;">
+                        <h:outputText value="Search for Medical Record:"/>
+                        <p:inputText id="globalFilter" onkeyup="PF('dataTableViewAllMedicalRecords').filter()" style="width: 300px" placeholder="Enter Name or NRIC" />
+                    </p:outputPanel>
+                </f:facet>
+                    <p:column headerText='Patient Name' sortBy='#{record.name}' filterBy="#{record.name}" filterMatchMode="contains">
                         #{record.name}
                     </p:column>
-                    <p:column headerText="NRIC" sortBy='#{record.nric}'>
+                    <p:column headerText="NRIC" sortBy='#{record.nric}' filterBy="#{record.nric}" filterMatchMode="contains">
                         <h:outputText value='#{record.nric}'/>
                     </p:column>
-                    <p:column headerText="Date Of Birth" sortBy='#{record.dob}'>
-                        <h:outputText value='#{record.dob}'/>
+                    <p:column headerText="Date Of Birth" sortBy='#{record.dob}' filterBy="#{record.dob}" filterMatchMode="contains">
+                        <h:outputText value='#{record.dob}'>
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
                     </p:column>
-                    <p:column headerText="Contact Number" sortBy='#{record.contact_number}'>
+                    <p:column headerText="Contact Number" sortBy='#{record.contact_number}' filterBy="#{record.contact_number}"  filterMatchMode="contains">
                         <h:outputText value='#{record.contact_number}'/>
+                    </p:column>
+                    <p:column headerText="Action">
+                        <h:commandButton actionListener="#{MedicalRecordManagementManagedBean.viewMedicalRecordDetails}" value="View" >
+                            <f:attribute value="#{record.id}" name="recordId" />
+                        </h:commandButton>  
+                
+
                     </p:column>
                 </p:dataTable>
             </p:panel>
         </h:form>
         
-        
-        
+
+        <growl value="messages"></growl>
+
     </ui:define>
 
 </ui:composition>

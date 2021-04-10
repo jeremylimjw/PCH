@@ -6,14 +6,14 @@
 package ejb.session.stateless;
 
 import entity.MedicalRecord;
-
-import java.util.Date;
 import entity.Appointment;
-
+import java.io.IOException;
 import java.util.List;
+import java.util.Date;
 import java.util.Set;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -25,6 +25,8 @@ import javax.validation.ValidatorFactory;
 import util.exception.InputDataValidationException;
 import util.exception.MedicalRecordEntityException;
 import util.exception.MedicalRecordNotFoundException;
+
+
 
 /**
  *
@@ -78,6 +80,7 @@ public class MedicalRecordSessionBean implements MedicalRecordSessionBeanLocal {
     }
 
     @TransactionAttribute
+    
     @Override
     public void update(MedicalRecord medicalRecord) throws MedicalRecordEntityException {
         Set<ConstraintViolation<MedicalRecord>> constraints = validator.validate(medicalRecord);

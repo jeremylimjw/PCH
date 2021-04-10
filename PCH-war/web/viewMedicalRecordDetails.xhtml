@@ -1,0 +1,288 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./template/main.xhtml">
+
+    <ui:define name="head">
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/servePatient.css" />
+    </ui:define>
+
+    <ui:define name="main">
+
+        <h:panelGroup rendered="#{viewMedicalRecordDetailsManagedBean.record == null}" class="error-message">NO APPOINTMENT SELECTED</h:panelGroup>
+
+        <h:panelGroup rendered="#{viewMedicalRecordDetailsManagedBean.record != null}">
+
+            <h:form>
+
+                <p:tabView>
+                    <p:tab title="Details">
+
+                        <div style="display:flex;flex-direction: row;">
+
+                            <div class="details-container" style="margin-right: 20px;">
+
+                                <div class="details-item">
+                                    <label for="name" class="label-text">Name</label>
+                                    <h:outputText id="name" value="#{viewMedicalRecordDetailsManagedBean.record.name}" />
+                                </div>
+
+                                <div class="details-item">
+                                    <label for="nric" class="label-text">NRIC</label>
+                                    <h:outputText id="nric" value="#{viewMedicalRecordDetailsManagedBean.record.nric}" />
+                                </div>
+
+                                <div class="details-item">
+                                    <label for="address" class="label-text">Address <i class="fas fa-edit" /></label>
+                                    <p:inputText id="address" value="#{viewMedicalRecordDetailsManagedBean.record.address}" class="editable-input"/>
+                                </div>
+
+                                <div class="details-item">
+                                    <label for="contact_number" class="label-text">Contact Number <i class="fas fa-edit" /></label>
+                                    <p:inputText id="contact_number" value="#{viewMedicalRecordDetailsManagedBean.record.contact_number}" class="editable-input"/>
+                                </div>
+
+                                <div class="details-item">
+                                    <label for="dob" class="label-text">Date of Birth <i class="fas fa-edit" /></label>
+                                    <p:calendar id="dob" value="#{viewMedicalRecordDetailsManagedBean.record.dob}" focusOnSelect="true" required="true" class="editable-input" pattern="dd/MM/yyyy">
+                                        <p:ajax event="blur" update="age" />
+                                    </p:calendar>
+
+<!--                                    <p:inputText id="dob" value="#{viewMedicalRecordDetailsManagedBean.record.dob}" class="editable-input">
+    <p:ajax event="blur" update="age" />
+    <f:convertDateTime pattern="dd/MM/yyyy" />
+</p:inputText>-->
+                                </div>
+
+                                <div class="details-item">
+                                    <label for="age" class="label-text">Age</label>
+                                    <h:outputText id="age" value="#{viewMedicalRecordDetailsManagedBean.record.dob}">
+                                        <f:converter converterId="ageConverter" />
+                                    </h:outputText>
+                                </div>
+
+                                <div class="details-item">
+                                    <label for="blood_type" class="label-text">Blood Type <i class="fas fa-edit" /></label>
+                                    <p:inputText id="blood_type" value="#{viewMedicalRecordDetailsManagedBean.record.blood_type}" class="editable-input"/>
+                                </div>
+
+                                <div class="details-item">
+                                    <label for="date_created" class="label-text">Date Joined</label>
+                                    <h:outputText id="date_created" value="#{viewMedicalRecordDetailsManagedBean.record.date_created}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="side-panel" style="margin-right: 20px;">
+
+                                <label class="label-text">
+                                    Drug Allergys 
+                                    <i class="fas fa-edit" /> &nbsp;
+                                    <h:commandButton value="+" class="button blue-button" immediate="true"
+                                                     action="#{viewMedicalRecordDetailsManagedBean.record.drug_allergys.add('')}" />
+                                </label>
+
+                                <h:panelGroup rendered="#{viewMedicalRecordDetailsManagedBean.record.drug_allergys.isEmpty()}">
+                                    <p style="margin: 0;color: #696969;">No records</p>
+                                </h:panelGroup>
+
+                                <ui:repeat value="#{viewMedicalRecordDetailsManagedBean.record.drug_allergys}" var="da" varStatus="myVarStatus" >
+                                    <div class="dynamic-item">
+
+                                        <p:inputText class="editable-input" placeholder="Enter drug name" style="width:80%;"
+                                                     value="#{viewMedicalRecordDetailsManagedBean.record.drug_allergys[myVarStatus.index]}">
+                                            <p:ajax event="blur" update="@form"/>
+                                        </p:inputText>
+
+                                        <h:commandButton class="red-button" value="x" immediate="true"
+                                                         actionListener="#{viewMedicalRecordDetailsManagedBean.record.drug_allergys.remove(myVarStatus.index)}" />
+                                    </div>
+                                </ui:repeat>
+
+                            </div>
+
+                        </div>
+
+                    </p:tab>
+
+                    <p:tab title="Medical History">
+
+                        <div style="display:flex; flex-direction:row;">
+
+                            <div>
+                                <p:dataTable id="medical_historys" var="ph" rows="10" paginator="true" paginatorPosition="bottom" editable="true" editMode="cell" rowIndexVar="index"
+                                             value="#{viewMedicalRecordDetailsManagedBean.record.past_medical_historys}"
+                                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                             rowsPerPageTemplate="5,10, 20">
+
+                                    <p:column headerText="Past Medical History">
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{viewMedicalRecordDetailsManagedBean.record.past_medical_historys[index] != '' ? viewMedicalRecordDetailsManagedBean.record.past_medical_historys[index] : 'Click to edit'}" />
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:inputText value="#{viewMedicalRecordDetailsManagedBean.record.past_medical_historys[index]}" style="width:100%;" />
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+
+                                    <p:column style="width: 40px;">
+                                        <p:commandButton value="x" update="medical_historys" style="background-color:#CB4E4E; color: white;background-image: none;"
+                                                         action="#{viewMedicalRecordDetailsManagedBean.record.past_medical_historys.remove(index)}">
+                                            <p:confirm header="Confirm Delete" message="Are you sure you want to delete? This action cannot be undone." />
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
+                                <p:commandButton value="Add new record" update="medical_historys" style="width:100%;" immediate="true"
+                                                 action="#{viewMedicalRecordDetailsManagedBean.record.past_medical_historys.add('')}"/>
+                            </div>
+
+                            <div>
+                                <p:dataTable id="family_historys" var="fh" rows="10" paginator="true" paginatorPosition="bottom" editable="true" editMode="cell" rowIndexVar="index"
+                                             value="#{viewMedicalRecordDetailsManagedBean.record.family_historys}"
+                                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                             rowsPerPageTemplate="5,10,20">
+
+                                    <p:column headerText="Family Medical History">
+
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{viewMedicalRecordDetailsManagedBean.record.family_historys[index] != '' ? viewMedicalRecordDetailsManagedBean.record.family_historys[index] : 'Click to edit'}" />
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:inputText value="#{viewMedicalRecordDetailsManagedBean.record.family_historys[index]}" style="width:100%;" />
+                                            </f:facet>
+                                        </p:cellEditor>
+
+                                    </p:column>
+
+                                    <p:column style="width: 40px;">
+                                        <p:commandButton value="x" update="family_historys" style="background-color:#CB4E4E; color: white;background-image: none;"
+                                                         action="#{viewMedicalRecordDetailsManagedBean.record.family_historys.remove(index)}">
+                                            <p:confirm header="Confirm Delete" message="Are you sure you want to delete? This action cannot be undone." />
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
+
+                                <p:commandButton value="Add new record" update="family_historys" style="width:100%;" immediate="true"
+                                                 action="#{viewMedicalRecordDetailsManagedBean.record.family_historys.add('')}"/>
+
+
+                            </div>
+
+                            <div>
+                                <p:dataTable id="vaccinations" var="v" rows="10" paginator="true" paginatorPosition="bottom" editable="true" editMode="cell" rowIndexVar="index"
+                                             value="#{viewMedicalRecordDetailsManagedBean.record.vaccinations}"
+                                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                             rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+
+                                    <p:column headerText="Vaccination History">
+
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{viewMedicalRecordDetailsManagedBean.record.vaccinations[index] != '' ? viewMedicalRecordDetailsManagedBean.record.vaccinations[index] : 'Click to edit'}" />
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:inputText value="#{viewMedicalRecordDetailsManagedBean.record.vaccinations[index]}" style="width:100%;" />
+                                            </f:facet>
+                                        </p:cellEditor>
+
+                                    </p:column>
+
+                                    <p:column style="width: 40px;">
+                                        <p:commandButton value="x" update="vaccinations" style="background-color:#CB4E4E; color: white;background-image: none;"
+                                                         action="#{viewMedicalRecordDetailsManagedBean.record.vaccinations.remove(index)}">
+                                            <p:confirm header="Confirm Delete" message="Are you sure you want to delete? This action cannot be undone." />
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
+
+                                <p:commandButton value="Add new record" update="vaccinations" style="width:100%;" immediate="true"
+                                                 action="#{viewMedicalRecordDetailsManagedBean.record.vaccinations.add('')}" />
+                            </div>
+
+                        </div>
+
+                    </p:tab>
+
+                    <p:tab title="Appointment History">
+                        <p:dataTable id="appointments" value="#{viewMedicalRecordDetailsManagedBean.appointments}" var="a" rowHover="true" emptyMessage="No records available"
+                                     rows="10" rowsPerPageTemplate="10,20,50" paginator="true" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+                            <p:column headerText="Appt Number" sortBy="#{a.queue_no}" filterBy="#{a.queue_no}" filterMatchMode="contains">
+                                <h:outputText value="#{a.queue_no}" />
+                            </p:column>
+
+                            <p:column headerText="Appt Time" sortBy="#{a.date_time}" filterBy="#{a.date_time}" filterMatchMode="contains">
+                                <h:outputText value="#{a.date_time}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Type" sortBy="#{a.schedule_type}" filterBy="#{a.schedule_type}" filterMatchMode="contains">
+                                <h:outputText value="#{a.schedule_type.toString()}" />
+                            </p:column>
+
+                            <p:column headerText="Appt Type" sortBy="#{a.appointment_type}" filterBy="#{a.appointment_type}" filterMatchMode="contains">
+                                <h:outputText value="#{a.appointment_type.toString()}" />
+                            </p:column>
+
+                            <p:column headerText="Patient" sortBy="#{a.medical_record.name}" filterBy="#{a.medical_record.name}" filterMatchMode="contains">
+                                <h:outputText value="#{a.medical_record.name}" />
+                            </p:column>
+
+                            <p:column headerText="Assigned" sortBy="#{a.employee.name}" filterBy="#{a.employee.name}" filterMatchMode="contains">
+                                <h:outputText value="#{a.employee.name}" />
+                            </p:column>
+
+                            <p:column headerText="Status" sortBy="#{a.status}" filterBy="#{a.status}" filterMatchMode="contains">
+                                <h:outputText value="#{a.status.toString()}" />
+                            </p:column>
+
+                            <p:column headerText="MC" sortBy="#{a.medical_certificate == null ? 'No' : 'Yes'}" filterBy="#{a.medical_certificate == null ? 'No' : 'Yes'}" filterMatchMode="contains">
+                                <h:outputText value="#{a.medical_certificate == null ? 'No' : 'Yes'}" />
+                            </p:column>
+
+                            <p:column headerText="Action" style="width:80px;">
+                                <p:commandButton action="#{viewMedicalRecordDetailsManagedBean.redirectAppointment(a.id)}" icon="ui-icon-document" title="View" />
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:tab>
+
+
+
+                </p:tabView>
+
+                <div class="button-group">
+
+                    <h:button class="button red-button" value="BACK" outcome="viewAllMedicalRecords.xhtml"/>
+                    <h:commandButton class="button green-button" value="SAVE" actionListener="#{viewMedicalRecordDetailsManagedBean.doUpdate}">
+                        <f:ajax execute="@form" render="@form" />
+                    </h:commandButton>
+                </div>
+
+            </h:form>
+
+        </h:panelGroup>
+
+    </ui:define>
+
+    <ui:define name="growl">
+        <p:growl>
+            <p:autoUpdate />
+        </p:growl>
+    </ui:define>
+
+</ui:composition>

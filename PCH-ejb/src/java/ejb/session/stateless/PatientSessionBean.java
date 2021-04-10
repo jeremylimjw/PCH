@@ -60,7 +60,7 @@ public class PatientSessionBean implements PatientSessionBeanLocal {
                 em.persist(patient);
                 em.flush();
 
-                return patient.getId();
+                return patient.getPatientId();
             } else {
                 throw new PatientEntityException(getValidatorErrors(constraintViolations));
             }
@@ -102,9 +102,9 @@ public class PatientSessionBean implements PatientSessionBeanLocal {
     
     @Override
     public void updatePatientDetails(Patient patient) throws PatientEntityException {
-        if (patient != null && patient.getId() != null) {
+        if (patient != null && patient.getPatientId() != null) {
             
-            Patient patientToUpdate = retrieveById(patient.getId());
+            Patient patientToUpdate = retrieveById(patient.getPatientId());
             
             if (patientToUpdate.getUsername().equals(patient.getUsername())) {
                 patientToUpdate.setEmail(patient.getEmail());
@@ -116,9 +116,9 @@ public class PatientSessionBean implements PatientSessionBeanLocal {
     
     @Override
     public void updatePatientPassword(Patient patient) throws PatientEntityException {
-        if (patient != null && patient.getId() != null) {
+        if (patient != null && patient.getPatientId()!= null) {
             
-            Patient patientToUpdate = retrieveById(patient.getId());
+            Patient patientToUpdate = retrieveById(patient.getPatientId());
             
             if (patientToUpdate.getUsername().equals(patient.getUsername())) {
                 patientToUpdate.setPassword(patient.getPassword());
