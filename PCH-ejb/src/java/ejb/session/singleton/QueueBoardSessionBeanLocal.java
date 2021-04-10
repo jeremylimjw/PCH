@@ -19,4 +19,6 @@ import util.exception.EmployeeEntityException;
 public interface QueueBoardSessionBeanLocal {
     public void add(Long employeeId, Long appointmentId) throws EmployeeEntityException, AppointmentEntityException;
     public List<QueueBoardItem> retrieveQueueBoard();
+    public List<QueueBoardItem> getQueueBoard();
+    public void setQueueBoard(List<QueueBoardItem> queueBoard);
 }
