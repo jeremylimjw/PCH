@@ -31,8 +31,8 @@ import util.exception.MedicalRecordNotFoundException;
  * @author 13002
  */
 @Named(value = "viewMedicalRecordDetailsManagedBean")
-@RequestScoped
-public class ViewMedicalRecordDetailsManagedBean{
+@ViewScoped
+public class ViewMedicalRecordDetailsManagedBean implements Serializable {
 
     @EJB
     private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
@@ -60,11 +60,8 @@ public class ViewMedicalRecordDetailsManagedBean{
         try {
             //medicalRecordToBeUpdated = (Long)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("recordIdToView");
             Long id = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
-            System.out.println("Reached somehow...");
-            System.out.println("View Medical Record Details -- got record " + id);
             record = medicalRecordSessionBeanLocal.retrieveById(id);
             appointments = appointmentSessionBeanLocal.retrieveByMedicalRecordId(id);
-            System.out.println("---Got Medical Record wiht name: " + record.getName());
         } catch (MedicalRecordEntityException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }

@@ -289,10 +289,11 @@ public class DataInitSessionBean {
                 Patient eric = new Patient("eric", "password", "eric@gmail.com", ericRecord); em.persist(eric);
                 
 
-                generateAppointments();
                 if (em.find(MedicalRecord.class, 3l) == null) {
                     dataInitMedicalRecords();
                 }
+                
+                generateAppointments();
 
             } catch (ParseException ex) {
                 System.out.println(ex.getMessage());
@@ -533,8 +534,8 @@ public class DataInitSessionBean {
     private void generateAppointments() {
         
         double p = 0.9; // probability for a time slot to be booked
-        int monthsBefore = -1; // how far before to add appointments since
-        int monthsAfter = 1; // how far after to add appointments til
+        int daysBefore = -7; // how far before to add appointments since
+        int daysAfter = 14; // how far after to add appointments til
         
         double p_consultation = 0.7; // probability of an appointment being a consultation
         double p_checkup = 0.2; // probability of an appointment being a health checkup
@@ -561,8 +562,9 @@ public class DataInitSessionBean {
         Random random = new Random();
 
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.MONTH, monthsBefore);
+        c.add(Calendar.DATE, daysBefore);
         c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), 1, 0, 0, 0);
+        System.out.println(c.get(Calendar.SECOND));
 
         Calendar upperBound = Calendar.getInstance();
         upperBound.set(upperBound.get(Calendar.YEAR), upperBound.get(Calendar.MONTH), upperBound.get(Calendar.DATE), 0, 0, 0);
@@ -592,17 +594,17 @@ public class DataInitSessionBean {
                         
                         double p_appointmentType = random.nextDouble();
                         ScheduleTypeEnum appointmentType;
-                        if (p_appointmentType < p_walkin) {
-                            appointmentType = ScheduleTypeEnum.WALK_IN;
-                            Appointment a = new Appointment(null, medical_records.get((i%mrsSize)), c.getTime(), appointmentType, type, status);
-                            em.persist(a);em.flush();
-                            a.setQueue_no(String.format("W%03d", a.getId()));
-                        } else {
+//                        if (p_appointmentType < p_walkin) {
+//                            appointmentType = ScheduleTypeEnum.WALK_IN;
+//                            Appointment a = new Appointment(null, medical_records.get((i%mrsSize)), c.getTime(), appointmentType, type, status);
+//                            em.persist(a);em.flush();
+//                            a.setQueue_no(String.format("W%03d", a.getId()));
+//                        } else {
                             appointmentType = ScheduleTypeEnum.APPOINTMENT;
                             Appointment a = new Appointment(doctors.get(i%doctorsSize), medical_records.get((i%mrsSize)), c.getTime(), appointmentType, type, status);
                             em.persist(a);em.flush();
                             a.setQueue_no(String.format("A%03d", a.getId()));
-                        }
+//                        }
                         
                     }
                 }
@@ -613,7 +615,7 @@ public class DataInitSessionBean {
         }
         // --- End of randomizing past appointments ---
         
-        upperBound.add(Calendar.MONTH, monthsAfter);
+        upperBound.add(Calendar.DATE, daysAfter);
         
         // --- Start of randomizing future appointments ---
         while (c.getTime().getTime() < upperBound.getTime().getTime()) {

@@ -47,9 +47,6 @@ public class QueueBoardSessionBean implements QueueBoardSessionBeanLocal {
         Appointment appointment = appointmentSessionBeanLocal.retrieveById(appointmentId);
         
         queueBoard.add(new QueueBoardItem(employee, appointment));
-        
-        System.out.println("---- QUEUEBOARD SINGLETON BEAN ----");
-        for (QueueBoardItem q : queueBoard) System.out.println(q);
     }
     
     @Override
