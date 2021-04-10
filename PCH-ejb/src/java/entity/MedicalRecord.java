@@ -6,8 +6,8 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,8 +44,8 @@ public class MedicalRecord implements Serializable {
     @NotNull
     private String nric;
     
-    @Column(nullable = false, length = 128)
-    @Size(min = 1, max = 128)
+    @Column(length = 128)
+    @Size(min = 0, max = 128)
     private String address;
     
     @Temporal(TemporalType.TIMESTAMP)
@@ -82,7 +82,7 @@ public class MedicalRecord implements Serializable {
     @OneToMany(mappedBy = "medical_record", fetch = FetchType.EAGER)
     private List<Appointment> appointments;
     
-    @OneToOne
+    @OneToOne(mappedBy = "medical_record")
     private Patient patient;
 
     public MedicalRecord() {
@@ -98,7 +98,7 @@ public class MedicalRecord implements Serializable {
         this.drug_allergys = drug_allergys;
         this.family_historys = family_historys;
         this.past_medical_historys = past_medical_historys;
-        this.vaccinations = vaccinations;
+        this.vaccinations = vaccinations;    
         this.date_created = new Date();
         this.appointments = new ArrayList<>();
     }
@@ -207,6 +207,14 @@ public class MedicalRecord implements Serializable {
         this.appointments = appointments;
     }
 
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -231,14 +239,4 @@ public class MedicalRecord implements Serializable {
     public String toString() {
         return "entity.MedicalRecord[ id=" + Id + " ]";
     }
-
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-    
-    
 }

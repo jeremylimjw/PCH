@@ -32,6 +32,7 @@ import util.enumeration.ScheduleTypeEnum;
 import util.enumeration.StatusEnum;
 import util.exception.AppointmentEntityException;
 import util.exception.EmployeeEntityException;
+import util.exception.MedicalRecordNotFoundException;
 
 /**
  *
@@ -60,16 +61,16 @@ public class AppointmentManagedBean implements Serializable {
     private List<Appointment> appointments;
     private List<Appointment> queue;
     private List<Employee> doctors;
-    private Date dateOfAppointment;
     private AppointmentTypeEnum appointmentType;
     private String patientNric;
+    private MedicalRecord retrievedMedicalRecord;
     
     public AppointmentManagedBean() {
         appointments = new ArrayList<>();
         queue = new LinkedList<>();
         doctors = new ArrayList<>();
-        dateOfAppointment = new Date();
         patientNric = "";
+        retrievedMedicalRecord = new MedicalRecord();
     }
     
     @PostConstruct
@@ -167,28 +168,12 @@ public class AppointmentManagedBean implements Serializable {
         }
     }
     
-//    public void addAppointment(ActionEvent event) {
-//        Employee doctorSelected = (Employee)event.getComponent().getAttributes().get("doctorSelected");
-//        MedicalRecord selectedMedicalRecord = (MedicalRecord)event.getComponent().getAttributes().get("selectedMedicalRecord");
-//        
-//        
-//        try {
-//            appointmentSessionBeanLocal.createAppointment(doctorSelected.getId(), selectedMedicalRecord.getId(), dateOfAppointment, appointmentType);
-//        } catch (AppointmentEntityException ex) {
-//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
-//        }
-//        
-//        getAllAppointmentsForToday();
-//    }
-    
     public void addWalkInAppointment(ActionEvent event) {
-        
-        MedicalRecord selectedMedicalRecord = medicalRecordSessionBean.searchMedicalRecordsByNRIC(patientNric).get(0);
-        
         try {
-            appointmentSessionBeanLocal.createWalkIn(selectedMedicalRecord.getId(), appointmentType);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Walk-in Appointment has been created for patient record " + selectedMedicalRecord.getNric(), null));
-        } catch (AppointmentEntityException ex) {
+            retrievedMedicalRecord = medicalRecordSessionBean.retrieveMedicalRecordByNRIC(patientNric);
+            appointmentSessionBeanLocal.createWalkIn(retrievedMedicalRecord.getId(), appointmentType);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Walk-in Appointment has been created for patient record " + retrievedMedicalRecord.getNric(), null));
+        } catch (AppointmentEntityException | MedicalRecordNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
         }
     }
@@ -250,14 +235,6 @@ public class AppointmentManagedBean implements Serializable {
         this.doctors = doctors;
     }
 
-    public Date getDateOfAppointment() {
-        return dateOfAppointment;
-    }
-
-    public void setDateOfAppointment(Date dateOfAppointment) {
-        this.dateOfAppointment = dateOfAppointment;
-    }
-
     public AppointmentTypeEnum getAppointmentType() {
         return appointmentType;
     }
@@ -272,5 +249,13 @@ public class AppointmentManagedBean implements Serializable {
 
     public void setPatientNric(String patientNric) {
         this.patientNric = patientNric;
+    }
+
+    public MedicalRecord getRetrievedMedicalRecord() {
+        return retrievedMedicalRecord;
+    }
+
+    public void setRetrievedMedicalRecord(MedicalRecord retrievedMedicalRecord) {
+        this.retrievedMedicalRecord = retrievedMedicalRecord;
     }
 }
