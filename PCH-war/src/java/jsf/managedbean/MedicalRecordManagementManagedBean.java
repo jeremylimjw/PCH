@@ -57,7 +57,7 @@ public class MedicalRecordManagementManagedBean {
     
     public void createNewMedicalRecord(ActionEvent event) throws InputDataValidationException, MedicalRecordEntityException {
         try {
-           newRecord.setDate_created(new Date());
+            newRecord.setDate_created(new Date());
             List<String> help = new ArrayList<>();
             help.add("");
             newRecord.setDrug_allergys(new ArrayList<>());
