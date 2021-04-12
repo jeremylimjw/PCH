@@ -34,19 +34,6 @@ public class LoginManagedBean {
     public LoginManagedBean() {
     }
     
-    // FOR DEVELOPING PURPOSE ONLY, REMOVE DURING PRODUCTION
-    public void quickLogin(String username, String password) throws IOException {
-        try {
-            Employee employee = employeeEntitySessionBeanLocal.login(username, password);
-            FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", employee);
-            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
-        } catch (EmployeeEntityException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid login credential: " + ex.getMessage(), null));
-        }
-    }
-    
     public void login(ActionEvent login) throws IOException {
         try {
             Employee employee = employeeEntitySessionBeanLocal.login(username, password);
