@@ -94,21 +94,6 @@
                 </div>
             </h:form>
             
-            <!--FOR DEVELOPER'S USE ONLY, REMOVE DURING PRODUCTION!!!!-->
-            <h:form>
-                <div class="form-div">
-                    <h:outputText value="Session ID: #{session.id}" /><br/>
-                </div>
-                <div class="form-div" style="width: 290px;display:flex;">
-                    <h:commandButton class="orange-button" type="submit" value="DOCTOR 1" actionListener="#{loginManagedBean.quickLogin('alice', 'password')}" style="margin-right: 10px;"/>
-                    <h:commandButton class="orange-button" type="submit" value="DOCTOR 2" actionListener="#{loginManagedBean.quickLogin('bob', 'password')}" />
-                </div>
-                <div class="form-div">
-                    <h:commandButton class="orange-button" type="submit" value="NURSE" actionListener="#{loginManagedBean.quickLogin('charlie', 'password')}" />
-                </div>
-            </h:form>
-                
-            
         </div>
         
         <p:growl sticky="true" globalOnly="true">

@@ -178,35 +178,6 @@ public class AppointmentManagedBean implements Serializable {
         }
     }
     
-    // ---- FOR TESTING ONLY ----
-    // ADD SAMPLE APPOINTMENT
-    public void addRandomAppointment() {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, (int)(Math.random()*((23-0)+1))+0);
-        c.set(Calendar.MINUTE, (int)(Math.random()*((60-0)+1))+0);
-        c.set(Calendar.SECOND, 0);
-        
-        try {
-            appointmentSessionBeanLocal.createAppointment(user.getId(), 1l, c.getTime(), AppointmentTypeEnum.CONSULTATION);
-        } catch (AppointmentEntityException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
-        }
-        
-        getAllAppointmentsForToday();
-    }
-    
-    // ---- FOR TESTING ONLY ----
-    // ADD SAMPLE WALK IN
-    public void addRandomWalkIn() {
-        try {
-            appointmentSessionBeanLocal.createWalkIn(1l, AppointmentTypeEnum.CONSULTATION);
-        } catch (AppointmentEntityException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), null));
-        }
-        
-        getAllAppointmentsForToday();
-    }
-    
     public AppointmentTypeEnum[] getAppointmentTypeEnum() {
         return AppointmentTypeEnum.values();
     }
