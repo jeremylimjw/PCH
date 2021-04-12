@@ -577,6 +577,7 @@ public class DataInitSessionBean {
                 for (int i = 0; i < times.length; i++) {
                     c.set(Calendar.HOUR_OF_DAY, times[i][0]);
                     c.set(Calendar.MINUTE, times[i][1]);
+                    c.set(Calendar.SECOND, 0);
 
                     if(random.nextDouble() < p) {
                         
@@ -594,17 +595,17 @@ public class DataInitSessionBean {
                         
                         double p_appointmentType = random.nextDouble();
                         ScheduleTypeEnum appointmentType;
-//                        if (p_appointmentType < p_walkin) {
-//                            appointmentType = ScheduleTypeEnum.WALK_IN;
-//                            Appointment a = new Appointment(null, medical_records.get((i%mrsSize)), c.getTime(), appointmentType, type, status);
-//                            em.persist(a);em.flush();
-//                            a.setQueue_no(String.format("W%03d", a.getId()));
-//                        } else {
+                        if (p_appointmentType < p_walkin) {
+                            appointmentType = ScheduleTypeEnum.WALK_IN;
+                            Appointment a = new Appointment(doctors.get(i%doctorsSize), medical_records.get((i%mrsSize)), c.getTime(), appointmentType, type, status);
+                            em.persist(a);em.flush();
+                            a.setQueue_no(String.format("W%03d", a.getId()));
+                        } else {
                             appointmentType = ScheduleTypeEnum.APPOINTMENT;
                             Appointment a = new Appointment(doctors.get(i%doctorsSize), medical_records.get((i%mrsSize)), c.getTime(), appointmentType, type, status);
                             em.persist(a);em.flush();
                             a.setQueue_no(String.format("A%03d", a.getId()));
-//                        }
+                        }
                         
                     }
                 }
@@ -625,6 +626,7 @@ public class DataInitSessionBean {
                 for (int i = 0; i < times.length; i++) {
                     c.set(Calendar.HOUR_OF_DAY, times[i][0]);
                     c.set(Calendar.MINUTE, times[i][1]);
+                    c.set(Calendar.SECOND, 0);
 
                     if(random.nextDouble() < p) {
                         
