@@ -56,18 +56,24 @@ public class MedicalRecordManagementManagedBean {
     }
     
     public void createNewMedicalRecord(ActionEvent event) throws InputDataValidationException, MedicalRecordEntityException {
-        newRecord.setDate_created(new Date());
-        List<String> help = new ArrayList<>();
-        help.add("");
-        newRecord.setDrug_allergys(new ArrayList<>());
-        newRecord.setFamily_historys(help);
-        newRecord.setPast_medical_historys(help);
-        newRecord.setVaccinations(help);
-        Long newRecordId = medicalRecordSessionBeanLocal.createNewMedicalRecord(newRecord);
-        //newRecord = medicalRecordSessionBeanLocal.retrieveById(newRecordId);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Medical Record created successfully!", "New Record ID: " + newRecordId));
+        try {
+           newRecord.setDate_created(new Date());
+            List<String> help = new ArrayList<>();
+            help.add("");
+            newRecord.setDrug_allergys(new ArrayList<>());
+            newRecord.setFamily_historys(help);
+            newRecord.setPast_medical_historys(help);
+            newRecord.setVaccinations(help);
+            Long newRecordId = medicalRecordSessionBeanLocal.createNewMedicalRecord(newRecord);
+            //newRecord = medicalRecordSessionBeanLocal.retrieveById(newRecordId);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Medical Record created successfully!", "New Record ID: " + newRecordId));
+
+            System.out.println("********** MedicalRecordManagementManagedBean.createNewMedicalRecord: " + event.getComponent().getAttributes().get("test")); 
+            newRecord = new MedicalRecord();
+        } catch (InputDataValidationException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating medical record: " + ex.getMessage(), null));
+        }
         
-        System.out.println("********** MedicalRecordManagementManagedBean.createNewMedicalRecord: " + event.getComponent().getAttributes().get("test"));
     }
     
     public void clearNewRecord() {
