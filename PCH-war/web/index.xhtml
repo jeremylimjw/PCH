@@ -41,14 +41,25 @@
                             <div class="name" title="#{a.medical_record.name}">#{a.medical_record.name}</div>
                         </div>
 
-                        <div>
-                            <div class="label-text">AGE</div>
+                        <h:panelGroup rendered="#{sessionScope.user.role == 'DOCTOR'}">
                             <div>
-                                <h:outputText value="#{a.medical_record.dob}">
-                                    <f:converter converterId="ageConverter" />
-                                </h:outputText>
+                                <div class="label-text">AGE</div>
+                                <div>
+                                    <h:outputText value="#{a.medical_record.dob}">
+                                        <f:converter converterId="ageConverter" />
+                                    </h:outputText>
+                                </div>
                             </div>
-                        </div>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup rendered="#{sessionScope.user.role == 'NURSE'}">
+                            <div>
+                                <div class="label-text">DOCTOR</div>
+                                <div class="name" title="#{a.employee.name}">
+                                    <h:outputText value="#{a.employee.name}" />
+                                </div>
+                            </div>
+                        </h:panelGroup>
 
                         <div>
                             <div class="label-text">ALLERGY</div>

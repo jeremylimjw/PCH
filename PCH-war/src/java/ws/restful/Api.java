@@ -66,17 +66,20 @@ public class Api {
             
             for(QueueBoardItem q : queueBoard) {
                 Employee e = new Employee();
-                e.setName(q.getEmployee().getName());
-                Appointment a = new Appointment();
-                a.setQueue_no(q.getAppointment().getQueue_no());
-                
-                qb.add(0, new QueueBoardItem(e, a));
+                if (q != null && q.getEmployee() != null) {
+                    e.setName(q.getEmployee().getName());
+                    Appointment a = new Appointment();
+                    a.setQueue_no(q.getAppointment().getQueue_no());
+
+                    qb.add(0, new QueueBoardItem(e, a));
+                }
             }
             
             GenericEntity<List<QueueBoardItem>> genericEntity = new GenericEntity<List<QueueBoardItem>>(qb) { };    
             
             return Response.status(Response.Status.OK).entity(genericEntity).build();
         } catch(Exception ex) {
+            System.out.println(ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
