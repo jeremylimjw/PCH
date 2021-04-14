@@ -262,13 +262,13 @@ public class DataInitSessionBean {
                         new ArrayList<>(Arrays.asList("Alcohol")),
                         new ArrayList<>(Arrays.asList("Onpattro")), "Treat polyneuropathy (damage of multiple nerves throughout the body)", null));
 
-                em.persist(new Employee("Alice Tan Jing Xuan", "alicetan", "password", "alicetan@gmail.com", RoleEnum.DOCTOR));
+                em.persist(new Employee("Alice Tan Jing Xuan", "doctor", "password", "alicetan@gmail.com", RoleEnum.DOCTOR));
                 em.persist(new Employee("Bob Goh Xiao Ming", "bobgohxm", "password", "bob_goh@gmail.com", RoleEnum.DOCTOR));
                 em.persist(new Employee("Wan Tew Chee", "wantc", "password", "doctor_wan_tc@hotmail.com", RoleEnum.DOCTOR));
                 em.persist(new Employee("Aishah Fatimah", "aishahf", "password", "aishahf@gmail.com", RoleEnum.DOCTOR));
                 em.persist(new Employee("Kenley Hogan", "kenleyh", "password", "hogankenley@yahoo.sg", RoleEnum.DOCTOR));
                 
-                em.persist(new Employee("Charlie Zhou Shen", "charliezhou", "password", "charliezhou@gmail.com", RoleEnum.NURSE));
+                em.persist(new Employee("Charlie Zhou Shen", "nurse", "password", "charliezhou@gmail.com", RoleEnum.NURSE));
                 em.persist(new Employee("Zhao Ming", "zhaomingnurse", "password", "zhaoming@gmail.com", RoleEnum.NURSE));
                 em.persist(new Employee("Marsden Ramanuja", "marsdennurse", "password", "marsdenramanuja@gmail.com", RoleEnum.NURSE));
                 em.persist(new Employee("Angela Lim Jia Ying", "angelalim", "password", "angelalimjy@gmail.com", RoleEnum.NURSE));
@@ -293,14 +293,7 @@ public class DataInitSessionBean {
                     dataInitMedicalRecords();
                 }
                 
-                /* 
-                *   There is a bug where sometimes, generated appointments will have +1 second, e.g. '2020-01-01 12:00:01'.
-                *   Correct value should be '2020-01-01 12:00:00'. This bug will cause Angular application to incorrectly
-                *   perform validation by filtering the available date/time appointment slots, when creating a new appointment.
-                *   A workaround is to check the database records if this bug has occured. If it did, delete the
-                *   tables and re-generate the appointments. About 50% chance it will generate incorrectly with the +1 second.
-                */
-//                generateAppointments();
+                generateAppointments();
 
             } catch (ParseException ex) {
                 System.out.println(ex.getMessage());
@@ -569,9 +562,17 @@ public class DataInitSessionBean {
         Random random = new Random();
 
         Calendar c = Calendar.getInstance();
+        
+        // --- Insert fixed number of walk-ins ---
+        for (int i = 0; i < 6; i++) {
+            Appointment a = new Appointment(doctors.get(i%doctorsSize), medical_records.get((i%mrsSize)), c.getTime(), ScheduleTypeEnum.WALK_IN, AppointmentTypeEnum.CONSULTATION, StatusEnum.ARRIVED);
+            em.persist(a);em.flush();
+            a.setQueue_no(String.format("W%03d", a.getId()));
+        }
+        
         c.add(Calendar.DATE, daysBefore);
         c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), 1, 0, 0, 0);
-        System.out.println(c.get(Calendar.SECOND));
+        c.set(Calendar.MILLISECOND, 0);
 
         Calendar upperBound = Calendar.getInstance();
         upperBound.set(upperBound.get(Calendar.YEAR), upperBound.get(Calendar.MONTH), upperBound.get(Calendar.DATE), 0, 0, 0);
@@ -584,7 +585,6 @@ public class DataInitSessionBean {
                 for (int i = 0; i < times.length; i++) {
                     c.set(Calendar.HOUR_OF_DAY, times[i][0]);
                     c.set(Calendar.MINUTE, times[i][1]);
-                    c.set(Calendar.SECOND, 0);
 
                     if(random.nextDouble() < p) {
                         
@@ -633,7 +633,6 @@ public class DataInitSessionBean {
                 for (int i = 0; i < times.length; i++) {
                     c.set(Calendar.HOUR_OF_DAY, times[i][0]);
                     c.set(Calendar.MINUTE, times[i][1]);
-                    c.set(Calendar.SECOND, 0);
 
                     if(random.nextDouble() < p) {
                         
