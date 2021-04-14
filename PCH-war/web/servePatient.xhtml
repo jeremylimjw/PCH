@@ -136,7 +136,7 @@
                                         <p:inputText style="width: 15%;" 
                                                      value="#{servePatientManagedBean.appointment.prescriptions[myVarStatus.index].quantity}" 
                                                      disabled="#{servePatientManagedBean.appointment.status != 'IN_PROGRESS' or sessionScope.user.role != 'DOCTOR'}">
-                                            <p:ajax event="blur" update="@form" listener="#{servePatientManagedBean.calculateTotal()}"/>
+                                            <p:ajax update="@form" listener="#{servePatientManagedBean.calculateTotal()}"/>
                                         </p:inputText>
 
                                         <h:commandButton class="red-button" value="x" immediate="true"

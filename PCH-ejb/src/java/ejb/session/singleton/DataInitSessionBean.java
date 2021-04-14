@@ -565,7 +565,7 @@ public class DataInitSessionBean {
         
         // --- Insert fixed number of walk-ins ---
         for (int i = 0; i < 6; i++) {
-            Appointment a = new Appointment(doctors.get(i%doctorsSize), medical_records.get((i%mrsSize)), c.getTime(), ScheduleTypeEnum.WALK_IN, AppointmentTypeEnum.CONSULTATION, StatusEnum.ARRIVED);
+            Appointment a = new Appointment(null, medical_records.get((i%mrsSize)), c.getTime(), ScheduleTypeEnum.WALK_IN, AppointmentTypeEnum.CONSULTATION, StatusEnum.ARRIVED);
             em.persist(a);em.flush();
             a.setQueue_no(String.format("W%03d", a.getId()));
         }
