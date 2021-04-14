@@ -293,7 +293,14 @@ public class DataInitSessionBean {
                     dataInitMedicalRecords();
                 }
                 
-                generateAppointments();
+                /* 
+                *   There is a bug where sometimes, generated appointments will have +1 second, e.g. '2020-01-01 12:00:01'.
+                *   Correct value should be '2020-01-01 12:00:00'. This bug will cause Angular application to incorrectly
+                *   perform validation by filtering the available date/time appointment slots, when creating a new appointment.
+                *   A workaround is to check the database records if this bug has occured. If it did, delete the
+                *   tables and re-generate the appointments. About 50% chance it will generate incorrectly with the +1 second.
+                */
+//                generateAppointments();
 
             } catch (ParseException ex) {
                 System.out.println(ex.getMessage());
